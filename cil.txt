@@ -1,0 +1,15 @@
+
+
+C:\"Program Files"\PostgreSQL\14\bin\createuser.exe --username=postgres --superuser --pwprompt kingbuy
+C:\"Program Files"\PostgreSQL\14\bin\createdb.exe --username=postgres --owner=kingbuy kingbuy
+
+
+
+python manage.py collectstatic
+
+python manage.py makemigrations
+
+python manage.py migrate
+
+python manage.py createsuperuser
+

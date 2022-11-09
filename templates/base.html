@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+{% load static i18n %}
+{#{% load render_bundle from webpack_loader %}#}
+{% load version %}
+{% load serialize_messages from utils %}
+{% load svg %}
+{% load compress %}
+
+<html lang="{{ LANGUAGE_CODE }}" class="no-js">
+<head>
+    <title>
+        {% block title %}
+            {% blocktrans trimmed context "Dashboard default page title" %}
+                在庫管理システム
+            {% endblocktrans %}
+        {% endblock %}
+    </title>
+    {% block meta %}
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+        <meta name="theme-color" content="#21915a"/>
+        <meta name="robots" content="noindex, nofollow">
+    {% endblock meta %}
+    {% block custom_css %}{% endblock %}
+    {% compress css %}
+        <link type="text/x-scss" href="{% static 'Materialize/sass/materialize.scss' %}" rel="stylesheet" media="screen">
+    {% endcompress %}
+      <!--Import Google Icon Font-->
+      <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+</head>
+
+<body class="{% block body_class %}body-home{% endblock %}">
+<header>
+    <div class="navbar-fixed">
+        <nav id="top-nav">
+            <div class="nav-wrapper">
+                <ul class="left">
+                    <li>
+                        <a href="{% url 'index' %}" class="logo" style="height: 56px;">
+                            <img src="https://tempsiteforsam.s3.ap-northeast-1.amazonaws.com/kingbuy-static/logo-white-svg.png"
+                                 style="height: 51px;padding: 5px;">
+                        </a>
+                    </li>
+                </ul>
+                <ul class="right">
+                    <li class="user-name">
+                        現在のスタッフ： {{ request.user }}
+                    </li>
+
+                    <li class="">
+                        <a href="{% url 'account:logout' %}" class="waves-effect waves-light btn-large"
+                           style="font-size: large">
+                            {% trans "Log out" context "Dashboard top navigation action" %}
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+    </div>
+</header>
+
+
+<div class="subheader top-nav">
+    <div class="nav-wrapper container">
+        {% block breadcrumbs %}
+            <ul class="breadcrumbs">
+                <li class="visible-s">
+                    <a href="#">
+                        {% trans "コントロールパネル" context "Dashboard homepage" %}
+                    </a>
+                </li>
+            </ul>
+        {% endblock %}
+        {% block header_extra %}{% endblock %}
+    </div>
+</div>
+
+
+<main class="main">
+    <div id="base-modal" class="modal"></div>
+    <div id="base-modal-fixed" class="modal modal-fixed-footer"></div>
+    <div class="container" style="margin-left: 40px;margin-right: 40px;">
+        {#      ーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーー#}
+        <div class="row" style="margin-left: 40px;margin-right: 40px;">
+            {% block newfilters %}filter{% endblock newfilters %}
+        </div>
+        {% block content %}{% endblock %}
+        {#      ーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーー#}
+        <div id="dashboard-app"></div>
+    </div>
+</main>
+
+
+<div id="messages-container" data-messages="{% serialize_messages %}"></div>
+{#<script type="text/javascript" src="{% url 'javascript-catalog' %}"></script>#}
+<script src="https://kit.fontawesome.com/1f9b8807e2.js" crossorigin="anonymous"></script>
+<script src="https://yubinbango.github.io/yubinbango/yubinbango.js" charset="UTF-8"></script>
+<script src="https://code.jquery.com/jquery-3.6.1.js" integrity="sha256-3zlB5s2uwoUzrXK3BT7AX3FyvojsraNFxCc2vC/7pNI=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0-rc.2/js/materialize.js" integrity="sha512-LSynsHcISjg2FJcfjq+IqrgsAAdo8A6t35zA/Fys/mZWuaiTS9a8oB5IXFW15oAJF/9KA5OWUx8RwWd9I4RVrw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+{% block custom_js %}{% endblock %}
+
+    <script>
+      $(document).ready(function(){
+    $('select').formSelect();
+  });
+    </script>
+
+</body>
+</html>
+
