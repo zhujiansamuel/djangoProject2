@@ -1,0 +1,30 @@
+{% extends "base_modal.html" %}
+
+{% load i18n %}
+{% load static %}
+
+{% block form_class %}{% endblock %}
+
+{% block action_url %}
+  {% url "product_stock:stock-delete" product_pk=product.pk stock_pk=stock.pk %}
+{% endblock %}
+
+{% block title %}
+  {% blocktrans context "Dashboard confirmation modal" %}
+    Remove variant {{ stock }}
+  {% endblocktrans %}
+{% endblock %}
+
+{% block content %}
+  <div class="col s12">
+    <p>
+      {% blocktrans context "Dashboard confirmation modal" %}
+        Are you sure you want to remove stock <strong>{{ stock }}</strong> (IMEI) of product [{{ product }}]?
+      {% endblocktrans %}
+    </p>
+  </div>
+{% endblock %}
+
+{% block primary_action %}
+  {% trans "Remove" context "Dashboard delete action" %}
+{% endblock %}

@@ -1,0 +1,86 @@
+{% extends "base_modal.html" %}
+
+{% load i18n %}
+{% load materializecss %}
+{% load price from taxed_prices %}
+
+{% block action_url %}
+  {%url 'product_stock:remove-order-manage-line' order_manage_pk=order_manage.pk order_manage_line_pk=item.pk %}
+{% endblock %}
+
+{% block title %}
+  {% trans "注文出入庫から商品を削除" context "Modal remove order line title" %}
+{% endblock %}
+
+{% block content %}
+  <div class="col s12">
+    {% trans "注文出入庫から商品を削除してもよろしいですか?" context "Modal remove order line text" %}
+  </div>
+  {{ form|materializecss }}
+  <div class="col s12">
+    <table>
+      <thead>
+      <tr>
+        <th class="wide">
+          {% trans "名前" context "Modal remove order line table header" %}
+        </th>
+        <th>
+          {% trans "JAN" context "Modal remove order line table header" %}
+        </th>
+        {% if item.product_stock %}
+        {% else %}
+          <th class="right-align">
+            {% trans "SKU" context "Modal remove order line table header" %}
+          </th>
+        {% endif %}
+        <th class="right-align">
+          {% if item.product_stock %}
+            {% trans "平均価格" context "Modal remove order line table header" %}
+          {% else %}
+            {% trans "Price" context "Modal remove order line table header" %}
+          {% endif %}
+        </th>
+        <th class="right-align">
+          {% trans "数量" context "Modal remove order line table header" %}
+        </th>
+        <th class="right-align">
+          {% trans "Total" context "Modal remove order line table header" %}
+        </th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr>
+        <td>
+          {{ item }}<br>
+        </td>
+        <td>
+          {{ item.product_stock_jan_code }}
+        </td>
+        {% if item.product_stock %}
+        {% else %}
+          <td class="right-align">
+            {% if item.product_object_stock_sku %}
+              {{ item.product_object_stock_sku }}
+            {% else %}
+              ----
+            {% endif %}
+          </td>
+        {% endif %}
+        <td class="right-align">
+          {% price item.unit_price %}
+        </td>
+        <td class="right-align">
+          {{ item.quantity }}
+        </td>
+        <td class="right-align">
+          {% price item.line_price %}
+        </td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
+{% endblock %}
+
+{% block primary_action %}
+  {% trans "Remove" context "Dashboard delete action" %}
+{% endblock %}

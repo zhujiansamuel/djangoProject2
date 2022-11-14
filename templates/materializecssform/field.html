@@ -33,9 +33,9 @@
       <label class="control-label {{ classes.label }}">
         {{ field.label }}
         {% if not field.field.required %}
-{#          <span class="help-block materialize-red-text">{% trans "(optional)" context "Dashboard form labels" %}</span>#}
+{#          <span class="help-block materialize-red-text">{% trans "(optional)" context "product_stock form labels" %}</span>#}
         {% elif field.field.required %}
-          <span class="help-block materialize-red-text">{% trans "(必要)" context "Dashboard form labels" %}</span>
+          <span class="help-block materialize-red-text">{% trans "(必要)" context "product_stock form labels" %}</span>
         {% endif %}
       </label>
     {% endif %}
@@ -69,9 +69,9 @@
       <label class="control-label {{ classes.label }}">
         {{ field.label }}
               {% if not field.field.required %}
-{#          <span class="help-block materialize-red-text">{% trans "(optional)" context "Dashboard form labels" %}</span>#}
+{#          <span class="help-block materialize-red-text">{% trans "(optional)" context "product_stock form labels" %}</span>#}
         {% elif field.field.required %}
-          <span class="help-block materialize-red-text">{% trans "(必要)" context "Dashboard form labels" %}</span>
+          <span class="help-block materialize-red-text">{% trans "(必要)" context "product_stock form labels" %}</span>
         {% endif %}
       </label>
     {% endif %}
@@ -104,9 +104,9 @@
       <label class="active" for="{{ field.auto_id }}">
         {{ field.label }}
         {% if not field.field.required %}
-{#          <span class="help-block materialize-red-text">{% trans "(optional)" context "Dashboard form labels" %}</span>#}
+{#          <span class="help-block materialize-red-text">{% trans "(optional)" context "product_stock form labels" %}</span>#}
         {% elif field.field.required %}
-          <span class="help-block materialize-red-text">{% trans "(必要)" context "Dashboard form labels" %}</span>
+          <span class="help-block materialize-red-text">{% trans "(必要)" context "product_stock form labels" %}</span>
         {% endif %}
       </label>
       <input type="text" id="{{ field.auto_id }}" class="datepicker" name="{{ field.name }}"
@@ -134,9 +134,9 @@
         <label class="control-label {{ classes.label }}">
           {{ field.label }}
         {% if not field.field.required %}
-{#          <span class="help-block materialize-red-text">{% trans "(optional)" context "Dashboard form labels" %}</span>#}
+{#          <span class="help-block materialize-red-text">{% trans "(optional)" context "product_stock form labels" %}</span>#}
         {% elif field.field.required %}
-          <span class="help-block materialize-red-text">{% trans "(必要)" context "Dashboard form labels" %}</span>
+          <span class="help-block materialize-red-text">{% trans "(必要)" context "product_stock form labels" %}</span>
         {% endif %}
         </label>
       {% endif %}
@@ -162,7 +162,7 @@
       </div>
     {% else %}
       <label for="{{ field.id_for_label }}">
-        {{ field.label }}{% if not field.field.required %} {% trans "(optional)" context "Dashboard form labels" %}{% endif %}
+        {{ field.label }}{% if not field.field.required %} {% trans "(optional)" context "product_stock form labels" %}{% endif %}
       </label>
       {{ field }}
       {% for error in field.errors %}
@@ -191,9 +191,9 @@
       <label class="{{ classes.label }}" for="{{ field.auto_id }}">
         {{ field.label }}
         {% if not field.field.required %}
-{#          <span class="help-block materialize-red-text">{% trans "(optional)" context "Dashboard form labels" %}</span>#}
+{#          <span class="help-block materialize-red-text">{% trans "(optional)" context "product_stock form labels" %}</span>#}
         {% elif field.field.required %}
-          <span class="help-block materialize-red-text">{% trans "(必要)" context "Dashboard form labels" %}</span>
+          <span class="help-block materialize-red-text">{% trans "(必要)" context "product_stock form labels" %}</span>
         {% endif %}
       </label>
     {% endif %}
@@ -221,9 +221,9 @@
         for="{{ field.auto_id }}">
         {{ field.label }}
         {% if not field.field.required %}
-{#          <span class="help-block materialize-red-text">{% trans "(optional)" context "Dashboard form labels" %}</span>#}
+{#          <span class="help-block materialize-red-text">{% trans "(optional)" context "product_stock form labels" %}</span>#}
         {% elif field.field.required %}
-          <span class="help-block materialize-red-text">{% trans "(必要)" context "Dashboard form labels" %}</span>
+          <span class="help-block materialize-red-text">{% trans "(必要)" context "product_stock form labels" %}</span>
         {% endif %}
       </label>
     </p>
@@ -286,9 +286,9 @@
 {#      <label class="{{ classes.label }}" for="{{ field.auto_id }}">#}
 {#        {{ field.label }}#}
 {#        {% if not field.field.required %}#}
-{#          <span class="help-block materialize-red-text">{% trans "(optional)" context "Dashboard form labels" %}</span>#}
+{#          <span class="help-block materialize-red-text">{% trans "(optional)" context "product_stock form labels" %}</span>#}
 {#        {% elif field.field.required %}#}
-{#          <span class="help-block materialize-red-text">{% trans "(必要)" context "Dashboard form labels" %}</span>#}
+{#          <span class="help-block materialize-red-text">{% trans "(必要)" context "product_stock form labels" %}</span>#}
 {#        {% endif %}#}
 {#      </label>#}
 {#    {% endif %}#}
@@ -327,9 +327,9 @@
 {#      <label class="{{ classes.label }}" for="{{ field.auto_id }}">#}
 {#        {{ field.label }}#}
 {#        {% if not field.field.required %}#}
-{#          <span class="help-block materialize-red-text">{% trans "(optional)" context "Dashboard form labels" %}</span>#}
+{#          <span class="help-block materialize-red-text">{% trans "(optional)" context "product_stock form labels" %}</span>#}
 {#        {% elif field.field.required %}#}
-{#          <span class="help-block materialize-red-text">{% trans "(必要)" context "Dashboard form labels" %}</span>#}
+{#          <span class="help-block materialize-red-text">{% trans "(必要)" context "product_stock form labels" %}</span>#}
 {#        {% endif %}#}
 {#      </label>#}
 {#    {% endif %}#}
@@ -361,9 +361,9 @@
     <label class="active" for="{{ field.auto_id }}_0">
       {{ field.label }}
         {% if not field.field.required %}
-{#          <span class="help-block materialize-red-text">{% trans "(optional)" context "Dashboard form labels" %}</span>#}
+{#          <span class="help-block materialize-red-text">{% trans "(optional)" context "product_stock form labels" %}</span>#}
         {% elif field.field.required %}
-          <span class="help-block materialize-red-text">{% trans "(必要)" context "Dashboard form labels" %}</span>
+          <span class="help-block materialize-red-text">{% trans "(必要)" context "product_stock form labels" %}</span>
         {% endif %}
     </label>
     {% for value in field.value %}
@@ -393,9 +393,9 @@
     <label class="active" for="{{ field.auto_id }}_0">
       {{ field.label }}
         {% if not field.field.required %}
-{#          <span class="help-block materialize-red-text">{% trans "(optional)" context "Dashboard form labels" %}</span>#}
+{#          <span class="help-block materialize-red-text">{% trans "(optional)" context "product_stock form labels" %}</span>#}
         {% elif field.field.required %}
-          <span class="help-block materialize-red-text">{% trans "(必要)" context "Dashboard form labels" %}</span>
+          <span class="help-block materialize-red-text">{% trans "(必要)" context "product_stock form labels" %}</span>
         {% endif %}
     </label>
     <div>
@@ -432,9 +432,9 @@
     <label class="active" for="{{ field.auto_id }}_0">
       {{ field.label }}
         {% if not field.field.required %}
-{#          <span class="help-block materialize-red-text">{% trans "(optional)" context "Dashboard form labels" %}</span>#}
+{#          <span class="help-block materialize-red-text">{% trans "(optional)" context "product_stock form labels" %}</span>#}
         {% elif field.field.required %}
-          <span class="help-block materialize-red-text">{% trans "(必要)" context "Dashboard form labels" %}</span>
+          <span class="help-block materialize-red-text">{% trans "(必要)" context "product_stock form labels" %}</span>
         {% endif %}
     </label>
     {% for value in field.value %}
@@ -466,9 +466,9 @@
       <label class="active chars-left__label" for="{{ field.auto_id }}">
         {{ field.label }}
         {% if not field.field.required %}
-{#          <span class="help-block materialize-red-text">{% trans "(optional)" context "Dashboard form labels" %}</span>#}
+{#          <span class="help-block materialize-red-text">{% trans "(optional)" context "product_stock form labels" %}</span>#}
         {% elif field.field.required %}
-          <span class="help-block materialize-red-text">{% trans "(必要)" context "Dashboard form labels" %}</span>
+          <span class="help-block materialize-red-text">{% trans "(必要)" context "product_stock form labels" %}</span>
         {% endif %}
       </label>
       <span class="chars-left__count">
@@ -496,9 +496,9 @@
       <label class="active" for="{{ field.auto_id }}">
         {{ field.label }}
         {% if not field.field.required %}
-{#          <span class="help-block materialize-red-text">{% trans "(optional)" context "Dashboard form labels" %}</span>#}
+{#          <span class="help-block materialize-red-text">{% trans "(optional)" context "product_stock form labels" %}</span>#}
         {% elif field.field.required %}
-          <span class="help-block materialize-red-text">{% trans "(必要)" context "Dashboard form labels" %}</span>
+          <span class="help-block materialize-red-text">{% trans "(必要)" context "product_stock form labels" %}</span>
         {% endif %}
       </label>
     {% endif %}

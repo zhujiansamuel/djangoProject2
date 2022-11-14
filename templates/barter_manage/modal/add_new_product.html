@@ -1,0 +1,55 @@
+{% extends "base_modal.html" %}
+
+{% load i18n %}
+{% load materializecss %}
+
+{% block action_url %}
+{%url 'product_stock:add-new-product-to-barter-manage' barter_manage_pk=barter_manage.pk %}
+{% endblock %}
+
+{% block title %}
+{% blocktrans trimmed with barter_manage=barter_manage context "Modal barter_manage add variant title" %}
+  {{ barter_manage }}へ在庫商品を追加
+{% endblocktrans %}
+{% endblock %}
+
+{% block content %}
+
+{{ form.product_stock|materializecss:"s12 m8" }}
+<br>
+    <div class="row">
+    {{ form.name|materializecss }}
+  </div>
+    <div class="row">
+    {{ form.jan_code|materializecss }}
+  </div>
+    <div class="row">
+    {{ form.description|materializecss }}
+  </div>
+  <div class="row">
+    {{ form.slug|materializecss }}
+  </div>
+  <div class="row">
+    {{ form.imei_code|materializecss }}
+  </div>
+  <div class="row">
+    {{ form.notion|materializecss }}
+  </div>
+  <div class="row">
+    {{ form.shops|materializecss }}
+  </div>
+  <div class="row">
+    {{ form.extra_informations|materializecss }}
+  </div>
+  <div class="row">
+    {{ form.price_override_amount|materializecss }}
+  </div>
+  <div class="row">
+    {{ form.status|materializecss }}
+  </div>
+
+{% endblock %}
+
+{% block primary_action %}
+{% trans "Add" context "Modal barter_manage add variant primary action" %}
+{% endblock %}

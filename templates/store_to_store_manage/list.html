@@ -1,0 +1,133 @@
+{% extends "base.html" %}
+{% load i18n %}
+{% load price from taxed_prices %}
+{% load prices %}
+{% load status %}
+{% load utils %}
+{% load static %}
+
+{% block title %}{% trans "店舗間転移執行表" context "Dashboard store_to_store_manage list" %} - {{ block.super }}{% endblock %}
+
+{% block body_class %}body-store-to-store-manage{% endblock %}
+
+{% block menu_store_to_store_manage_class %}active{% endblock %}
+
+
+{% block newfilters %}
+  {% if not is_empty %}
+    <div class="row">
+    <div class="col s12 l12">
+    <ul class="collapsible">
+      <li>
+        <div class="collapsible-header">
+          <i class="fa-regular fa-nfc-magnifying-glass"></i>
+          フィルター
+          <span class="new badge"  data-badge-caption="個店舗間転移執行表発見">{{ store_to_store_manage_s_filter.get_total }}</span></div>
+        <div class="collapsible-body">
+          {% filters store_to_store_manage_s_filter %}
+        </div>
+      </li>
+    </ul>
+    </div>
+    </div>
+  {% endif %}
+{% endblock newfilters %}
+
+
+{% block header_extra %}
+
+    <div class="btn-fab-fixed" style="right: 8%;z-index: auto;">
+    <a class="waves-effect waves-light btn" href="{%url 'product_stock:store-to-store-manage-create' %}"
+       title="{% trans "店舗間転移執行表を新規追加" context "store_to_store_manage list add button text" %}">
+      <span>店舗間転移執行表を新規追加</span>
+      <i class="fa-sharp fa-solid fa-memo-circle-info"></i>
+    </a>
+  </div>
+
+{% endblock %}
+
+{% block breadcrumbs %}
+  <ul class="breadcrumbs">
+    <li class="visible-s">{% trans "店舗間転移執行表" context "Dashboard orders list" %}</li>
+  </ul>
+{% endblock %}
+
+{% block content %}
+  <div class="row">
+    <div class="col s12 l12">
+      {% if store_to_store_manage_s %}
+        <div class="card">
+          <div class="data-table-container">
+            <table class="bordered highlight responsive data-table last-right-align">
+              <thead>
+                <tr>
+                  {% sorting_header 'pk' '#' %}
+
+                  {% trans "作成" context "store_to_store_manage table header" as label %}
+                  {% sorting_header 'created' label %}
+
+                  {% trans "執行表状況" context "store_to_store_manage table header" as label %}
+                  {% sorting_header 'store_to_store_manage_status' label %}
+
+                  {% trans "移動先" context "store_to_store_manage table header" as label %}
+                  {% sorting_header 'to_shop' label %}
+
+                  {% trans "責任者" context "store_to_store_manage table header" as label %}
+                  {% sorting_header 'responsible_person' label %}
+
+                  {% trans "最後の変更" context "store_to_store_manage table header" as label %}
+                  {% sorting_header 'last_change' label %}
+
+                </tr>
+              </thead>
+              <tbody>
+                {% for store_to_store_manage in store_to_store_manage_s %}
+                  <tr data-action-go="{%url 'product_stock:store-to-store-manage-details' store_to_store_manage_pk=store_to_store_manage.pk %}">
+                    <td>
+                      #{{ store_to_store_manage.id }}
+                    </td>
+                    <td>
+                      {{ store_to_store_manage.created }}
+                    </td>
+                    <td>
+                      {{ store_to_store_manage.store_to_store_status }}
+{#                      {% render_order_status order.status order.get_status_display %}#}
+                    </td>
+                    <td>
+                      {% if store_to_store_manage.to_shop %}
+                      {{ store_to_store_manage.to_shop }}
+                      {% else %}
+                      未定
+                      {% endif %}
+                    </td>
+                    <td class="">
+                      {{ store_to_store_manage.responsible_person }}
+                    </td>
+                    <td class="right-align">
+                      {{ store_to_store_manage.last_change }}
+                    </td>
+                  </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+          </div>
+        </div>
+        <div class="row">
+{#          {% paginate orders %}#}
+        </div>
+      {% else %}
+        {% if is_empty %}
+          {% include 'dashboard/product_stock/store_to_store_manage/zero_page.html' %}
+        {% else %}
+{#          <div class="col s12">#}
+{#            <div class="not-found">#}
+{#              <p class="grey-text">#}
+{#                {% trans "No orders found." context "Empty order list message" %}#}
+{#              </p>#}
+{#            </div>#}
+{#          </div>#}
+        {% endif %}
+      {% endif %}
+    </div>
+  </div>
+{% endblock %}

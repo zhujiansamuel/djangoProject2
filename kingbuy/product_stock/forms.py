@@ -983,7 +983,7 @@ class OrderManageAddProductForm_with_iemi( forms.Form ):
 
     product_stock = AjaxSelect2ChoiceField(
         queryset=ProductStock.objects.all(),
-        fetch_data_url=reverse_lazy( "dashboard:ajax-product-stock" ),
+        fetch_data_url=reverse_lazy( "product_stock:ajax-product-stock" ),
         label=pgettext_lazy(
             "Order form: subform to add variant to order_manage form: variant field",
             "既存商品類"
@@ -1022,7 +1022,7 @@ class BarterManageAddProductForm_with_iemi( forms.Form ):
 
     product_stock = AjaxSelect2ChoiceField(
         queryset=ProductStock.objects.all(),
-        fetch_data_url=reverse_lazy( "dashboard:ajax-product-stock" ),
+        fetch_data_url=reverse_lazy( "product_stock:ajax-product-stock" ),
         label=pgettext_lazy(
             "barter_manage: subform to add variant to order_manage form: variant field",
             "既存商品類"
@@ -1048,7 +1048,7 @@ class ManualInventoryManageAddProductForm( forms.Form ):
 
     product_stock = AjaxSelect2ChoiceField(
         queryset=ProductStock.objects.all(),
-        fetch_data_url=reverse_lazy( "dashboard:ajax-product-stock-s" ),
+        fetch_data_url=reverse_lazy( "product_stock:ajax-product-stock-s" ),
         label=pgettext_lazy(
             "Order form: subform to add variant to order_manage form: variant field",
             "既存商品類"
@@ -1092,7 +1092,7 @@ class BarterManageAddProductForm( forms.Form ):
 
     product_stock = AjaxSelect2ChoiceField(
         queryset=ProductStock.objects.all(),
-        fetch_data_url=reverse_lazy( "dashboard:ajax-product-stock-s" ),
+        fetch_data_url=reverse_lazy( "product_stock:ajax-product-stock-s" ),
         label=pgettext_lazy(
             "Order form: subform to add variant to order_manage form: variant field",
             "既存商品類"
@@ -1378,7 +1378,7 @@ class AddProductStockToOrderManageForm( forms.Form ):
 
     product_stock = AjaxSelect2ChoiceField(
         queryset=ProductStock.objects.filter( is_temp=False ),
-        fetch_data_url=reverse_lazy( "dashboard:ajax-product-stock" ),
+        fetch_data_url=reverse_lazy( "product_stock:ajax-product-stock" ),
         label=pgettext_lazy(
             "Order form: subform to add variant to order_manage form: variant field",
             "注文出入庫: 商品類を選択s"
@@ -1402,7 +1402,7 @@ class AddProductStockToManualInventoryManageForm( forms.Form ):
 
     product_stock = AjaxSelect2ChoiceField(
         queryset=ProductStock.objects.filter( is_temp=False ),
-        fetch_data_url=reverse_lazy( "dashboard:ajax-product-stock" ),
+        fetch_data_url=reverse_lazy( "product_stock:ajax-product-stock" ),
         label=pgettext_lazy(
             "Order form: subform to add variant to manual_inventory_manage form: variant field",
             "商品ロック: 商品類を選択"
@@ -1426,7 +1426,7 @@ class AddProductStockToStoreToStoreManageForm( forms.Form ):
 
     product_stock = AjaxSelect2ChoiceField(
         queryset=ProductStock.objects.filter( is_temp=False ),
-        fetch_data_url=reverse_lazy( "dashboard:ajax-product-stock" ),
+        fetch_data_url=reverse_lazy( "product_stock:ajax-product-stock" ),
         label=pgettext_lazy(
             "Order form: subform to add variant to store_to_store_manage form: variant field",
             "店舗間移動: 商品類を選択"
@@ -1450,7 +1450,7 @@ class AddProductStockToBarterManageForm( forms.Form ):
 
     product_stock = AjaxSelect2ChoiceField(
         queryset=ProductStock.objects.filter( is_temp=False ),
-        fetch_data_url=reverse_lazy( "dashboard:ajax-product-stock" ),
+        fetch_data_url=reverse_lazy( "product_stock:ajax-product-stock" ),
         label=pgettext_lazy(
             "Order form: subform to add variant to barter_manage form: variant field",
             "物々交換: 商品類を選択"
@@ -1495,7 +1495,7 @@ class OrderManageSuppliersAddressForm( forms.Form ):
         ]
     suppliers = AjaxSelect2ChoiceField(
         queryset=Suppliers.objects.all(),
-        fetch_data_url=reverse_lazy( "dashboard:ajax-suppliers-list" ),
+        fetch_data_url=reverse_lazy( "product_stock:ajax-suppliers-list" ),
         required=False,
         label=pgettext_lazy(
             "Order form: editing suppliers details - selecting a suppliers",
@@ -1586,7 +1586,7 @@ class BarterManageSuppliersAddressForm( forms.Form ):
         ]
     suppliers = AjaxSelect2ChoiceField(
         queryset=Suppliers.objects.all(),
-        fetch_data_url=reverse_lazy( "dashboard:ajax-suppliers-list" ),
+        fetch_data_url=reverse_lazy( "product_stock:ajax-suppliers-list" ),
         required=False,
         label=pgettext_lazy(
             "Order form: editing suppliers details - selecting a suppliers",
@@ -1656,7 +1656,7 @@ class BarterManageSuppliersAddressForm( forms.Form ):
 class OrderManageLegalPersonAddressForm( forms.Form ):
     legalperson = AjaxSelect2ChoiceField(
         queryset=LegalPerson.objects.all(),
-        fetch_data_url=reverse_lazy( "dashboard:ajax-legal-person-list" ),
+        fetch_data_url=reverse_lazy( "product_stock:ajax-legal-person-list" ),
         required=False,
         label=pgettext_lazy(
             "Order form: editing suppliers details - selecting a suppliers",
@@ -1696,7 +1696,7 @@ class StoreToStoreManageLegalPersonAddressForm( forms.Form ):
 class BarterManageLegalPersonAddressForm( forms.Form ):
     legalperson = AjaxSelect2ChoiceField(
         queryset=LegalPerson.objects.all(),
-        fetch_data_url=reverse_lazy( "dashboard:ajax-legal-person-list" ),
+        fetch_data_url=reverse_lazy( "product_stock:ajax-legal-person-list" ),
         required=False,
         label=pgettext_lazy(
             "Order form: editing suppliers details - selecting a suppliers",

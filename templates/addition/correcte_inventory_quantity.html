@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+{% load i18n %}
+{% load materializecss %}
+{% load static %}
+
+
+{% load price from taxed_prices %}
+{% load utils %}
+
+
+{% block title %}
+  {% trans "在庫数量の手動修正" context "Dashboard suppliers list" %} - {{ block.super }}
+{% endblock %}
+
+{% block body_class %}body-stock-taking-list{% endblock %}
+
+{% block menu_stock_taking_class %}active{% endblock %}
+
+{% block newfilters %}{% endblock newfilters %}
+
+{% block header_extra %}
+{% endblock %}
+
+{% block breadcrumbs %}
+  <ul class="breadcrumbs">
+    <li class="visible-s">
+      {% trans "在庫数量の手動修正" context "Dashboard suppliers list" %}
+    </li>
+  </ul>
+{% endblock %}
+
+
+{% block content %}
+
+  <div class="row">
+    <div class="col s12 l12" id="stock-taking-upload">
+在庫数量の手動修正
+    </div>
+  </div>
+
+{% endblock %}
+

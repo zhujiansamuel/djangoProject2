@@ -1,0 +1,29 @@
+{% extends "base_modal.html" %}
+
+{% load i18n %}
+{% load materializecss %}
+{% load utils %}
+
+{% block action_url %}
+{%url 'product_stock:select-product-object-stock-to-manual-inventory-manage' manual_inventory_manage_pk=manual_inventory_manage.pk %}
+{% endblock %}
+
+{% block title %}
+{% blocktrans trimmed with manual_inventory_manage=manual_inventory_manage context "Modal manual_inventory_manage add variant title" %}
+  {{ manual_inventory_manage }}へ在庫商品を追加
+{% endblocktrans %}
+{% endblock %}
+
+{% block content %}
+      <div class="card">
+      {{ form }}
+      </div>
+
+
+
+{% endblock %}
+
+{% block primary_action %}
+{% trans "Add" context "Modal order_manage add variant primary action" %}
+
+{% endblock %}

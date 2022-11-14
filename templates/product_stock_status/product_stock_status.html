@@ -1,0 +1,85 @@
+{% extends "base.html" %}
+{% load i18n %}
+{% load materializecss %}
+{% load static %}
+
+
+{% load price from taxed_prices %}
+{% load utils %}
+
+
+{% block title %}
+  {% trans "商品状態" context "Dashboard product_stock_status list" %} - {{ block.super }}
+{% endblock %}
+
+{% block body_class %}body-product-stock-status-list{% endblock %}
+
+{% block menu_product_stock_status_class %}active{% endblock %}
+
+{% block newfilters %}{% endblock newfilters %}
+
+{% block header_extra %}
+  <div class="btn-fab-fixed" style="right: 8%;">
+    <a class="waves-effect waves-light btn" href="{%url 'product_stock:product-stock-status-create' %}"
+       title="{% trans "商品状態新規追加" context "product-stock-status list add button text" %}">
+      <span>商品状態新規追加</span>
+      <i class="fa-sharp fa-solid fa-memo-circle-info"></i>
+    </a>
+  </div>
+{% endblock %}
+
+{% block breadcrumbs %}
+  <ul class="breadcrumbs">
+    <li class="visible-s">
+      {% trans "商品状態" context "Dashboard product-stock-status list" %}
+    </li>
+  </ul>
+{% endblock %}
+
+{% block content %}
+  <div class="row">
+    <div class="col s12 l9" id="product-list">
+      {% if product_stock_status_s %}
+        <div class="card">
+            <div class="data-table-container">
+              <table class="bordered highlight responsive data-table last-right-align">
+            <thead>
+              <tr>
+                <th class="bulk-checkbox"></th>
+                {% trans "商品状態" context "Products list table header" as label %}
+                {% sorting_header 'name' label is_wide=True %}
+
+                {% trans "説明" context "Products list table header" as label %}
+                {% sorting_header 'description' label is_wide=True %}
+
+              </tr>
+            </thead>
+
+            <tbody>
+                {% for product_stock_status in product_stock_status_s %}
+{#                  --------------------------------------------------|-#}
+                  <tr class="avatar" data-action-go="{%url 'product_stock:product-stock-status-edit' product_stock_status_pk=product_stock_status.pk %}">
+                    <td>
+                      <label for="id_product_stock_status_{{ product_stock_status.pk }}"></label>
+                    </td>
+                    <td>
+                      {{ product_stock_status.name }}
+                    </td>
+                    <td>
+                      {{product_stock_status.description}}
+                    </td>
+                  </tr>
+                {% endfor %}
+            </tbody>
+            </table>
+            </div>
+        </div>
+      {% endif %}
+    </div>
+
+    <div class="col s12 l3" id="filters">
+{#      {% if not is_empty %}{% filters filter_set %}{% endif %}#}
+    </div>
+  </div>
+{% endblock %}
+

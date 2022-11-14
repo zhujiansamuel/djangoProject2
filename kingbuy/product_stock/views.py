@@ -133,7 +133,7 @@ from .utils import (
 def correcte_inventory_quantity(request):
     status = 200
     ctx = {}
-    template = "product_stock/addition/correcte_inventory_quantity.html"
+    template = "addition/correcte_inventory_quantity.html"
     return TemplateResponse( request, template, ctx, status=status )
 
 
@@ -142,7 +142,7 @@ def correcte_inventory_quantity(request):
 def add_imei(request):
     status = 200
     ctx = {}
-    template = "product_stock/addition/add_imei.html"
+    template = "addition/add_imei.html"
     return TemplateResponse( request, template, ctx, status=status )
 
 
@@ -211,13 +211,13 @@ def add_new_product_to_order_manage_no_iemi(request, order_manage_pk):
             }
         msg = (
                 pgettext_lazy(
-                    "Dashboard message related to an order",
+                    "product_stock message related to an order",
                     "%(order_manage)sへ %(quantity)d 種類商品を追加",
                     )
                 % msg_dict
         )
         messages.success( request, msg )
-        return redirect( "order-manage-details",
+        return redirect( "product_stock:order-manage-details",
                          order_manage_pk=order_manage_pk
                          )
     elif form.errors:
@@ -227,7 +227,7 @@ def add_new_product_to_order_manage_no_iemi(request, order_manage_pk):
         "form": form,
         "no_imei":True
         }
-    template = "product_stock/order_manage/add_new_product_numenous.html"
+    template = "order_manage/add_new_product_numenous.html"
     return TemplateResponse( request, template, ctx, status=status )
 
 
@@ -290,13 +290,13 @@ def add_new_product_to_barter_manage(request, barter_manage_pk):
             }
         msg = (
                 pgettext_lazy(
-                    "Dashboard message related to an order",
+                    "product_stock message related to an order",
                     "%(barter_manage)sへ %(quantity)d 個商品を追加",
                     )
                 % msg_dict
         )
         messages.success( request, msg )
-        return redirect( "barter-manage-details",
+        return redirect( "product_stock:barter-manage-details",
                          barter_manage_pk=barter_manage_pk
                          )
 
@@ -304,7 +304,7 @@ def add_new_product_to_barter_manage(request, barter_manage_pk):
         "barter_manage": barter_manage,
         "form": form,
         }
-    template = "product_stock/barter_manage/modal/add_new_product.html"
+    template = "barter_manage/modal/add_new_product.html"
     return TemplateResponse( request, template, ctx, status=status )
 
 
@@ -360,13 +360,13 @@ def select_product_object_stock_to_order_manage(request, order_manage_pk):
             }
         msg = (
                 pgettext_lazy(
-                    "Dashboard message related to an order",
+                    "product_stock message related to an order",
                     "%(order_manage)sへ %(quantity)d 個商品を追加",
                     )
                 % msg_dict
         )
         messages.success( request, msg )
-        return redirect( "order-manage-details",
+        return redirect( "product_stock:order-manage-details",
                          order_manage_pk=order_manage_pk
                          )
     elif form.errors:
@@ -375,7 +375,7 @@ def select_product_object_stock_to_order_manage(request, order_manage_pk):
         "order_manage": order_manage,
         "form": form,
         }
-    template = "product_stock/order_manage/select_product_object_stock_list.html"
+    template = "order_manage/select_product_object_stock_list.html"
     return TemplateResponse( request, template, ctx, status=status )
 
 
@@ -423,13 +423,13 @@ def select_product_object_stock_to_barter_manage(request, barter_manage_pk):
             }
         msg = (
                 pgettext_lazy(
-                    "Dashboard message related to an order",
+                    "product_stock message related to an order",
                     "%(barter_manage)sへ %(quantity)d 個商品を追加",
                     )
                 % msg_dict
         )
         messages.success( request, msg )
-        return redirect( "barter-manage-details",
+        return redirect( "product_stock:barter-manage-details",
                          barter_manage_pk=barter_manage_pk
                          )
     elif form.errors:
@@ -438,7 +438,7 @@ def select_product_object_stock_to_barter_manage(request, barter_manage_pk):
         "barter_manage": barter_manage,
         "form": form,
         }
-    template = "product_stock/barter_manage/select_product_object_stock_list.html"
+    template = "barter_manage/select_product_object_stock_list.html"
     return TemplateResponse( request, template, ctx, status=status )
 
 
@@ -491,13 +491,13 @@ def select_product_object_stock_to_store_to_store_manage(
             }
         msg = (
                 pgettext_lazy(
-                    "Dashboard message related to an order",
+                    "product_stock message related to an order",
                     "%(store_to_store_manage)sへ %(quantity)d 個商品を追加",
                     )
                 % msg_dict
         )
         messages.success( request, msg )
-        return redirect( "store-to-store-manage-details",
+        return redirect( "product_stock:store-to-store-manage-details",
                          store_to_store_manage_pk=store_to_store_manage_pk
                          )
     elif form.errors:
@@ -506,7 +506,7 @@ def select_product_object_stock_to_store_to_store_manage(
         "store_to_store_manage": store_to_store_manage,
         "form": form,
         }
-    template = "product_stock/store_to_store_manage/modal/select_product_object_stock_list.html"
+    template = "store_to_store_manage/modal/select_product_object_stock_list.html"
     return TemplateResponse( request, template, ctx, status=status )
 
 
@@ -561,13 +561,13 @@ def select_product_object_stock_to_manual_inventory_manage(
             }
         msg = (
                 pgettext_lazy(
-                    "Dashboard message related to an order",
+                    "product_stock message related to an order",
                     "%(manual_inventory_manage)sへ %(quantity)d 個商品を追加",
                     )
                 % msg_dict
         )
         messages.success( request, msg )
-        return redirect( "manual-inventory-manage-details",
+        return redirect( "product_stock:manual-inventory-manage-details",
                          manual_inventory_manage_pk=manual_inventory_manage_pk
                          )
     elif form.errors:
@@ -576,7 +576,7 @@ def select_product_object_stock_to_manual_inventory_manage(
         "manual_inventory_manage": manual_inventory_manage,
         "form": form,
         }
-    template = "product_stock/manual_inventory_manage/modal/select_product_object_stock_list.html"
+    template = "manual_inventory_manage/modal/select_product_object_stock_list.html"
     return TemplateResponse( request, template, ctx, status=status )
 
 
@@ -628,13 +628,13 @@ def select_product_stock_to_order_manage(request, order_manage_pk):
             }
         msg = (
                 pgettext_lazy(
-                    "Dashboard message related to an order",
+                    "product_stock message related to an order",
                     "%(order_manage)sへ %(quantity)d 個商品を追加",
                     )
                 % msg_dict
         )
         messages.success( request, msg )
-        return redirect( "order-manage-details",
+        return redirect( "product_stock:order-manage-details",
                          order_manage_pk=order_manage_pk
                          )
     elif form.errors:
@@ -643,7 +643,7 @@ def select_product_stock_to_order_manage(request, order_manage_pk):
         "order_manage": order_manage,
         "form": form,
         }
-    template = "product_stock/order_manage/select_product_stock_list.html"
+    template = "order_manage/select_product_stock_list.html"
     return TemplateResponse( request, template, ctx, status=status )
 
 
@@ -686,13 +686,13 @@ def select_product_stock_to_barter_manage(request, barter_manage_pk):
             }
         msg = (
                 pgettext_lazy(
-                    "Dashboard message related to an order",
+                    "product_stock message related to an order",
                     "%(barter_manage)sへ %(quantity)d 個商品を追加",
                     )
                 % msg_dict
         )
         messages.success( request, msg )
-        return redirect( "barter-manage-details",
+        return redirect( "product_stock:barter-manage-details",
                          barter_manage_pk=barter_manage_pk
                          )
     elif form.errors:
@@ -701,7 +701,7 @@ def select_product_stock_to_barter_manage(request, barter_manage_pk):
         "barter_manage": barter_manage,
         "form": form,
         }
-    template = "product_stock/barter_manage/modal/add_product_stock_list.html"
+    template = "barter_manage/modal/add_product_stock_list.html"
     return TemplateResponse( request, template, ctx, status=status )
 
 
@@ -744,13 +744,13 @@ def select_product_stock_to_store_to_store_manage(request, store_to_store_manage
             }
         msg = (
                 pgettext_lazy(
-                    "Dashboard message related to an order",
+                    "product_stock message related to an order",
                     "%(store_to_store_manage)sへ %(quantity)d 個商品を追加",
                     )
                 % msg_dict
         )
         messages.success( request, msg )
-        return redirect( "store-to-store-manage-details",
+        return redirect( "product_stock:store-to-store-manage-details",
                          store_to_store_manage_pk=store_to_store_manage_pk
                          )
     elif form.errors:
@@ -759,7 +759,7 @@ def select_product_stock_to_store_to_store_manage(request, store_to_store_manage
         "store_to_store_manage": store_to_store_manage,
         "form": form,
         }
-    template = "product_stock/store_to_store_manage/modal/add_product_stock_list.html"
+    template = "store_to_store_manage/modal/add_product_stock_list.html"
     return TemplateResponse( request, template, ctx, status=status )
 
 
@@ -806,13 +806,13 @@ def select_product_stock_to_manual_inventory_manage(
             }
         msg = (
                 pgettext_lazy(
-                    "Dashboard message related to an order",
+                    "product_stock message related to an order",
                     "%(manual_inventory_manage)sへ %(quantity)d 個商品を追加",
                     )
                 % msg_dict
         )
         messages.success( request, msg )
-        return redirect( "manual-inventory-manage-details",
+        return redirect( "product_stock:manual-inventory-manage-details",
                          manual_inventory_manage_pk=manual_inventory_manage_pk
                          )
     elif form.errors:
@@ -821,7 +821,7 @@ def select_product_stock_to_manual_inventory_manage(
         "manual_inventory_manage": manual_inventory_manage,
         "form": form,
         }
-    template = "product_stock/manual_inventory_manage/modal/add_product_stock_list.html"
+    template = "manual_inventory_manage/modal/add_product_stock_list.html"
     return TemplateResponse( request, template, ctx, status=status )
 
 
@@ -883,7 +883,7 @@ def add_new_product_to_barter_manage_numerous(request, barter_manage_pk):
             product_stock_temp.save()
 
         redirect_url = reverse(
-            "input-iemi-to-barter-manage",
+            "product_stock:input-iemi-to-barter-manage",
             kwargs={ "barter_manage_pk": barter_manage_pk,
                      "product_stock_temp_pk": product_stock_temp.pk,
                      "quantity": quantity
@@ -900,7 +900,7 @@ def add_new_product_to_barter_manage_numerous(request, barter_manage_pk):
         "barter_manage": barter_manage,
         "form": form,
         }
-    template = "product_stock/barter_manage/add_new_product_numenous.html"
+    template = "barter_manage/add_new_product_numenous.html"
     return TemplateResponse( request, template, ctx, status=status )
 
 
@@ -975,13 +975,13 @@ def input_iemi_to_barter_manage(
             }
         msg = (
                 pgettext_lazy(
-                    "Dashboard message related to an order",
+                    "product_stock message related to an order",
                     "%(barter_manage)sへ %(quantity)d 個商品を追加",
                     )
                 % msg_dict
         )
         messages.success( request, msg )
-        return redirect( "barter-manage-details",
+        return redirect( "product_stock:barter-manage-details",
                          barter_manage_pk=barter_manage_pk
                          )
 
@@ -991,7 +991,7 @@ def input_iemi_to_barter_manage(
         "formset": formset,
         "formbulk": formbulk,
         }
-    template = "product_stock/barter_manage/add_product_input_IEMI.html"
+    template = "barter_manage/add_product_input_IEMI.html"
     return TemplateResponse( request, template, ctx, status=status )
 
 # ---------------------------------------------------------
@@ -1024,7 +1024,7 @@ def add_new_product_to_order_manage_numerous(request, order_manage_pk):
             product_stock_temp.save()
 
         redirect_url = reverse(
-            "input-iemi-to-order-manage",
+            "product_stock:input-iemi-to-order-manage",
             kwargs={ "order_manage_pk": order_manage_pk,
                      "product_stock_temp_pk": product_stock_temp.pk,
                      "quantity": quantity
@@ -1042,7 +1042,7 @@ def add_new_product_to_order_manage_numerous(request, order_manage_pk):
         "form": form,
 
         }
-    template = "product_stock/order_manage/add_new_product_numenous.html"
+    template = "order_manage/add_new_product_numenous.html"
     return TemplateResponse( request, template, ctx, status=status )
 
 
@@ -1115,13 +1115,13 @@ def input_iemi_to_order_manage(
             }
         msg = (
                 pgettext_lazy(
-                    "Dashboard message related to an order",
+                    "product_stock message related to an order",
                     "%(order_manage)sへ %(quantity)d 個商品を追加",
                     )
                 % msg_dict
         )
         messages.success( request, msg )
-        return redirect( "order-manage-details",
+        return redirect( "product_stock:order-manage-details",
                          order_manage_pk=order_manage_pk
                          )
 
@@ -1131,7 +1131,7 @@ def input_iemi_to_order_manage(
         "formset": formset,
         "formbulk": formbulk,
         }
-    template = "product_stock/order_manage/add_product_input_IEMI.html"
+    template = "order_manage/add_product_input_IEMI.html"
     return TemplateResponse( request, template, ctx, status=status )
 
 # --------------------------------------------------------------------------------------------
@@ -1185,7 +1185,7 @@ def order_manage_list(request):
         "order_manage_s_filter": order_manage_s_filter,
         "is_empty": not order_manage_s_filter.queryset.exists(),
         }
-    return TemplateResponse( request, "product_stock/order_manage/list.html",
+    return TemplateResponse( request, "order_manage/list.html",
                              ctx
                              )
 
@@ -1210,7 +1210,7 @@ def barter_manage_list(request):
         "is_empty": not barter_manage_s_filter.queryset.exists(),
         }
 
-    return TemplateResponse( request, "product_stock/barter_manage/list.html",
+    return TemplateResponse( request, "barter_manage/list.html",
                              ctx
                              )
 
@@ -1238,7 +1238,7 @@ def store_to_store_manage_list(request):
         "is_empty": not store_to_store_manage_s_filter.queryset.exists(),
         }
     return TemplateResponse( request,
-                             "product_stock/store_to_store_manage/list.html",
+                             "store_to_store_manage/list.html",
                              ctx
                              )
 
@@ -1267,7 +1267,7 @@ def manual_inventory_manage_list(request):
         }
 
     return TemplateResponse( request,
-                             "product_stock/manual_inventory_manage/list.html",
+                             "manual_inventory_manage/list.html",
                              ctx
                              )
 
@@ -1291,7 +1291,7 @@ def shop_list(request):
     ctx = {
         "shops": shops,
         }
-    return TemplateResponse( request, "product_stock/shops/shops.html", ctx )
+    return TemplateResponse( request, "shops/shops.html", ctx )
 
 
 @staff_member_required
@@ -1301,11 +1301,11 @@ def shop_create(request):
     form = forms.ShopsForm( request.POST or None, instance=shop )
     if form.is_valid():
         shop = form.save()
-        msg = pgettext_lazy( "Dashboard message", "店舗を新規追加" )
+        msg = pgettext_lazy( "product_stock message", "店舗を新規追加" )
         messages.success( request, msg )
-        return redirect( "shop-list" )
+        return redirect( "product_stock:shop-list" )
     ctx = { "shop": shop, "form": form }
-    return TemplateResponse( request, "product_stock/shops/forms.html", ctx )
+    return TemplateResponse( request, "shops/forms.html", ctx )
 
 
 @staff_member_required
@@ -1315,11 +1315,11 @@ def shop_edit(request, shop_pk):
     form = forms.ShopsForm( request.POST or None, instance=shop )
     if form.is_valid():
         shop = form.save()
-        msg = pgettext_lazy( "Dashboard message", "店舗を編集済" )
+        msg = pgettext_lazy( "product_stock message", "店舗を編集済" )
         messages.success( request, msg )
-        return redirect( "shop-list" )
+        return redirect( "product_stock:shop-list" )
     ctx = { "shop": shop, "form": form }
-    return TemplateResponse( request, "product_stock/shops/forms.html", ctx )
+    return TemplateResponse( request, "shops/forms.html", ctx )
 
 
 # --------------------------------------------------------------------------------------------
@@ -1341,7 +1341,7 @@ def E_market_list(request):
     ctx = {
         "E_market_s": E_market_s,
         }
-    return TemplateResponse( request, "product_stock/E_market/E_market.html",
+    return TemplateResponse( request, "E_market/E_market.html",
                              ctx
                              )
 
@@ -1355,9 +1355,9 @@ def E_market_create(request):
         E_market = form.save()
         msg = pgettext_lazy( "Dashboard message", "Eマーケットを新規追加" )
         messages.success( request, msg )
-        return redirect( "E-market-list" )
+        return redirect( "product_stock:E-market-list" )
     ctx = { "E_market": E_market, "form": form }
-    return TemplateResponse( request, "product_stock/E_market/forms.html",
+    return TemplateResponse( request, "E_market/forms.html",
                              ctx
                              )
 
@@ -1371,9 +1371,9 @@ def E_market_edit(request, E_market_pk):
         E_market = form.save()
         msg = pgettext_lazy( "Dashboard message", "Eマーケットを編集済" )
         messages.success( request, msg )
-        return redirect( "E-market-list" )
+        return redirect( "product_stock:E-market-list" )
     ctx = { "E_market": E_market, "form": form }
-    return TemplateResponse( request, "product_stock/E_market/forms.html",
+    return TemplateResponse( request, "E_market/forms.html",
                              ctx
                              )
 
@@ -1399,7 +1399,7 @@ def extra_information_list(request):
         "extra_informations": extra_informations,
         }
     return TemplateResponse( request,
-                             "product_stock/ExtraInformation/extrainformationlist.html",
+                             "ExtraInformation/extrainformationlist.html",
                              ctx
                              )
 
@@ -1415,10 +1415,10 @@ def extra_information_create(request):
         extra_information = form.save()
         msg = pgettext_lazy( "Dashboard message", "追加情報を追加" )
         messages.success( request, msg )
-        return redirect( "extra-information-list" )
+        return redirect( "product_stock:extra-information-list" )
     ctx = { "extra_information": extra_information, "form": form }
     return TemplateResponse( request,
-                             "product_stock/ExtraInformation/forms.html", ctx
+                             "ExtraInformation/forms.html", ctx
                              )
 
 
@@ -1433,10 +1433,10 @@ def extra_information_edit(request, extra_information_pk):
         extra_information = form.save()
         msg = pgettext_lazy( "Dashboard message", "追加情報を編集済" )
         messages.success( request, msg )
-        return redirect( "extra-information-list" )
+        return redirect( "product_stock:extra-information-list" )
     ctx = { "extra_information": extra_information, "form": form }
     return TemplateResponse( request,
-                             "product_stock/ExtraInformation/forms.html", ctx
+                             "ExtraInformation/forms.html", ctx
                              )
 
 
@@ -1470,7 +1470,7 @@ def suppliers_list(request):
         "is_empty": not suppliers_s_filter.queryset.exists(),
         }
     return TemplateResponse( request,
-                             "product_stock/Suppliers/suppliers.html",
+                             "Suppliers/suppliers.html",
                              ctx
                              )
 
@@ -1515,10 +1515,10 @@ def suppliers_create(request):
             pgettext_lazy( "Dashboard message", "取引先(個人)を追加" )
         )
         messages.success( request, msg )
-        return redirect( "suppliers-details", suppliers_pk=suppliers.pk )
+        return redirect( "product_stock:suppliers-details", suppliers_pk=suppliers.pk )
     ctx = { "suppliers": suppliers, "form": form }
     return TemplateResponse( request,
-                             "product_stock/Suppliers/forms.html", ctx
+                             "Suppliers/forms.html", ctx
                              )
 
 
@@ -1561,11 +1561,11 @@ def suppliers_edit(request, suppliers_pk):
             pgettext_lazy( "Dashboard message", "取引先(個人)を編集済" )
         )
         messages.success( request, msg )
-        return redirect( "suppliers-details", suppliers_pk=suppliers.pk )
+        return redirect( "product_stock:suppliers-details", suppliers_pk=suppliers.pk )
 
     ctx = { "suppliers": suppliers, "form": form }
     return TemplateResponse( request,
-                             "product_stock/Suppliers/forms.html", ctx
+                             "Suppliers/forms.html", ctx
                              )
 
 
@@ -1589,7 +1589,7 @@ def suppliers_details(request, suppliers_pk):
             "address": address
             }
     return TemplateResponse( request,
-                             "product_stock/Suppliers/detail.html", ctx
+                             "Suppliers/detail.html", ctx
                              )
 
 
@@ -1623,7 +1623,7 @@ def legal_person_list(request):
         "is_empty": not legal_person_s_filter.queryset.exists(),
         }
     return TemplateResponse( request,
-                             "product_stock/LegalPerson/legal_person.html",
+                             "LegalPerson/legal_person.html",
                              ctx
                              )
 
@@ -1661,13 +1661,13 @@ def legal_person_create(request):
         legal_person.save()
         msg = pgettext_lazy( "Dashboard message", "取引先(個人)を編集済" )
         messages.success( request, msg )
-        return redirect( "legal-person-details",
+        return redirect( "product_stock:legal-person-details",
                          legal_person_pk=legal_person.pk
                          )
 
     ctx = { "legal_person": legal_person, "form": form }
     return TemplateResponse( request,
-                             "product_stock/LegalPerson/forms.html", ctx
+                             "LegalPerson/forms.html", ctx
                              )
 
 
@@ -1704,12 +1704,12 @@ def legal_person_edit(request, legal_person_pk):
 
         msg = pgettext_lazy( "Dashboard message", "取引先(法人)を編集済" )
         messages.success( request, msg )
-        return redirect( "legal-person-details",
+        return redirect( "product_stock:legal-person-details",
                          legal_person_pk=legal_person.pk
                          )
     ctx = { "legal_person": legal_person, "form": form }
     return TemplateResponse( request,
-                             "product_stock/LegalPerson/forms.html", ctx
+                             "LegalPerson/forms.html", ctx
                              )
 
 
@@ -1733,7 +1733,7 @@ def legal_person_details(request, legal_person_pk):
             "address": address,
             }
     return TemplateResponse( request,
-                             "product_stock/LegalPerson/detail.html", ctx
+                             "LegalPerson/detail.html", ctx
                              )
 
 
@@ -1758,7 +1758,7 @@ def product_stock_status_list(request):
         "product_stock_status_s": product_stock_status_s,
         }
     return TemplateResponse( request,
-                             "product_stock/product_stock_status/product_stock_status.html",
+                             "product_stock_status/product_stock_status.html",
                              ctx
                              )
 
@@ -1774,10 +1774,10 @@ def product_stock_status_create(request):
         product_stock_status = form.save()
         msg = pgettext_lazy( "Dashboard message", "商品状態を追加" )
         messages.success( request, msg )
-        return redirect( "product-stock-status-list" )
+        return redirect( "product_stock:product-stock-status-list" )
     ctx = { "product_stock_status": product_stock_status, "form": form }
     return TemplateResponse( request,
-                             "product_stock/product_stock_status/forms.html",
+                             "product_stock_status/forms.html",
                              ctx
                              )
 
@@ -1795,10 +1795,10 @@ def product_stock_status_edit(request, product_stock_status_pk):
         product_stock_status = form.save()
         msg = pgettext_lazy( "Dashboard message", "商品状態を編集" )
         messages.success( request, msg )
-        return redirect( "product-stock-status-list" )
+        return redirect( "product_stock:product-stock-status-list" )
     ctx = { "product_stock_status": product_stock_status, "form": form }
     return TemplateResponse( request,
-                             "product_stock/product_stock_status/forms.html",
+                             "product_stock_status/forms.html",
                              ctx
                              )
 
@@ -1850,12 +1850,12 @@ def create_order_manage_from_draft(request, order_manage_pk):
         # TODO:email
 
         # emails.send_order_manage_confirmation.delay(order_manage.pk, request.user.pk)
-        return redirect( "order-manage-details",
+        return redirect( "product_stock:order-manage-details",
                          order_manage_pk=order_manage_pk
                          )
     elif form.errors:
         status = 400
-    template = "product_stock/order_manage/model/create_order_manage.html"
+    template = "order_manage/model/create_order_manage.html"
     ctx = { "form": form, "order_manage": order_manage }
     return TemplateResponse( request, template, ctx, status=status )
 
@@ -1886,12 +1886,12 @@ def create_barter_manage_from_draft(request, barter_manage_pk):
         # TODO:email
 
         # emails.send_barter_manage_confirmation.delay(barter_manage.pk, request.user.pk)
-        return redirect( "barter-manage-details",
+        return redirect( "product_stock:barter-manage-details",
                          barter_manage_pk=barter_manage_pk
                          )
     elif form.errors:
         status = 400
-    template = "product_stock/barter_manage/modal/create_barter_manage.html"
+    template = "barter_manage/modal/create_barter_manage.html"
     ctx = { "form": form, "barter_manage": barter_manage }
     return TemplateResponse( request, template, ctx, status=status )
 
@@ -1923,12 +1923,12 @@ def create_store_to_store_manage_from_draft(request, store_to_store_manage_pk):
         # TODO:email
 
         # emails.send_store_to_store_manage_confirmation.delay(store_to_store_manage.pk, request.user.pk)
-        return redirect( "store-to-store-manage-details",
+        return redirect( "product_stock:store-to-store-manage-details",
                          store_to_store_manage_pk=store_to_store_manage_pk
                          )
     elif form.errors:
         status = 400
-    template = "product_stock/store_to_store_manage/modal/create_store_to_store_manage.html"
+    template = "store_to_store_manage/modal/create_store_to_store_manage.html"
     ctx = { "form": form, "store_to_store_manage": store_to_store_manage }
     return TemplateResponse( request, template, ctx, status=status )
 
@@ -1960,12 +1960,12 @@ def create_manual_inventory_manage_from_draft(request, manual_inventory_manage_p
         # TODO:email
 
         # emails.send_manual_inventory_manage_confirmation.delay(manual_inventory_manage.pk, request.user.pk)
-        return redirect( "manual-inventory-manage-details",
+        return redirect( "product_stock:manual-inventory-manage-details",
                          manual_inventory_manage_pk=manual_inventory_manage_pk
                          )
     elif form.errors:
         status = 400
-    template = "product_stock/manual_inventory_manage/modal/create_manual_inventory_manage.html"
+    template = "manual_inventory_manage/modal/create_manual_inventory_manage.html"
     ctx = { "form": form, "manual_inventory_manage": manual_inventory_manage }
     return TemplateResponse( request, template, ctx, status=status )
 
@@ -2011,7 +2011,7 @@ def order_manage_create(request, order_manage_type_No=0):
                                              user=request.user
                                              )
     messages.success( request, msg )
-    return redirect( "order-manage-details", order_manage_pk=order_manage.pk )
+    return redirect( "product_stock:order-manage-details", order_manage_pk=order_manage.pk )
 
 
 @staff_member_required
@@ -2030,7 +2030,7 @@ def barter_manage_create(request):
                                               )
     # Send success message and redirect to the draft details
     messages.success( request, msg )
-    return redirect( "barter-manage-details",
+    return redirect( "product_stock:barter-manage-details",
                      barter_manage_pk=barter_manage.pk
                      )
 
@@ -2052,7 +2052,7 @@ def store_to_store_manage_create(request):
         )
     # Send success message and redirect to the draft details
     messages.success( request, msg )
-    return redirect( "store-to-store-manage-details",
+    return redirect( "product_stock:store-to-store-manage-details",
                      store_to_store_manage_pk=store_to_store_manage.pk
                      )
 
@@ -2074,7 +2074,7 @@ def manual_inventory_manage_create(request):
         )
     # Send success message and redirect to the draft details
     messages.success( request, msg )
-    return redirect( "manual-inventory-manage-details",
+    return redirect( "product_stock:manual-inventory-manage-details",
                      manual_inventory_manage_pk=manual_inventory_manage.pk
                      )
 
@@ -2110,7 +2110,7 @@ def store_to_store_manage_add_to_shops(request, store_to_store_manage_pk):
                 pgettext_lazy( "Dashboard message", "エラー：移動先を選択ください" )
             )
             messages.error( request, msg )
-            return redirect( "store-to-store-manage-details",
+            return redirect( "product_stock:store-to-store-manage-details",
                              store_to_store_manage_pk=store_to_store_manage_pk
                              )
         msg = (
@@ -2123,7 +2123,7 @@ def store_to_store_manage_add_to_shops(request, store_to_store_manage_pk):
             user=request.user
             )
         #
-        return redirect( "store-to-store-manage-details",
+        return redirect( "product_stock:store-to-store-manage-details",
                          store_to_store_manage_pk=store_to_store_manage_pk
                          )
     elif form.errors:
@@ -2131,7 +2131,7 @@ def store_to_store_manage_add_to_shops(request, store_to_store_manage_pk):
     ctx = { "store_to_store_manage": store_to_store_manage, "form": form }
     return TemplateResponse(
         request,
-        "product_stock/store_to_store_manage/modal/edit_to_shop.html", ctx,
+        "store_to_store_manage/modal/edit_to_shop.html", ctx,
         status=status
         )
 
@@ -2191,14 +2191,14 @@ def order_manage_add_suppliers(request, order_manage_pk):
             user=request.user
             )
 
-        return redirect( "order-manage-details",
+        return redirect( "product_stock:order-manage-details",
                          order_manage_pk=order_manage_pk
                          )
     elif form.errors:
         status = 400
     ctx = { "order_manage": order_manage, "form": form }
     return TemplateResponse(
-        request, "product_stock/order_manage/edit_suppliers.html", ctx,
+        request, "order_manage/edit_suppliers.html", ctx,
         status=status
         )
 
@@ -2260,14 +2260,14 @@ def barter_manage_add_suppliers(request, barter_manage_pk):
             user=request.user
             )
 
-        return redirect( "barter-manage-details",
+        return redirect( "product_stock:barter-manage-details",
                          barter_manage_pk=barter_manage_pk
                          )
     elif form.errors:
         status = 400
     ctx = { "barter_manage": barter_manage, "form": form }
     return TemplateResponse(
-        request, "product_stock/barter_manage/edit_suppliers.html", ctx,
+        request, "barter_manage/edit_suppliers.html", ctx,
         status=status
         )
 
@@ -2323,14 +2323,14 @@ def order_manage_add_legal_person(request, order_manage_pk):
             order_manage=order_manage,
             user=request.user
             )
-        return redirect( "order-manage-details",
+        return redirect( "product_stock:order-manage-details",
                          order_manage_pk=order_manage_pk
                          )
     elif form.errors:
         status = 400
     ctx = { "order_manage": order_manage, "form": form }
     return TemplateResponse(
-        request, "product_stock/order_manage/edit_legal_person.html",
+        request, "order_manage/edit_legal_person.html",
         ctx,
         status=status
         )
@@ -2387,14 +2387,14 @@ def barter_manage_add_legal_person(request, barter_manage_pk):
             barter_manage=barter_manage,
             user=request.user
             )
-        return redirect( "barter-manage-details",
+        return redirect( "product_stock:barter-manage-details",
                          barter_manage_pk=barter_manage_pk
                          )
     elif form.errors:
         status = 400
     ctx = { "barter_manage": barter_manage, "form": form }
     return TemplateResponse(
-        request, "product_stock/barter_manage/edit_legal_person.html",
+        request, "barter_manage/edit_legal_person.html",
         ctx,
         status=status
         )
@@ -2443,14 +2443,14 @@ def order_manage_edit_legal_person(request, order_manage_pk):
             order_manage=order_manage,
             user=request.user
             )
-        return redirect( "order-manage-details",
+        return redirect( "product_stock:order-manage-details",
                          order_manage_pk=order_manage_pk
                          )
     elif form.errors:
         status = 400
     ctx = { "order_manage": order_manage, "form": form, "edit": True }
     return TemplateResponse(
-        request, "product_stock/order_manage/edit_legal_person.html",
+        request, "order_manage/edit_legal_person.html",
         ctx,
         status=status
         )
@@ -2498,14 +2498,14 @@ def barter_manage_edit_legal_person(request, barter_manage_pk):
             barter_manage=barter_manage,
             user=request.user
             )
-        return redirect( "barter-manage-details",
+        return redirect( "product_stock:barter-manage-details",
                          barter_manage_pk=barter_manage_pk
                          )
     elif form.errors:
         status = 400
     ctx = { "barter_manage": barter_manage, "form": form, "edit": True }
     return TemplateResponse(
-        request, "product_stock/barter_manage/edit_legal_person.html",
+        request, "barter_manage/edit_legal_person.html",
         ctx,
         status=status
         )
@@ -2560,14 +2560,14 @@ def order_manage_edit_suppliers(request, order_manage_pk):
             order_manage=order_manage,
             user=request.user
             )
-        return redirect( "order-manage-details",
+        return redirect( "product_stock:order-manage-details",
                          order_manage_pk=order_manage_pk
                          )
     elif form.errors:
         status = 400
     ctx = { "order_manage": order_manage, "form": form, "edit": True }
     return TemplateResponse(
-        request, "product_stock/order_manage/edit_suppliers.html",
+        request, "order_manage/edit_suppliers.html",
         ctx,
         status=status
         )
@@ -2621,7 +2621,7 @@ def barter_manage_edit_suppliers(request, barter_manage_pk):
             barter_manage=barter_manage,
             user=request.user
             )
-        return redirect( "barter-manage-details",
+        return redirect( "product_stock:barter-manage-details",
                          barter_manage_pk=barter_manage_pk
                          )
 
@@ -2629,7 +2629,7 @@ def barter_manage_edit_suppliers(request, barter_manage_pk):
         status = 400
     ctx = { "barter_manage": barter_manage, "form": form, "edit": True }
     return TemplateResponse(
-        request, "product_stock/barter_manage/edit_suppliers.html",
+        request, "barter_manage/edit_suppliers.html",
         ctx,
         status=status
         )
@@ -2661,7 +2661,7 @@ def order_manage_add_slip_number(request, order_manage_pk):
         status = 400
     ctx = { "order_manage": order_manage, "form": form }
     ctx.update( csrf( request ) )
-    template = "product_stock/order_manage/model/add_slip.html"
+    template = "order_manage/model/add_slip.html"
     return TemplateResponse( request, template, ctx, status=status )
 
 
@@ -2682,7 +2682,7 @@ def barter_manage_add_slip_number(request, barter_manage_pk):
         status = 400
     ctx = { "barter_manage": barter_manage, "form": form }
     ctx.update( csrf( request ) )
-    template = "product_stock/barter_manage/modal/add_slip.html"
+    template = "barter_manage/modal/add_slip.html"
     return TemplateResponse( request, template, ctx, status=status )
 
 
@@ -2703,7 +2703,7 @@ def store_to_store_manage_add_slip_number(request, store_to_store_manage_pk):
         status = 400
     ctx = { "store_to_store_manage": store_to_store_manage, "form": form }
     ctx.update( csrf( request ) )
-    template = "product_stock/store_to_store_manage/modal/add_slip.html"
+    template = "store_to_store_manage/modal/add_slip.html"
     return TemplateResponse( request, template, ctx, status=status )
 
 
@@ -2734,7 +2734,7 @@ def order_manage_add_note(request, order_manage_pk):
         status = 400
     ctx = { "order_manage": order_manage, "form": form }
     ctx.update( csrf( request ) )
-    template = "product_stock/order_manage/model/add_note.html"
+    template = "order_manage/model/add_note.html"
     return TemplateResponse( request, template, ctx, status=status )
 
 
@@ -2755,7 +2755,7 @@ def barter_manage_add_note(request, barter_manage_pk):
         status = 400
     ctx = { "barter_manage": barter_manage, "form": form }
     ctx.update( csrf( request ) )
-    template = "product_stock/barter_manage/modal/add_note.html"
+    template = "barter_manage/modal/add_note.html"
     return TemplateResponse( request, template, ctx, status=status )
 
 
@@ -2778,7 +2778,7 @@ def store_to_store_manage_add_note(request, store_to_store_manage_pk):
         status = 400
     ctx = { "store_to_store_manage": store_to_store_manage, "form": form }
     ctx.update( csrf( request ) )
-    template = "product_stock/store_to_store_manage/modal/add_note.html"
+    template = "store_to_store_manage/modal/add_note.html"
     return TemplateResponse( request, template, ctx, status=status )
 
 
@@ -2801,7 +2801,7 @@ def manual_inventory_manage_add_note(request, manual_inventory_manage_pk):
         status = 400
     ctx = { "manual_inventory_manage": manual_inventory_manage, "form": form }
     ctx.update( csrf( request ) )
-    template = "product_stock/manual_inventory_manage/modal/add_note.html"
+    template = "manual_inventory_manage/modal/add_note.html"
     return TemplateResponse( request, template, ctx, status=status )
 
 
@@ -2845,7 +2845,7 @@ def order_manage_details(request, order_manage_pk):
         "is_coordination": is_coordination
         }
     return TemplateResponse( request,
-                             "product_stock/order_manage/detail.html", ctx
+                             "order_manage/detail.html", ctx
                              )
 
 
@@ -2866,7 +2866,7 @@ def barter_manage_details(request, barter_manage_pk):
         "notes": barter_manage.events.filter( type=events.ManageEvents.NOTE_ADDED ),
         }
     return TemplateResponse( request,
-                             "product_stock/barter_manage/detail.html", ctx
+                             "barter_manage/detail.html", ctx
                              )
 
 
@@ -2890,7 +2890,7 @@ def store_to_store_manage_details(request, store_to_store_manage_pk):
             ),
         }
     return TemplateResponse( request,
-                             "product_stock/store_to_store_manage/detail.html",
+                             "store_to_store_manage/detail.html",
                              ctx
                              )
 
@@ -2915,7 +2915,7 @@ def manual_inventory_manage_details(request, manual_inventory_manage_pk):
             ),
         }
     return TemplateResponse( request,
-                             "product_stock/manual_inventory_manage/detail.html",
+                             "manual_inventory_manage/detail.html",
                              ctx
                              )
 
@@ -2947,8 +2947,8 @@ def remove_draft_order_manage(request, order_manage_pk):
                              "執行表下書きを削除"
                              )
         messages.success( request, msg )
-        return redirect( "order-manage-list" )
-    template = "product_stock/order_manage/model/remove_order_manage.html"
+        return redirect( "product_stock:order-manage-list" )
+    template = "order_manage/model/remove_order_manage.html"
     ctx = { "order_manage": order_manage }
     return TemplateResponse( request, template, ctx )
 
@@ -2969,8 +2969,8 @@ def remove_draft_barter_manage(request, barter_manage_pk):
                              "執行表下書きを削除"
                              )
         messages.success( request, msg )
-        return redirect( "barter-manage-list" )
-    template = "product_stock/barter_manage/modal/remove_barter_manage.html"
+        return redirect( "product_stock:barter-manage-list" )
+    template = "barter_manage/modal/remove_barter_manage.html"
     ctx = { "barter_manage": barter_manage }
     return TemplateResponse( request, template, ctx )
 
@@ -2993,8 +2993,8 @@ def remove_draft_store_to_store_manage(request, store_to_store_manage_pk):
                              "執行表下書きを削除"
                              )
         messages.success( request, msg )
-        return redirect( "store-to-store-manage-list" )
-    template = "product_stock/store_to_store_manage/modal/remove_store_to_store_manage.html"
+        return redirect( "product_stock:store-to-store-manage-list" )
+    template = "store_to_store_manage/modal/remove_store_to_store_manage.html"
     ctx = { "store_to_store_manage": store_to_store_manage }
     return TemplateResponse( request, template, ctx )
 
@@ -3019,8 +3019,8 @@ def remove_draft_manual_inventory_manage(request, manual_inventory_manage_pk):
                              "執行表下書きを削除"
                              )
         messages.success( request, msg )
-        return redirect( "manual-inventory-manage-list" )
-    template = "product_stock/manual_inventory_manage/modal/remove_manual_inventory_manage.html"
+        return redirect( "product_stock:manual-inventory-manage-list" )
+    template = "manual_inventory_manage/modal/remove_manual_inventory_manage.html"
     ctx = { "manual_inventory_manage": manual_inventory_manage }
     return TemplateResponse( request, template, ctx )
 
@@ -3057,14 +3057,14 @@ def remove_order_manage_line(request, order_manage_pk, order_manage_line_pk):
             order_manage_lines=[(order_manage_line.quantity, order_manage_line)]
             )
         messages.success( request, msg )
-        return redirect( "order-manage-details",
+        return redirect( "product_stock:order-manage-details",
                          order_manage_pk=order_manage_pk
                          )
     elif form.errors:
         status = 400
     ctx = { "order_manage": order_manage, "item": order_manage_line, "form": form }
     return TemplateResponse(
-        request, "product_stock/order_manage/model/cancel_line.html", ctx,
+        request, "order_manage/model/cancel_line.html", ctx,
         status=status
         )
 
@@ -3095,14 +3095,14 @@ def remove_barter_manage_line(request, barter_manage_pk, barter_manage_line_pk):
             barter_manage_lines=[(1, barter_manage_line)]
             )
         messages.success( request, msg )
-        return redirect( "barter-manage-details",
+        return redirect( "product_stock:barter-manage-details",
                          barter_manage_pk=barter_manage_pk
                          )
     elif form.errors:
         status = 400
     ctx = { "barter_manage": barter_manage, "item": barter_manage_line, "form": form }
     return TemplateResponse(
-        request, "product_stock/barter_manage/modal/cancel_line.html", ctx,
+        request, "barter_manage/modal/cancel_line.html", ctx,
         status=status
         )
 
@@ -3140,7 +3140,7 @@ def remove_store_to_store_manage_line(
             store_to_store_manage_lines=[(1, store_to_store_manage_line)]
             )
         messages.success( request, msg )
-        return redirect( "store-to-store-manage-details",
+        return redirect( "product_stock:store-to-store-manage-details",
                          store_to_store_manage_pk=store_to_store_manage_pk
                          )
     elif form.errors:
@@ -3148,7 +3148,7 @@ def remove_store_to_store_manage_line(
     ctx = { "store_to_store_manage": store_to_store_manage,
             "item": store_to_store_manage_line, "form": form }
     return TemplateResponse(
-        request, "product_stock/store_to_store_manage/modal/cancel_line.html",
+        request, "store_to_store_manage/modal/cancel_line.html",
         ctx, status=status
         )
 
@@ -3185,7 +3185,7 @@ def remove_manual_inventory_manage_line(
             manual_inventory_manage_lines=[(1, manual_inventory_manage_line)]
             )
         messages.success( request, msg )
-        return redirect( "manual-inventory-manage-details",
+        return redirect( "product_stock:manual-inventory-manage-details",
                          manual_inventory_manage_pk=manual_inventory_manage_pk
                          )
     elif form.errors:
@@ -3194,7 +3194,7 @@ def remove_manual_inventory_manage_line(
             "item": manual_inventory_manage_line, "form": form }
     return TemplateResponse(
         request,
-        "product_stock/manual_inventory_manage/modal/cancel_line.html", ctx,
+        "manual_inventory_manage/modal/cancel_line.html", ctx,
         status=status
         )
 
@@ -3227,8 +3227,8 @@ def remove_order_manage(request, order_manage_pk):
                              "執行表を取消"
                              )
         messages.success( request, msg )
-        return redirect( "order-manage-list" )
-    template = "product_stock/order_manage/model/remove_order_manage.html"
+        return redirect( "product_stock:order-manage-list" )
+    template = "order_manage/model/remove_order_manage.html"
     ctx = { "order_manage": order_manage }
     return TemplateResponse( request, template, ctx )
 
@@ -3249,8 +3249,8 @@ def remove_barter_manage(request, barter_manage_pk):
                              "執行表を取消"
                              )
         messages.success( request, msg )
-        return redirect( "barter-manage-list" )
-    template = "product_stock/barter_manage/modal/remove_barter_manage.html"
+        return redirect( "product_stock:barter-manage-list" )
+    template = "barter_manage/modal/remove_barter_manage.html"
     ctx = { "barter_manage": barter_manage }
     return TemplateResponse( request, template, ctx )
 
@@ -3273,8 +3273,8 @@ def remove_store_to_store_manage(request, store_to_store_manage_pk):
                              "執行表を取消"
                              )
         messages.success( request, msg )
-        return redirect( "store-to-store-manage-list" )
-    template = "product_stock/store_to_store_manage/modal/remove_store_to_store_manage.html"
+        return redirect( "product_stock:store-to-store-manage-list" )
+    template = "store_to_store_manage/modal/remove_store_to_store_manage.html"
     ctx = { "store_to_store_manage": store_to_store_manage }
     return TemplateResponse( request, template, ctx )
 
@@ -3299,8 +3299,8 @@ def remove_manual_inventory_manage(request, manual_inventory_manage_pk):
                              "執行表を取消"
                              )
         messages.success( request, msg )
-        return redirect( "manual-inventory-manage-list" )
-    template = "product_stock/manual_inventory_manage/modal/remove_manual_inventory_manage.html"
+        return redirect( "product_stock:manual-inventory-manage-list" )
+    template = "manual_inventory_manage/modal/remove_manual_inventory_manage.html"
     ctx = { "manual_inventory_manage": manual_inventory_manage }
     return TemplateResponse( request, template, ctx )
 
@@ -3328,7 +3328,7 @@ def remove_manual_inventory_manage(request, manual_inventory_manage_pk):
 # ---------------------------------------------------------
 
 class stock_taking( generic.FormView ):
-    template_name = 'product_stock/Stock_taking/stock_taking_upload.html'
+    template_name = 'Stock_taking/stock_taking_upload.html'
     success_url = reverse_lazy( 'index' )
     form_class = forms.StockTakingUploadForm
     permission_required = "site.manage_settings"
@@ -3846,7 +3846,7 @@ def fulfill_order_manage_lines(request, order_manage_pk):
                 "Dashboard message related to an order", "執行項目はありません。"
                 )
         messages.success( request, msg )
-        return redirect( "order-manage-details",
+        return redirect( "product_stock:order-manage-details",
                          order_manage_pk=order_manage_pk
                          )
     elif form.errors:
@@ -3857,7 +3857,7 @@ def fulfill_order_manage_lines(request, order_manage_pk):
         "order_manage": order_manage,
         "unfulfilled_lines": unfulfilled_lines,
         }
-    template = "product_stock/order_manage/model/fulfillment_form.html"
+    template = "order_manage/model/fulfillment_form.html"
     return TemplateResponse( request, template, ctx, status=status )
 
 
@@ -3962,7 +3962,7 @@ def fulfill_barter_manage_lines(request, barter_manage_pk):
                 "Dashboard message related to an order", "執行項目はありません"
                 )
         messages.success( request, msg )
-        return redirect( "barter-manage-details",
+        return redirect( "product_stock:barter-manage-details",
                          barter_manage_pk=barter_manage_pk
                          )
     elif form.errors:
@@ -3973,7 +3973,7 @@ def fulfill_barter_manage_lines(request, barter_manage_pk):
         "barter_manage": barter_manage,
         "unfulfilled_lines": unfulfilled_lines,
         }
-    template = "product_stock/barter_manage/modal/fulfillment_form.html"
+    template = "barter_manage/modal/fulfillment_form.html"
     return TemplateResponse( request, template, ctx, status=status )
 
 
@@ -4067,7 +4067,7 @@ def fulfill_store_manage_lines_MOVEOUT(request, store_to_store_manage_pk):
                 "Dashboard message related to an order", "執行項目はありません"
                 )
         messages.success( request, msg )
-        return redirect( "store-to-store-manage-details",
+        return redirect( "product_stock:store-to-store-manage-details",
                          store_to_store_manage_pk=store_to_store_manage_pk
                          )
     elif form.errors:
@@ -4078,7 +4078,7 @@ def fulfill_store_manage_lines_MOVEOUT(request, store_to_store_manage_pk):
         "store_to_store_manage": store_to_store_manage,
         "unfulfilled_lines": unfulfilled_lines,
         }
-    template = "product_stock/store_to_store_manage/modal/fulfillment_form.html"
+    template = "store_to_store_manage/modal/fulfillment_form.html"
     return TemplateResponse( request, template, ctx, status=status )
 
 
@@ -4173,7 +4173,7 @@ def fulfill_store_manage_lines_MOVEIN(request, store_to_store_manage_pk):
                 "Dashboard message related to an order", "執行項目はありません"
                 )
         messages.success( request, msg )
-        return redirect( "store-to-store-manage-details",
+        return redirect( "product_stock:store-to-store-manage-details",
                          store_to_store_manage_pk=store_to_store_manage_pk
                          )
     elif form.errors:
@@ -4184,7 +4184,7 @@ def fulfill_store_manage_lines_MOVEIN(request, store_to_store_manage_pk):
         "store_to_store_manage": store_to_store_manage,
         "unfulfilled_lines": unfulfilled_lines,
         }
-    template = "product_stock/store_to_store_manage/modal/fulfillment_form_movein.html"
+    template = "store_to_store_manage/modal/fulfillment_form_movein.html"
     return TemplateResponse( request, template, ctx, status=status )
 
 
@@ -4267,7 +4267,7 @@ def fulfill_manual_manage_lines_LOCK(request, manual_inventory_manage_pk):
                 "Dashboard message related to an order", "執行項目はありません"
                 )
         messages.success( request, msg )
-        return redirect( "manual-inventory-manage-details",
+        return redirect( "product_stock:manual-inventory-manage-details",
                          manual_inventory_manage_pk=manual_inventory_manage_pk
                          )
     elif form.errors:
@@ -4278,7 +4278,7 @@ def fulfill_manual_manage_lines_LOCK(request, manual_inventory_manage_pk):
         "manual_inventory_manage": manual_inventory_manage,
         "unfulfilled_lines": unfulfilled_lines,
         }
-    template = "product_stock/manual_inventory_manage/modal/fulfillment_form_LOCK.html"
+    template = "manual_inventory_manage/modal/fulfillment_form_LOCK.html"
     return TemplateResponse( request, template, ctx, status=status )
 
 
@@ -4374,7 +4374,7 @@ def fulfill_manual_manage_lines_UNLOCK(request, manual_inventory_manage_pk):
                 "Dashboard message related to an order", "執行項目はありません"
                 )
         messages.success( request, msg )
-        return redirect( "manual-inventory-manage-details",
+        return redirect( "product_stock:manual-inventory-manage-details",
                          manual_inventory_manage_pk=manual_inventory_manage_pk
                          )
     elif form.errors:
@@ -4385,7 +4385,7 @@ def fulfill_manual_manage_lines_UNLOCK(request, manual_inventory_manage_pk):
         "manual_inventory_manage": manual_inventory_manage,
         "unfulfilled_lines": unfulfilled_lines,
         }
-    template = "product_stock/manual_inventory_manage/modal/fulfillment_form_UNLOCK.html"
+    template = "manual_inventory_manage/modal/fulfillment_form_UNLOCK.html"
     return TemplateResponse( request, template, ctx, status=status )
 
 
@@ -4422,7 +4422,7 @@ def product_change_history(request):
         "product_object_stock_change_history":product_object_stock_change_history
         }
     return TemplateResponse( request,
-                             "product_stock/history/product_change_history.html", ctx
+                             "history/product_change_history.html", ctx
                              )
 
 # -----------------------------------------------------------------------------------------------------------------
@@ -4447,7 +4447,7 @@ def product_stock_temp_list(request):
         "is_empty": not product_stock_temps_filter.queryset.exists(),
         }
     return TemplateResponse( request,
-                             "product_stock/product_stock_temp/list.html", ctx
+                             "product_stock_temp/list.html", ctx
                              )
 
 
@@ -4460,10 +4460,10 @@ def product_stock_temp_create(request):
         product_stock_temp = form.save(request.user,commit=True,is_logs=True)
         msg = pgettext_lazy( "Dashboard message", "在庫商品類追加" )
         messages.success( request, msg )
-        return redirect( "product-stock-temp-list" )
+        return redirect( "product_stock:product-stock-temp-list" )
     ctx = { "product_stock_temp": product_stock_temp, "form": form }
     return TemplateResponse( request,
-                             "product_stock/product_stock_temp/form.html", ctx
+                             "product_stock_temp/form.html", ctx
                              )
 
 
@@ -4479,10 +4479,10 @@ def product_stock_temp_edit(request, product_stock_temp_pk):
 
         msg = pgettext_lazy( "Dashboard message", "在庫商品類編集済" )
         messages.success( request, msg )
-        return redirect( "product-stock-temp-list" )
+        return redirect( "product_stock:product-stock-temp-list" )
     ctx = { "product_stock_temp": product_stock_temp, "form": form }
     return TemplateResponse( request,
-                             "product_stock/product_stock_temp/form.html", ctx
+                             "product_stock_temp/form.html", ctx
                              )
 
 
@@ -4541,7 +4541,7 @@ def product_object_stock_temp_list(request, product_stock_temp_pk):
         "change_history": change_history
         }
     return TemplateResponse( request,
-                             "product_stock/product_object_stock_temp/list.html",
+                             "product_object_stock_temp/list.html",
                              ctx
                              )
 
@@ -4575,7 +4575,7 @@ def product_object_stock_temp_details(request, product_stock_temp_pk,product_obj
         "change_history": change_history
         }
     return TemplateResponse( request,
-                             "product_stock/product_object_stock_temp/detail.html",
+                             "product_object_stock_temp/detail.html",
                              ctx
                              )
 
@@ -4598,7 +4598,7 @@ def product_object_stock_temp_create(request, product_stock_temp_pk):
         msg = pgettext_lazy( "Dashboard message", " %sの在庫を追加" ) % (
             product_stock_temp.name,)
         messages.success( request, msg )
-        return redirect( "product-object-stock-temp-list",
+        return redirect( "product_stock:product-object-stock-temp-list",
                          product_stock_temp_pk=product_stock_temp_pk
                          )
     ctx = {
@@ -4607,7 +4607,7 @@ def product_object_stock_temp_create(request, product_stock_temp_pk):
         "form": form
         }
     return TemplateResponse( request,
-                             "product_stock/product_object_stock_temp/form.html",
+                             "product_object_stock_temp/form.html",
                              ctx
                              )
 
@@ -4632,7 +4632,7 @@ def product_object_stock_temp_edit(
         product_object_stock_temp = form.save(user=request.user,commit=True)
         msg = pgettext_lazy( "Dashboard message", "在庫を編集済" )
         messages.success( request, msg )
-        return redirect( "product-object-stock-temp-list",
+        return redirect( "product_stock:product-object-stock-temp-list",
                          product_stock_temp_pk=product_stock_temp_pk
                          )
     ctx = {
@@ -4641,7 +4641,7 @@ def product_object_stock_temp_edit(
         "form": form
         }
     return TemplateResponse( request,
-                             "product_stock/product_object_stock_temp/form.html",
+                             "product_object_stock_temp/form.html",
                              ctx
                              )
 
@@ -4698,7 +4698,7 @@ def product_object_stock_temp_edit(
 #         "filter_set": product_filter,
 #         "is_empty": not product_filter.queryset.exists(),
 #     }
-#     return TemplateResponse(request, "product_stock/list.html", ctx)
+#     return TemplateResponse(request, "list.html", ctx)
 #
 #
 #
@@ -4738,7 +4738,7 @@ def product_object_stock_temp_edit(
 #         "margin": margin,
 #         "is_empty": not variants.exists(),
 #     }
-#     return TemplateResponse(request, "product_stock/detail.html", ctx)
+#     return TemplateResponse(request, "detail.html", ctx)
 #
 # @staff_member_required
 # @permission_required("product_stock.manage_products_stock_permissions")
@@ -4751,7 +4751,7 @@ def product_object_stock_temp_edit(
 #         "stock": stock,
 #     }
 #     return TemplateResponse(
-#         request, "product_stock/stock/detail.html", ctx
+#         request, "stock/detail.html", ctx
 #     )
 #
 #
@@ -4768,7 +4768,7 @@ def product_object_stock_temp_edit(
 #         msg = pgettext_lazy("Dashboard message", "Saved stock %s") % (stock.imei,)
 #         messages.success(request, msg)
 #         return redirect(
-#             "stock-details", product_pk=product.pk, stock_pk=stock.pk
+#             "product_stock:stock-details", product_pk=product.pk, stock_pk=stock.pk
 #         )
 #
 #     ctx = {
@@ -4776,7 +4776,7 @@ def product_object_stock_temp_edit(
 #         "product": product,
 #         "stock": stock,
 #     }
-#     return TemplateResponse(request, "product_stock/form.html", ctx)
+#     return TemplateResponse(request, "form.html", ctx)
 #
 #
 #
@@ -4794,10 +4794,10 @@ def product_object_stock_temp_edit(
 #         msg = pgettext_lazy("Dashboard message", "Saved variant %s") % (stock.imei,)
 #         messages.success(request, msg)
 #         return redirect(
-#             "stock-details", product_pk=product.pk, stock_pk=stock.pk
+#             "product_stock:stock-details", product_pk=product.pk, stock_pk=stock.pk
 #         )
 #     ctx = {"form": form, "product": product, "stock": stock}
-#     return TemplateResponse(request, "product_stock/form.html", ctx)
+#     return TemplateResponse(request, "form.html", ctx)
 #
 #
 #
@@ -4813,13 +4813,13 @@ def product_object_stock_temp_edit(
 #         stock.delete()
 #         msg = pgettext_lazy("Dashboard message", "Removed stock %s") % (stock.imei,)
 #         messages.success(request, msg)
-#         return redirect("product-details-for-stock", pk=product.pk)
+#         return redirect("product_stock:product-details-for-stock", pk=product.pk)
 #     ctx = {
 #         "product": product,
 #         "stock": stock,
 #         }
 #
-#     return TemplateResponse(request, "product_stock/modal/confirm_delete.html", ctx)
+#     return TemplateResponse(request, "modal/confirm_delete.html", ctx)
 #
 #
 
@@ -4855,7 +4855,7 @@ def product_object_stock_temp_edit(
 #         "filter_set": product_filter,
 #         "is_empty": not product_filter.queryset.exists(),
 #     }
-#     return TemplateResponse(request, "product_stock/list.html", ctx)
+#     return TemplateResponse(request, "list.html", ctx)
 #
 #
 #
@@ -4895,7 +4895,7 @@ def product_object_stock_temp_edit(
 #         "margin": margin,
 #         "is_empty": not variants.exists(),
 #     }
-#     return TemplateResponse(request, "product_stock/detail.html", ctx)
+#     return TemplateResponse(request, "detail.html", ctx)
 #
 # @staff_member_required
 # @permission_required("product_stock.manage_products_stock_permissions")
@@ -4908,7 +4908,7 @@ def product_object_stock_temp_edit(
 #         "stock": stock,
 #     }
 #     return TemplateResponse(
-#         request, "product_stock/stock/detail.html", ctx
+#         request, "stock/detail.html", ctx
 #     )
 #
 #
@@ -4925,7 +4925,7 @@ def product_object_stock_temp_edit(
 #         msg = pgettext_lazy("Dashboard message", "Saved stock %s") % (stock.imei,)
 #         messages.success(request, msg)
 #         return redirect(
-#             "stock-details", product_pk=product.pk, stock_pk=stock.pk
+#             "product_stock:stock-details", product_pk=product.pk, stock_pk=stock.pk
 #         )
 #
 #     ctx = {
@@ -4933,7 +4933,7 @@ def product_object_stock_temp_edit(
 #         "product": product,
 #         "stock": stock,
 #     }
-#     return TemplateResponse(request, "product_stock/form.html", ctx)
+#     return TemplateResponse(request, "form.html", ctx)
 #
 #
 #
@@ -4951,10 +4951,10 @@ def product_object_stock_temp_edit(
 #         msg = pgettext_lazy("Dashboard message", "Saved variant %s") % (stock.imei,)
 #         messages.success(request, msg)
 #         return redirect(
-#             "stock-details", product_pk=product.pk, stock_pk=stock.pk
+#             "product_stock:stock-details", product_pk=product.pk, stock_pk=stock.pk
 #         )
 #     ctx = {"form": form, "product": product, "stock": stock}
-#     return TemplateResponse(request, "product_stock/form.html", ctx)
+#     return TemplateResponse(request, "form.html", ctx)
 #
 #
 #
@@ -4970,13 +4970,13 @@ def product_object_stock_temp_edit(
 #         stock.delete()
 #         msg = pgettext_lazy("Dashboard message", "Removed stock %s") % (stock.imei,)
 #         messages.success(request, msg)
-#         return redirect("product-details-for-stock", pk=product.pk)
+#         return redirect("product_stock:product-details-for-stock", pk=product.pk)
 #     ctx = {
 #         "product": product,
 #         "stock": stock,
 #         }
 #
-#     return TemplateResponse(request, "product_stock/modal/confirm_delete.html", ctx)
+#     return TemplateResponse(request, "modal/confirm_delete.html", ctx)
 #
 #
 
@@ -5048,7 +5048,7 @@ def product_object_stock_temp_edit(
 #                 % msg_dict
 #         )
 #         messages.success( request, msg )
-#         return redirect( "manual-inventory-manage-details",
+#         return redirect( "product_stock:manual-inventory-manage-details",
 #                          manual_inventory_manage_pk=manual_inventory_manage_pk
 #                          )
 #
@@ -5056,7 +5056,7 @@ def product_object_stock_temp_edit(
 #         "manual_inventory_manage": manual_inventory_manage,
 #         "form": form,
 #         }
-#     template = "product_stock/manual_inventory_manage/modal/add_new_product.html"
+#     template = "manual_inventory_manage/modal/add_new_product.html"
 #     return TemplateResponse( request, template, ctx, status=status )
 
 

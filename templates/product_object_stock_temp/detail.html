@@ -1,0 +1,730 @@
+{% extends "base.html" %}
+{% load i18n %}
+{% load materializecss %}
+{% load static %}
+
+
+{% load price from taxed_prices %}
+{% load utils %}
+
+
+{% block title %}
+  {% trans "在庫商品" context "Dashboard product_stock_temp list" %} -{{ product_object_stock_temp }}- {{ block.super }}
+{% endblock %}
+
+{% block body_class %}body-product-stock-temp-list{% endblock %}
+
+{% block menu_product_stock_temp_class %}active{% endblock %}
+
+{% block newfilters %}{% endblock newfilters %}
+
+{% block header_extra %}{% endblock %}
+
+
+{% block breadcrumbs %}
+  <ul class="breadcrumbs breadcrumbs--history">
+    <li class="visible-s">
+      <a href="{% url "product_stock:product-stock-temp-list" %}" class="breadcrumb">
+        {% trans "在庫商品" context "Product form breadcrumbs" %}
+      </a>
+    </li>
+    <li>
+      <a href="#" class="breadcrumb">
+        {{ product_stock_temp }}
+      </a>
+    </li>
+    <li>
+      <a href="#" class="breadcrumb">
+        {{ product_object_stock_temp }}
+      </a>
+    </li>
+  </ul>
+{% endblock %}
+
+
+{% block content %}
+
+  {% if perms.product_stock.manage_product_object_stock %}
+    <div class="row tab-content" id="order-manage-details">
+      <div class="col s12 l12">
+        <div class="card shipment-table">
+          <div class="data-table-header">
+            <div class="data-table-title">
+              <div class="row" style="padding-top: 3%;">
+                <div class="col s6">
+                  <h5>
+                    {{ product_stock_temp.name }}
+                  </h5>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="data-table-container">
+
+            <table class="bordered highlight responsive data-table">
+              <thead>
+              <tr>
+                {% trans "JAN" context "Products list table header" as label %}
+                {% sorting_header 'jan_code' label %}
+
+                {% trans "名前" context "Products list table header" as label %}
+                {% sorting_header 'name' label %}
+
+                {% trans "平均価格" context "Products list table header" as label %}
+                {% sorting_header 'price_average' label %}
+
+                {% trans "説明" context "Products list table header" as label %}
+                {% sorting_header 'description' label %}
+              </tr>
+              </thead>
+              <tbody>
+              <tr class="last-no-border">
+                <td>
+                  {{ product_stock_temp.jan_code }}
+                </td>
+                <td>
+                  {{ product_stock_temp.name }}
+                </td>
+                <td>
+                  {% if product_stock_temp.price_average %}
+                    {% price product_stock_temp.price_average %}
+                  {% else %}
+                    ---
+                  {% endif %}
+                </td>
+                <td>
+                  {{ product_stock_temp.description }}
+                </td>
+              </tr>
+              </tbody>
+            </table>
+
+
+            <table class="bordered highlight responsive data-table">
+              <thead>
+              <tr>
+                {% trans "IMEI" context "Products list table header" as label %}
+                {% sorting_header 'imei_code' label is_wide=True %}
+
+                {% trans "入庫金額" context "Products list table header" as label %}
+                {% sorting_header 'price_override' label is_wide=True %}
+
+                {% trans "店舗" context "Products list table header" as label %}
+                {% sorting_header 'shops' label is_wide=True %}
+
+                {% trans "可用状態" context "Products list table header" as label %}
+                {% sorting_header 'is_available' label is_wide=True %}
+
+                {% trans "在庫状態" context "Products list table header" as label %}
+                {% sorting_header 'manage_status' label is_wide=True %}
+
+                {% trans "分配状態" context "Products list table header" as label %}
+                {% sorting_header 'is_allocate' label is_wide=True %}
+
+                {% trans "ロック状態" context "Products list table header" as label %}
+                {% sorting_header 'is_lock' label is_wide=True %}
+
+                {% trans "予定状態" context "Products list table header" as label %}
+                {% sorting_header 'is_temp' label is_wide=True %}
+
+                {% trans "品切れ状態" context "Products list table header" as label %}
+                {% sorting_header 'is_out_of_stock' label is_wide=True %}
+
+                {% trans "商品状態" context "Products list table header" as label %}
+                {% sorting_header 'status' label is_wide=True %}
+
+                {% trans "メモ" context "Products list table header" as label %}
+                {% sorting_header 'notion' label is_wide=True %}
+
+                {% trans "最後の変更" context "Products list table header" as label %}
+                {% sorting_header 'last_change' label is_wide=True %}
+
+
+              </tr>
+              </thead>
+
+              <tbody>
+              <tr class="last-no-border">
+
+                <td>
+                  {{ product_object_stock_temp.imei_code }}
+                </td>
+                <td>
+                  {% price product_object_stock_temp.price_override %}
+                </td>
+                <td>
+                  {{ product_object_stock_temp.shops }}
+                </td>
+                <td>
+                  {% if product_object_stock_temp.is_available_M %}
+                    はい
+                  {% else %}
+                    <span style="color: #bb0000"><strong>いいえ</strong></span>
+                  {% endif %}
+                </td>
+                <td>
+                  {{ product_object_stock_temp.manage_status }}
+                </td>
+                <td>
+                  {% if product_object_stock_temp.is_allocate %}
+                    <span style="color: darkviolet">はい</span>
+                  {% else %}
+                    いいえ
+                  {% endif %}
+                </td>
+                <td>
+                  {% if product_object_stock_temp.is_lock %}
+                    <span style="color: blue">はい</span>
+                  {% else %}
+                    いいえ
+                  {% endif %}
+                </td>
+
+                <td>
+                  {% if product_object_stock_temp.is_temp %}
+                    <span style="color: darkviolet">はい</span>
+                  {% else %}
+                    いいえ
+                  {% endif %}
+                </td>
+
+                <td>
+                  {% if product_object_stock_temp.is_out_of_stock %}
+                    <span style="color: #bb0000">はい</span>
+                  {% else %}
+                    いいえ
+                  {% endif %}
+                </td>
+                <td>
+                  {{ product_object_stock_temp.status }}
+                </td>
+                <td>
+                  {{ product_object_stock_temp.notion }}
+                </td>
+                <td>
+                  {{ product_object_stock_temp.last_change }}
+                </td>
+              </tr>
+
+              </tbody>
+            </table>
+
+
+          </div>
+          {% if perms.product_stock.change_product_object_stock %}
+            <div class="data-table-action">
+              <div class="row">
+                {#---------------------------------------------------------------#}
+                <div class="col s6">
+                  <a href="{%url 'product_stock:product-object-stock-temp-edit' product_object_stock_temp_pk=product_object_stock_temp.pk product_stock_temp_pk=product_stock_temp.pk %}"
+                     class="btn-flat waves-effect"
+                     title="{% trans "edit" context "Order summary card action title" %}">
+                    {% trans "商品を編集" context "ProductObjectStock summary card action" %}
+                  </a>
+                </div>
+                {#---------------------------------------------------------------#}
+                <div class="col s6"></div>
+                {#---------------------------------------------------------------#}
+              </div>
+            </div>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+  {% endif %}
+
+
+  {% if change_history %}
+    {% if perms.product_stock.change_product_stock %}
+      <div class="row tab-content" id="order-manage-details">
+        <div class="col s12 l12">
+          <div class="card shipment-table">
+            <div class="data-table-header">
+              <div class="data-table-title">
+                <div class="row" style="padding-top: 3%;">
+                  <div class="col s6">
+                    <h5>
+                      商品情報の編集歴史
+                    </h5>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="data-table-container">
+
+              <table class="bordered highlight responsive data-table">
+                <thead>
+                <tr>
+                  <td>
+                    {% trans "作成" context "manual_inventory_manage table header" %}
+                  </td>
+                  <td>
+                    {% trans "フィールド" context "manual_inventory_manage table header" %}
+                  </td>
+                  <td>
+                    {% trans "編集前" context "manual_inventory_manage table header" %}
+                  </td>
+                  <td>
+                    {% trans "→" context "manual_inventory_manage table header" %}
+                  </td>
+                  <td>
+                    {% trans "編集後" context "manual_inventory_manage table header" %}
+                  </td>
+                  <td>
+                    {% trans "編集者" context "manual_inventory_manage table header" %}
+                  </td>
+                </tr>
+                </thead>
+
+                <tbody>
+                {% for change in change_history %}
+                  <tr>
+                    <td>
+                      #{{ change.change_date }}
+                    </td>
+                    <td>
+                      {{ change.change_field }}
+                    </td>
+                    <td>
+                      {{ change.old_value }}
+                    </td>
+                    <td>
+                      {% trans "→" context "manual_inventory_manage table header" %}
+                    </td>
+                    <td>
+                      {{ change.changed_value }}
+                    </td>
+                    <td class="right-align">
+                      {{ change.responsible_person }}
+                    </td>
+                  </tr>
+                {% endfor %}
+                </tbody>
+
+              </table>
+
+            </div>
+
+            <div class="data-table-action">
+              <div class="row">
+                {#---------------------------------------------------------------#}
+                <div class="col s6"></div>
+                {#---------------------------------------------------------------#}
+                <div class="col s6"></div>
+                {#---------------------------------------------------------------#}
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    {% endif %}
+  {% endif %}
+
+
+
+
+
+
+
+
+
+
+  {% if order_manage_s %}
+    {% if perms.product_stock.order_manage_permissions %}
+      <div class="row tab-content" id="order-manage-details">
+        <div class="col s12 l12">
+          <div class="card shipment-table">
+            <div class="data-table-header">
+              <div class="data-table-title">
+                <div class="row" style="padding-top: 3%;">
+                  <div class="col s6">
+                    <h5>
+                      関連の「買取・注文出入庫執行表」
+                    </h5>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="data-table-container">
+
+              <table class="bordered highlight responsive data-table">
+                <thead>
+                <tr>
+                  <td>
+                    {% trans "#" context "order_manage table header" %}
+                  </td>
+                  <td>
+                    {% trans "作成" context "order_manage table header" %}
+                  </td>
+                  <td>
+                    {% trans "取引先" context "order_manage table header" %}
+                  </td>
+                  <td>
+                    {% trans "資金状況" context "order_manage table header" %}
+                  </td>
+                  <td>
+                    {% trans "タイプ" context "order_manage table header" %}
+                  </td>
+                  <td>
+                    {% trans "注文出入庫状況" context "order_manage table header" %}
+                  </td>
+                  <td>
+                    {% trans "金額" context "order_manage table header" %}
+                  </td>
+                  <td>
+                    {% trans "責任者" context "order_manage table header" %}
+                  </td>
+                  <td>
+                    {% trans "最後の変更" context "order_manage table header" %}
+                  </td>
+                </tr>
+                </thead>
+
+                <tbody>
+                {% for order_manage in order_manage_s %}
+                  <tr data-action-go="{%url 'product_stock:order-manage-details' order_manage_pk=order_manage.pk %}">
+                    <td>
+                      #{{ order_manage.id }}
+                    </td>
+                    <td>
+                      {{ order_manage.created }}
+                    </td>
+                    <td>
+                      {% if order_manage.legal_person %}
+                        {{ order_manage.legal_person }}
+                      {% elif order_manage.legal_person %}
+                        {{ order_manage.legal_person }}
+                      {% else %}
+                        ---
+                      {% endif %}
+                    </td>
+                    <td>
+                      {{ order_manage.funds_status }}
+                      {# {% render_status order.get_payment_status order.get_payment_status_display %}#}
+                    </td>
+                    <td>
+                      {% if order_manage.type_No %}
+                        注文出庫
+                      {% else %}
+                        買取入庫
+                      {% endif %}
+                    </td>
+                    <td>
+                      {{ order_manage.order_status }}
+                      {#                       {% render_order_status order.status order.get_status_display %}#}
+                    </td>
+                    <td>
+                      {% price order_manage.total %}
+                    </td>
+                    <td>
+                      {{ order_manage.responsible_person }}
+                    </td>
+                    <td class="right-align">
+                      {{ order_manage.last_change }}
+                    </td>
+                  </tr>
+                {% endfor %}
+                </tbody>
+
+              </table>
+
+            </div>
+
+            <div class="data-table-action">
+              <div class="row">
+                {#---------------------------------------------------------------#}
+                <div class="col s6"></div>
+                {#---------------------------------------------------------------#}
+                <div class="col s6"></div>
+                {#---------------------------------------------------------------#}
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    {% endif %}
+  {% endif %}
+
+  {% if barter_manage_s %}
+    {% if perms.product_stock.barter_manage_permissions %}
+      <div class="row tab-content" id="order-manage-details">
+        <div class="col s12 l12">
+          <div class="card shipment-table">
+            <div class="data-table-header">
+              <div class="data-table-title">
+                <div class="row" style="padding-top: 3%;">
+                  <div class="col s6">
+                    <h5>
+                      関連の「物々交換執行表」
+                    </h5>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="data-table-container">
+
+              <table class="bordered highlight responsive data-table">
+                <thead>
+                <tr>
+                  <td>
+                    {% trans "#" context "order_manage table header" %}
+                  </td>
+                  <td>
+                    {% trans "作成" context "order_manage table header" %}
+                  </td>
+                  <td>
+                    {% trans "取引先" context "order_manage table header" %}
+                  </td>
+                  <td>
+                    {% trans "資金状況" context "order_manage table header" %}
+                  </td>
+                  <td>
+                    {% trans "資金" context "barter_manage table header" %}
+                  </td>
+                  <td>
+                    {% trans "物々交換状況" context "order_manage table header" %}
+                  </td>
+                  <td>
+                    {% trans "責任者" context "order_manage table header" %}
+                  </td>
+                  <td>
+                    {% trans "最後の変更" context "order_manage table header" %}
+                  </td>
+                </tr>
+                </thead>
+
+                <tbody>
+                {% for barter_manage in barter_manage_s %}
+                  <tr data-action-go="{%url 'product_stock:barter-manage-details' barter_manage_pk=barter_manage.pk %}"
+                      class="last-no-border">
+                    <td>
+                      #{{ barter_manage.id }}
+                    </td>
+                    <td>
+                      {{ barter_manage.created }}
+                    </td>
+                    <td>
+                      {% if barter_manage.suppliers %}
+                        {{ barter_manage.suppliers }}
+                      {% elif barter_manage.legal_person %}
+                        {{ barter_manage.legal_person }}
+                      {% else %}
+                        ---
+                      {% endif %}
+                    </td>
+                    <td>
+                      ----
+                      {#                      {{ barter_manage.funds_status }}#}
+                      {# {% render_status order.get_payment_status order.get_payment_status_display %}#}
+                    </td>
+                    <td>
+                      {% price barter_manage.total %}
+                    </td>
+                    <td>
+                      {{ barter_manage.barter_status }}
+                      {# {% render_order_status order.status order.get_status_display %}#}
+                    </td>
+                    <td>
+                      {{ barter_manage.responsible_person }}
+                    </td>
+                    <td class="right-align">
+                      {{ barter_manage.last_change }}
+                    </td>
+                  </tr>
+                {% endfor %}
+                </tbody>
+
+              </table>
+
+            </div>
+
+            <div class="data-table-action">
+              <div class="row">
+                {#---------------------------------------------------------------#}
+                <div class="col s6"></div>
+                {#---------------------------------------------------------------#}
+                <div class="col s6"></div>
+                {#---------------------------------------------------------------#}
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    {% endif %}
+  {% endif %}
+
+  {% if manual_inventory_manage_s %}
+    {% if perms.product_stock.manual_inventory_manage_permissions %}
+      <div class="row tab-content" id="order-manage-details">
+        <div class="col s12 l12">
+          <div class="card shipment-table">
+            <div class="data-table-header">
+              <div class="data-table-title">
+                <div class="row" style="padding-top: 3%;">
+                  <div class="col s6">
+                    <h5>
+                      関連の「商品ロック執行表」
+                    </h5>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="data-table-container">
+
+              <table class="bordered highlight responsive data-table">
+                <thead>
+                <tr>
+                  <td>
+                    {% trans "#" context "order_manage table header" %}
+                  </td>
+                  <td>
+                    {% trans "作成" context "manual_inventory_manage table header" %}
+                  </td>
+                  <td>
+                    {% trans "ロック状況" context "manual_inventory_manage table header" %}
+                  </td>
+                  <td>
+                    {% trans "責任者" context "manual_inventory_manage table header" %}
+                  </td>
+                  <td>
+                    {% trans "最後の変更" context "manual_inventory_manage table header" %}
+                  </td>
+                </tr>
+                </thead>
+
+                <tbody>
+                {% for manual_inventory_manage in manual_inventory_manage_s %}
+                  <tr
+                    data-action-go="{%url 'product_stock:manual-inventory-manage-details' manual_inventory_manage_pk=manual_inventory_manage.pk %}">
+                    <td>
+                      #{{ manual_inventory_manage.id }}
+                    </td>
+                    <td>
+                      {{ manual_inventory_manage.created }}
+                    </td>
+                    <td>
+                      {{ manual_inventory_manage.manual_inventory_status }}
+                      {#                      {% render_order_status order.status order.get_status_display %}#}
+                    </td>
+                    <td>
+                      {{ manual_inventory_manage.responsible_person }}
+                    </td>
+                    <td class="right-align">
+                      {{ manual_inventory_manage.last_change }}
+                    </td>
+                  </tr>
+                {% endfor %}
+                </tbody>
+
+              </table>
+
+            </div>
+
+            <div class="data-table-action">
+              <div class="row">
+                {#---------------------------------------------------------------#}
+                <div class="col s6"></div>
+                {#---------------------------------------------------------------#}
+                <div class="col s6"></div>
+                {#---------------------------------------------------------------#}
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    {% endif %}
+  {% endif %}
+
+  {% if store_to_store_manage_s %}
+    {% if perms.product_stock.store_to_store_manage_permissions %}
+      <div class="row tab-content" id="order-manage-details">
+        <div class="col s12 l12">
+          <div class="card shipment-table">
+            <div class="data-table-header">
+              <div class="data-table-title">
+                <div class="row" style="padding-top: 3%;">
+                  <div class="col s6">
+                    <h5>
+                      関連の「店舗間転移執行表」
+                    </h5>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="data-table-container">
+
+              <table class="bordered highlight responsive data-table">
+                <thead>
+                <tr>
+                  <td>
+                    {% trans "#" context "order_manage table header" %}
+                  </td>
+                  <td>
+                    {% trans "作成" context "store_to_store_manage table header" %}
+                  </td>
+                  <td>
+                    {% trans "執行表状況" context "store_to_store_manage table header" %}
+                  </td>
+                  <td>
+                    {% trans "移動先" context "store_to_store_manage table header" %}
+                  </td>
+                  <td>
+                    {% trans "責任者" context "store_to_store_manage table header" %}
+                  </td>
+                  <td>
+                    {% trans "最後の変更" context "store_to_store_manage table header" %}
+                  </td>
+                </tr>
+                </thead>
+
+                <tbody>
+                {% for store_to_store_manage in store_to_store_manage_s %}
+                  <tr
+                    data-action-go="{%url 'product_stock:store-to-store-manage-details' store_to_store_manage_pk=store_to_store_manage.pk %}">
+                    <td>
+                      #{{ store_to_store_manage.id }}
+                    </td>
+                    <td>
+                      {{ store_to_store_manage.created }}
+                    </td>
+                    <td>
+                      {{ store_to_store_manage.store_to_store_status }}
+                      {#                      {% render_order_status order.status order.get_status_display %}#}
+                    </td>
+                    <td>
+                      {% if store_to_store_manage.to_shop %}
+                        {{ store_to_store_manage.to_shop }}
+                      {% else %}
+                        未定
+                      {% endif %}
+                    </td>
+                    <td class="">
+                      {{ store_to_store_manage.responsible_person }}
+                    </td>
+                    <td class="right-align">
+                      {{ store_to_store_manage.last_change }}
+                    </td>
+                  </tr>
+                {% endfor %}
+                </tbody>
+
+              </table>
+
+            </div>
+
+            <div class="data-table-action">
+              <div class="row">
+                {#---------------------------------------------------------------#}
+                <div class="col s6"></div>
+                {#---------------------------------------------------------------#}
+                <div class="col s6"></div>
+                {#---------------------------------------------------------------#}
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    {% endif %}
+  {% endif %}
+
+{% endblock %}

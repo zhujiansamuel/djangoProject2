@@ -1,0 +1,23 @@
+{% extends "base_modal.html" %}
+
+{% load i18n %}
+{% load materializecss %}
+
+{% block action_url %}
+{%url 'product_stock:select-product-stock-to-barter-manage' barter_manage_pk=barter_manage.pk %}
+{% endblock %}
+
+{% block title %}
+{% blocktrans trimmed with barter_manage=barter_manage context "Modal barter_manage add variant title" %}
+  {{ barter_manage }}へ在庫商品を追加
+{% endblocktrans %}
+{% endblock %}
+
+{% block content %}
+{{ form.product_stock|materializecss:"s12 m8" }}
+{{ form.quantity|materializecss:"s12 m4" }}
+{% endblock %}
+
+{% block primary_action %}
+{% trans "Add" context "Modal barter_manage add variant primary action" %}
+{% endblock %}

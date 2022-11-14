@@ -1,0 +1,109 @@
+{% extends "base.html" %}
+{% load i18n %}
+{% load price from taxed_prices %}
+{% load materializecss %}
+{% load prices %}
+{% load status %}
+{% load utils %}
+{% load static %}
+
+{% block title %}{{ barter_manage }}{% trans "商品追加" context "Dashboard order_manage list" %} - {{ block.super }}{% endblock %}
+
+{% block body_class %}body-barter_manage{% endblock %}
+
+{% block menu_barter_manage_class %}active{% endblock %}
+
+{% block newfilters %}{% endblock newfilters %}
+
+{% block header_extra %}{% endblock %}
+
+{% block breadcrumbs %}
+  <ul class="breadcrumbs breadcrumbs--history">
+    <li class="">
+      <a href="{% url "product_stock:barter-manage-list" %}">
+        {% trans "物々交換執行表" context "Dashboard orders list" %}
+      </a>
+    </li>
+    <li>
+      <span>
+        {{ barter_manage }}
+      </span>
+    </li>
+  <li>
+    <span>
+    商品を追加
+    </span>
+  </li>
+  </ul>
+
+{% endblock %}
+
+{% block content %}
+  <form method="post" id="myforms">
+    {% csrf_token %}
+    <div class="row">
+      {{ form.jan_code|materializecss }}
+    </div>
+    <br>
+    <div class="row">
+      {{ form.quantity|materializecss }}
+    </div>
+
+    <div class="row">
+      {{ form.name|materializecss }}
+    </div>
+{#    <div class="row">#}
+{#      {{ form.jan_code|materializecss }}#}
+{#    </div>#}
+    <div class="row">
+      {{ form.description|materializecss }}
+    </div>
+    </form>
+      <a href="{%url 'product_stock:barter-manage-details' barter_manage_pk=barter_manage.pk %}" class="modal-action modal-close btn-flat waves-effect">
+      {% block cancel_action %} {% trans "Cancel" context "Dashboard cancel action" %} {% endblock %}
+    </a>
+  <a class="btn waves-effect" contenteditable="false" onclick="document.getElementById('myforms').submit()">
+    次に
+  </a>
+
+  <script src="https://code.jquery.com/jquery-3.6.1.min.js"></script>
+
+  <script>
+  var input_max1 = document.getElementById( 'id_quantity' )
+
+  input_max1.oninput = function () {
+    if(input_max1.value>10){
+      input_max1.value = 10
+      alert('最大数は10')
+    }
+  }
+
+$('#product_stock_jan_search_id').keydown(function(event){
+    if (event.keyCode == 13) {
+      $.ajax({
+          type:'POST',
+          url:'{% url "product_stock:ajax-product-stock-single" %}',
+          data:{
+              product_stock_jan_search:$('#product_stock_jan_search_id').val(),
+              csrfmiddlewaretoken:$('input[name=csrfmiddlewaretoken]').val(),
+              action: 'post'
+          },
+          success:function(json){
+            var name00 = document.getElementById( 'id_name' )
+            var description00 = document.getElementById( 'id_description' )
+            name00.value=json.results.name;
+            name00.disabled=true;
+            description00.value=json.results.description;
+            description00.disabled=true;
+
+          },
+          error : function(xhr,errmsg,err) {
+          console.log(xhr.status + ": " + xhr.responseText); // provide a bit more info about the error to the console
+      }
+      });
+
+    }
+});
+
+  </script>
+{% endblock %}

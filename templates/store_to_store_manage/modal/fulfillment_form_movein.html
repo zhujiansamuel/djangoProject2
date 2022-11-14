@@ -1,0 +1,129 @@
+{% extends "base_modal.html" %}
+
+{% load i18n %}
+{% load materializecss %}
+{% load dashboard %}
+
+{% block action_url %}
+  {%url 'product_stock:fulfill-store-to-store-manage-MOVEIN' store_to_store_manage_pk=store_to_store_manage.pk %}
+{% endblock %}
+
+{% block title %}
+  {{ store_to_store_manage }}の執行
+{% endblock %}
+
+{% block content %}
+  <div class="row" style="padding: 2%;">
+    <div class="col s12 l12">
+    {{ fulfillment_line_formset.management_form }}
+      <div class="data-table-container">
+        <table class="bordered highlight responsive data-table">
+          <thead>
+          <tr>
+            <th class="wide">
+              {% trans "項目" context "Modal remove order line table header" %}
+            </th>
+            <th class="right-align">
+              {% trans "数量" context "Modal remove order line table header" %}
+            </th>
+          </tr>
+          </thead>
+          <tbody>
+          {% for line in unfulfilled_lines %}
+            <tr>
+              <td>
+                {% if line.product_stock %}
+                  {{ line.product_stock.name }}
+                  <br>
+                  <span class="grey-text">
+                      {% blocktrans trimmed with jan=line.product_stock.jan_code context "Order table text" %}
+                        JAN 　　　: {{ jan }}
+                      {% endblocktrans %}
+                    </span>
+                {% elif line.product_object_stock %}
+                      {{ line.product_object_stock.product_stock.name }}
+                      <br>
+                      <span class="grey-text">
+                      {% blocktrans trimmed with jan=line.product_object_stock.product_stock.jan_code context "Order table text" %}
+                        JAN 　　　: {{ jan }}
+                      {% endblocktrans %}
+                    </span>
+                      <br>
+                      <span class="grey-text">
+                      {% blocktrans trimmed with imei=line.product_object_stock.imei_code context "Order table text" %}
+                        IMEI　　　: {{ imei }}
+                      {% endblocktrans %}
+                    </span>
+                      <br>
+                      <span class="grey-text">
+                      {% blocktrans trimmed with extra_informations=line.product_object_stock.extra_informations context "Order table text" %}
+                        追加情報　: {{ extra_informations }}
+                      {% endblocktrans %}
+                    </span>
+                      <br>
+                      <span class="grey-text">
+                      {% blocktrans trimmed with status=line.product_object_stock.status context "Order table text" %}
+                        ステータス: {{ status }}
+                      {% endblocktrans %}
+                    </span>
+                {% endif %}
+              </td>
+
+
+              <td class="right-align fulfillment-quantity">
+                {% get_formset_form fulfillment_line_formset forloop.counter0 as line_form %}
+                <div class="fulfillment-quantity-input">
+                  <input id="{{ line_form.store_to_store_manage_line.auto_id }}"
+                         type="hidden"
+                         name="{{ line_form.store_to_store_manage_line.html_name }}"
+                         required="{{ line_form.store_to_store_manage_line.field.required }}"
+                         value="{{ line_form.store_to_store_manage_line.value }}">
+                  <input id="{{ line_form.quantity.auto_id }}"
+                         max="{{ line.quantity }}"
+                         min="0"
+                         name="{{ line_form.quantity.html_name }}"
+                         required="{{ line_form.quantity.field.required }}"
+                         type="number"
+                         value="{{ line_form.quantity.value }}">
+                  {% blocktrans trimmed with quantity_unfulfilled=line.quantity_unfulfilled_MOVEIN context "Fulfill order table quantity unfulfilled" %}
+                    / {{ quantity_unfulfilled }}
+                  {% endblocktrans %}
+
+                </div>
+
+
+
+                <label for="{{ line_form.quantity.auto_id }}">
+                  {% for error in line_form.quantity.errors %}
+                    <p class="help-block materialize-red-text">{{ error }}</p>
+                  {% endfor %}
+                  {% for error in formset.non_form_errors %}
+                    <p class="help-block materialize-red-text">{{ error }}</p>
+                  {% endfor %}
+
+                  {% if line_form.quantity.help_text %}
+                    <p class="help-block">
+                      {{ line_form.quantity.field.help_text|safe }}
+                    </p>
+                  {% endif %}
+                </label>
+
+
+              </td>
+
+
+            </tr>
+          {% endfor %}
+          </tbody>
+        </table>
+      </div>
+
+
+    </div>
+  </div>
+  </div>
+{% endblock %}
+
+{% block primary_action %}
+  {% trans "執行" context "Modal store_to_store add variant primary action" %}
+{% endblock %}

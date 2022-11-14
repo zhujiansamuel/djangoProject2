@@ -1,0 +1,247 @@
+{% extends "base.html" %}
+{% load i18n %}
+{% load price from taxed_prices %}
+{% load materializecss %}
+{% load prices %}
+{% load status %}
+{% load utils %}
+{% load static %}
+
+{% block title %}{% trans "執行(IEMIを入力)" context "Dashboard order_manage list" %} - {{ block.super }}{% endblock %}
+
+{% block body_class %}body-order_manage{% endblock %}
+
+{% block menu_order_manage_class %}active{% endblock %}
+
+{% block newfilters %}{% endblock newfilters %}
+
+{% block header_extra %}{% endblock %}
+
+{% block breadcrumbs %}
+  <ul class="breadcrumbs breadcrumbs--history">
+    <li class="">
+      <a href="{% url "product_stock:order-manage-list" %}">
+        {% trans "注文出入庫" context "Dashboard orders list" %}
+      </a>
+    </li>
+    <li>
+      <span>
+        {{ order_manage }}
+      </span>
+    </li>
+  <li>
+    <span>
+    商品を追加(IEMIを入力)
+    </span>
+  </li>
+  </ul>
+
+
+
+
+{% endblock %}
+
+{% block content %}
+  {% if product_stock_temp %}
+    <a class="btn waves-effect" contenteditable="false" onclick="document.getElementById('myforms').submit()">
+      保存
+    </a>
+  {% endif %}
+
+  <form method="post" id="myforms">
+    {% csrf_token %}
+    {{ formset.management_form }}
+    <h4>
+      {{ product_stock_temp }}
+    </h4>
+    <div class="row" style="height:55px;">
+      <hr>
+
+      <div class="col s2" style="height:55px;">
+        <label class="" for="id_product_object_stock-0-price_override_amount">
+          全体変更
+        </label>
+      </div>
+      <div class="col s2" style="height:55px;">
+        <label class="" for="id_product_object_stock-0-price_override_amount">
+          買取価格 (all)
+        </label>
+        <input type="number" id="priceinputall">
+      </div>
+      <div class="col s2" style="height:55px;">
+        <label class="" for="id_product_object_stock-0-price_override_amount">
+          追加情報 (all)
+        </label>
+        {{ formbulk.extra_informations }}
+      </div>
+      <div class="col s2" style="height:55px;">
+        <label class="" for="id_product_object_stock-0-price_override_amount">
+          状態 (all)
+        </label>
+        {{ formbulk.status }}
+      </div>
+      <div class="col s2" style="height:55px;">
+        <label class="" for="id_product_object_stock-0-price_override_amount">
+          店舗 (all)
+        </label>
+        {{ formbulk.shops }}
+      </div>
+      <div class="col s2" style="height:55px;">
+        <label class="" for="id_product_object_stock-0-notion">
+          備考(all)
+
+        </label>
+        <input type="text" id="inputall">
+      </div>
+
+    </div>
+    {% for form in formset %}
+      <div class="row">
+        <hr>
+        <div class="col s2 i99">
+          {{ form.imei_code|materializecss }}
+        </div>
+        <div class="col s2 i00">
+          {{ form.price_override_amount|materializecss }}
+        </div>
+        <div class="col s2 i01">
+          {{ form.extra_informations|materializecss }}
+        </div>
+        <div class="col s2 i02">
+          {{ form.status|materializecss }}
+        </div>
+        <div class="col s2 i03">
+          {{ form.shops|materializecss }}
+        </div>
+        <div class="col s2 i04">
+          {{ form.notion|materializecss }}
+        </div>
+      </div>
+    {% endfor %}
+  </form>
+
+  <script src="https://code.jquery.com/jquery-3.6.1.min.js">
+  </script>
+
+  <script>
+    priceinputall.oninput = function () {
+      var price0 = $('.i00').find('input')
+      for (i = 0; i < price0.length; i++) {
+        price0[i].value = priceinputall.value
+      }
+    }
+
+    inputall.oninput = function () {
+      var beikao0 = $('.i04').find('input')
+      for (i = 0; i < beikao0.length; i++) {
+        beikao0[i].value = inputall.value
+      }
+    }
+
+    var i991 = $('.i99').find('input')
+
+    function focusNextInput(thisInput) {
+      var inputs = i991
+      for (var i = 0; i < inputs.length; i++) {
+        // 如果是最后一个，则焦点回到第一个
+        if (i == (inputs.length - 1)) {
+          {#inputs[0].focus();#}
+          alert('これが最後です')
+          break;
+        } else if (thisInput == inputs[i]) {
+          inputs[i + 1].focus();
+          break; //不加最后一行eles就直接回到第一个输入框
+        }
+
+      }
+    }
+
+    function moji(x) {
+      if (x) {
+        return "はい"
+      } else {
+        return "いいえ"
+      }
+    }
+
+    function ajaxproduct(thisInput) {
+      console.log(thisInput);
+      $.ajax({
+        type: 'POST',
+        url: '{% url "product_stock:ajax-product-object-stock-single" %}',
+        data: {
+          product_object_stock_imei_search: thisInput.value,
+          csrfmiddlewaretoken: $('input[name=csrfmiddlewaretoken]').val(),
+          action: 'post'
+        },
+        success: function (json) {
+          if (thisInput.value.length != 0) {
+            var ii = thisInput.parentElement.parentElement.parentElement
+            var pInfor = document.createElement("p")
+            pInfor.style.color = "blue";
+            if (json.results.status_) {
+              pInfor.innerHTML =
+                "　　　　　　この商品の在庫歴史があります。"
+                + "商品の現在在庫状態："
+                + json.results.manage_status
+                + "&nbsp;　　在庫切れ："
+                + moji(json.results.is_out_of_stock)
+                + "&nbsp;　　分配状態:"
+                + moji(json.results.is_allocate)
+                + "&nbsp;　　ロック状態:"
+                + moji(json.results.is_lock)
+                + "&nbsp;　　可用状態:"
+                + moji(json.results.is_available)
+              ii.appendChild(pInfor)
+            }
+            ;
+          }
+
+
+        },
+        error: function (xhr, errmsg, err) {
+          console.log(xhr.status + ": " + xhr.responseText); // provide a bit more info about the error to the console
+        }
+      });
+    }
+
+
+    //回车触发函数
+    i991.keydown(function (event) {
+      if (event.keyCode == 13) {
+        focusNextInput(this);
+        ajaxproduct(this);
+
+      }
+    });
+
+
+    var select000 = document.getElementById("id_extra_informations")
+    select000.onchange = function () {
+      var numform000 = $('.i01').length
+      var i011 = $('.i01')
+      for (var i = 0; i < numform000; i++) {
+        $(i011[i]).find('li').children('span')[Number(select000.value)].click()
+      }
+    }
+
+  var select001 = document.getElementById("id_status")
+  select001.onchange = function () {
+    var numform001 = $('.i02').length
+    var i021 = $('.i02')
+    for (var i = 0; i < numform001; i++) {
+      $(i021[i]).find('li').children('span')[Number(select001.value)].click()
+    }
+  }
+
+  var select002 = document.getElementById("id_shops")
+  select002.onchange = function () {
+    var numform002 = $('.i03').length
+    var i031 = $('.i03')
+    for (var i = 0; i < numform002; i++) {
+      $(i031[i]).find('li').children('span')[Number(select002.value)].click()
+    }
+  }
+
+  </script>
+{% endblock %}

@@ -1,0 +1,55 @@
+{% extends "base_modal.html" %}
+
+{% load i18n %}
+{% load materializecss %}
+
+{% block action_url %}
+{%url 'product_stock:add-new-product-to-manual-inventory-manage' manual_inventory_manage_pk=manual_inventory_manage.pk %}
+{% endblock %}
+
+{% block title %}
+{% blocktrans trimmed with manual_inventory_manage=manual_inventory_manage context "Modal manual_inventory_manage add variant title" %}
+  {{ manual_inventory_manage }}へ在庫商品を追加
+{% endblocktrans %}
+{% endblock %}
+
+{% block content %}
+
+{{ form.product_stock|materializecss:"s12 m8" }}
+<br>
+    <div class="row">
+    {{ form.name|materializecss }}
+  </div>
+    <div class="row">
+    {{ form.jan_code|materializecss }}
+  </div>
+    <div class="row">
+    {{ form.description|materializecss }}
+  </div>
+  <div class="row">
+    {{ form.slug|materializecss }}
+  </div>
+  <div class="row">
+    {{ form.imei_code|materializecss }}
+  </div>
+  <div class="row">
+    {{ form.notion|materializecss }}
+  </div>
+  <div class="row">
+    {{ form.shops|materializecss }}
+  </div>
+  <div class="row">
+    {{ form.extra_informations|materializecss }}
+  </div>
+  <div class="row">
+    {{ form.price_override_amount|materializecss }}
+  </div>
+  <div class="row">
+    {{ form.status|materializecss }}
+  </div>
+
+{% endblock %}
+
+{% block primary_action %}
+{% trans "Add" context "Modal manual_inventory_manage add variant primary action" %}
+{% endblock %}

@@ -1,33 +1,52 @@
 <!DOCTYPE html>
 {% load static i18n %}
-{#{% load render_bundle from webpack_loader %}#}
 {% load version %}
 {% load serialize_messages from utils %}
 {% load svg %}
-{% load compress %}
+{% load sass_tags %}
+{% load static %}
+
 
 <html lang="{{ LANGUAGE_CODE }}" class="no-js">
 <head>
+
     <title>
         {% block title %}
-            {% blocktrans trimmed context "Dashboard default page title" %}
+            {% blocktrans trimmed context "product_stock default page title" with site_name=site.name %}
                 在庫管理システム
             {% endblocktrans %}
         {% endblock %}
     </title>
+
+
     {% block meta %}
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
         <meta name="theme-color" content="#21915a"/>
         <meta name="robots" content="noindex, nofollow">
     {% endblock meta %}
+
+    {#    {% include 'favicon.html' %}#}
+
+    {#    {% render_bundle 'base' 'css' %}#}
+    {#    {% render_bundle 'dashboard' 'css' %}#}
+    {#    <link rel="stylesheet" type="text/css" href="{% static "versatileimagefield/css/versatileimagefield.css" %}">#}
+
+    {#    <link href="{% sass_src "sass/materialize.scss" %}" rel="stylesheet">#}
+    {##}
+    <link href="https://cdn.datatables.net/v/dt/dt-1.10.16/datatables.min.css" rel="stylesheet">
+    <link href="{% static 'css/jqvmap.css' %}" rel="stylesheet">
+    <link href="{% static 'css/flag-icon-css/css/flag-icon.min.css' %}" rel="stylesheet">
+    <!-- Fullcalendar-->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.7.0/fullcalendar.min.css" rel="stylesheet">
+    <!-- Materialize-->
+    <link href="{% static 'css/admin-materialize.min.css' %}" rel="stylesheet">
+    <!-- Material Icons-->
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     {% block custom_css %}{% endblock %}
-    {% compress css %}
-        <link type="text/x-scss" href="{% static 'Materialize/sass/materialize.scss' %}" rel="stylesheet" media="screen">
-    {% endcompress %}
-      <!--Import Google Icon Font-->
-      <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+
 </head>
+
 
 <body class="{% block body_class %}body-home{% endblock %}">
 <header>
@@ -48,12 +67,13 @@
                     </li>
 
                     <li class="">
-                        <a href="{% url 'account:logout' %}" class="waves-effect waves-light btn-large"
+                        <a href="" class="waves-effect waves-light btn-large"
                            style="font-size: large">
-                            {% trans "Log out" context "Dashboard top navigation action" %}
+                            {% trans "Log out" context "product_stock top navigation action" %}
                         </a>
                     </li>
                 </ul>
+
             </div>
         </nav>
     </div>
@@ -66,7 +86,7 @@
             <ul class="breadcrumbs">
                 <li class="visible-s">
                     <a href="#">
-                        {% trans "コントロールパネル" context "Dashboard homepage" %}
+                        {% trans "コントロールパネル" context "product_stock homepage" %}
                     </a>
                 </li>
             </ul>
@@ -79,9 +99,9 @@
 <main class="main">
     <div id="base-modal" class="modal"></div>
     <div id="base-modal-fixed" class="modal modal-fixed-footer"></div>
-    <div class="container" style="margin-left: 40px;margin-right: 40px;">
+    <div class="container" style="margin-left: 40px;margin-left: 40px;">
         {#      ーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーー#}
-        <div class="row" style="margin-left: 40px;margin-right: 40px;">
+        <div class="row">
             {% block newfilters %}filter{% endblock newfilters %}
         </div>
         {% block content %}{% endblock %}
@@ -92,20 +112,54 @@
 
 
 <div id="messages-container" data-messages="{% serialize_messages %}"></div>
-{#<script type="text/javascript" src="{% url 'javascript-catalog' %}"></script>#}
+
+
+<!-- Core Scripts - Include with every page -->
+
+
+{#    <script type="text/javascript" src="{% url 'javascript-catalog' %}"></script>#}
+{#    {% render_bundle 'dashboard' 'js' %}#}
+{#    <script src="{% static "versatileimagefield/js/versatileimagefield.js" %}"></script>#}
 <script src="https://kit.fontawesome.com/1f9b8807e2.js" crossorigin="anonymous"></script>
 <script src="https://yubinbango.github.io/yubinbango/yubinbango.js" charset="UTF-8"></script>
-<script src="https://code.jquery.com/jquery-3.6.1.js" integrity="sha256-3zlB5s2uwoUzrXK3BT7AX3FyvojsraNFxCc2vC/7pNI=" crossorigin="anonymous"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0-rc.2/js/materialize.js" integrity="sha512-LSynsHcISjg2FJcfjq+IqrgsAAdo8A6t35zA/Fys/mZWuaiTS9a8oB5IXFW15oAJF/9KA5OWUx8RwWd9I4RVrw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+<script src="{% static 'sitejs/materialize.min.js' %}"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.19.2/moment.min.js"></script>
+<!-- External libraries -->
+
+<!-- jqvmap -->
+<script type="text/javascript" src="{% static 'sitejs/jqvmap/jquery.vmap.min.js' %}"></script>
+<script type="text/javascript" src="{% static 'sitejs/jqvmap/jquery.vmap.world.js' %}" charset="utf-8"></script>
+<script type="text/javascript" src="{% static 'sitejs/jqvmap/jquery.vmap.sampledata.js' %}"></script>
+
+<!-- ChartJS -->
+<script type="text/javascript" src="{% static 'sitejs/Chart.js' %}"></script>
+<script type="text/javascript" src="{% static 'sitejs/Chart.Financial.js' %}"></script>
+
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.7.0/fullcalendar.min.js"></script>
+<script type="text/javascript" src="https://cdn.datatables.net/v/dt/dt-1.10.16/datatables.min.js"></script>
+<script src="{% static 'sitejs/imagesloaded.pkgd.min.js' %}"></script>
+<script src="{% static 'sitejs/masonry.pkgd.min.js' %}"></script>
+
+
+<!-- Initialization script -->
+<script src="{% static 'sitejs/admin.js' %}"></script>
+<script src="{% static 'sitejs/init.js' %}"></script>
+
+
+<script>
+    {#var iii = document.getElementsByClassName('datepicker');#}
+    {#for (let i = 0; i < iii.length; i++) {#}
+    {#    iii[i].addEventListener('pointerdown', (e) => {#}
+    {#        e.target.setPointerCapture(e.pointerId);#}
+    {#    })#}
+    {
+    #}#}
+
+</script>
 {% block custom_js %}{% endblock %}
-
-    <script>
-      $(document).ready(function(){
-    $('select').formSelect();
-  });
-    </script>
-
 </body>
 </html>
-

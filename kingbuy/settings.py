@@ -17,6 +17,8 @@ from django_prices.utils.formatting import get_currency_fraction
 from django.utils.translation import gettext_lazy as _, pgettext_lazy
 import dj_email_url
 
+
+
 DEFAULT_COUNTRY = os.environ.get( "DEFAULT_COUNTRY", "JP" )
 
 # DEFAULT_CURRENCY = os.environ.get("DEFAULT_CURRENCY", "USD")
@@ -59,7 +61,7 @@ INSTALLED_APPS = [
     "corsheaders",
     "storages",
     "simple_svg",
-    "compressor",
+    'sass_processor',
 
     'django.contrib.admin',
     'django.contrib.auth',
@@ -81,7 +83,7 @@ INSTALLED_APPS = [
     "graphene_django",
     "django_countries",
     "django_filters",
-
+    'crispy_forms',
 ]
 
 MIDDLEWARE = [
@@ -105,6 +107,7 @@ TEMPLATES = [
         ,
         'APP_DIRS': True,
         'OPTIONS': {
+            # 'environment': 'core.jinja2.environment',
             'context_processors': [
                 'django.template.context_processors.debug',
                 'django.template.context_processors.request',
@@ -211,17 +214,23 @@ DEFAULT_FROM_EMAIL = os.environ.get( "DEFAULT_FROM_EMAIL", EMAIL_HOST_USER )
 STATIC_ROOT = os.path.join( PROJECT_ROOT, "static" )
 STATIC_URL = os.environ.get( "STATIC_URL", "/static/" )
 STATICFILES_FINDERS = [
-    "django.contrib.staticfiles.finders.FileSystemFinder",
-    "django.contrib.staticfiles.finders.AppDirectoriesFinder",
-    "compressor.finders.CompressorFinder",
-    ]
-LIBSASS_ADDITIONAL_INCLUDE_PATHS = [
-        os.path.join(PROJECT_ROOT, 'static/Matpress/sass'),
+    'django.contrib.staticfiles.finders.FileSystemFinder',
+    'django.contrib.staticfiles.finders.AppDirectoriesFinder',
+    'sass_processor.finders.CssFinder',
     ]
 
-COMPRESS_PRECOMPILERS = (
-    ('text/x-scss', 'django_libsass.SassCompiler'),
-)
+
+SASS_PROCESSOR_INCLUDE_DIRS = [
+    os.path.join(PROJECT_ROOT, 'static/sass/materialize.scss'),
+]
+
+
+SASS_PRECISION = 8
+SASS_OUTPUT_STYLE = 'compact'
+
+from kingbuy.core.jinja2 import environment
+
+COMPRESS_JINJA2_GET_ENVIRONMENT = environment
 
 loaders = [
     "django.template.loaders.filesystem.Loader",
@@ -406,6 +415,11 @@ MAX_CHECKOUT_LINE_QUANTITY = int( os.environ.get( "MAX_CHECKOUT_LINE_QUANTITY", 
 
 AUTH_USER_MODEL = "account.User"
 LOGIN_URL = "/account/login/"
-LOGIN_REDIRECT_URL = 'index'
+LOGIN_REDIRECT_URL = '/index/'
 
 SITE_ID = 1
+
+
+PAGINATE_BY = 16
+DASHBOARD_PAGINATE_BY = 30
+DASHBOARD_SEARCH_LIMIT = 5

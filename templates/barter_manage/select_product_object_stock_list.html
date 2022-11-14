@@ -1,0 +1,55 @@
+{% extends "base.html" %}
+{% load i18n %}
+{% load price from taxed_prices %}
+{% load materializecss %}
+{% load prices %}
+{% load status %}
+{% load utils %}
+{% load static %}
+
+{% block title %}{{ barter_manage }}{% trans "商品追加" context "Dashboard barter_manage list" %} - {{ block.super }}{% endblock %}
+
+{% block body_class %}body-barter_manage{% endblock %}
+
+{% block menu_barter_manage_class %}active{% endblock %}
+
+{% block newfilters %}{% endblock newfilters %}
+
+{% block header_extra %}{% endblock %}
+
+{% block breadcrumbs %}
+  <ul class="breadcrumbs breadcrumbs--history">
+    <li class="">
+      <a href="{% url "product_stock:barter-manage-list" %}">
+        {% trans "物々交換執行表" context "Dashboard orders list" %}
+      </a>
+    </li>
+    <li>
+      <span>
+        {{ barter_manage }}
+      </span>
+    </li>
+  <li>
+    <span>
+    商品を追加
+    </span>
+  </li>
+  </ul>
+
+{% endblock %}
+
+{% block content %}
+  <form method="post" id="myforms">
+    {% csrf_token %}
+      <div class="card">
+      {{ form }}
+      </div>
+      <a href="{%url 'product_stock:barter-manage-details' barter_manage_pk=barter_manage.pk %}" class="modal-action modal-close btn-flat waves-effect">
+      {% block cancel_action %} {% trans "Cancel" context "Dashboard cancel action" %} {% endblock %}
+    </a>
+  </form>
+  <a class="btn waves-effect" contenteditable="false" onclick="document.getElementById('myforms').submit()">
+    次に
+  </a>
+
+{% endblock %}

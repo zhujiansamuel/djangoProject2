@@ -1,0 +1,108 @@
+{% extends "base.html" %}
+{% load i18n %}
+{% load materializecss %}
+{% load static %}
+
+{% block title %}
+  {% if product_object_stock_temp.pk %}
+   {% trans "編集" context "Dashboard product_stock_temp list" %} - {{ product_object_stock_temp.imei_code }}
+  {% else %}
+    {% trans "在庫追加" context "product_stock_temp detail page title" %}
+  {% endif %}
+  - {{ block.super }}
+{% endblock %}
+
+{% block body_class %}body-product-object-stock-list{% endblock %}
+
+{% block menu_product_stock_temp_class %}active{% endblock %}
+
+{% block newfilters %}{% endblock newfilters %}
+
+{% block breadcrumbs %}
+  <ul class="breadcrumbs breadcrumbs--history">
+    <li>
+      <a href="{%url 'product_stock:product-stock-temp-list' %}" class="breadcrumbs--ellipsed-item">
+        {% trans "在庫" context "Dashboard product-stock-temp-list list" %}
+      </a>
+    </li>
+{#    <li class="back-mobile">#}
+{#      <a href="{%url 'product_stock:attributes' %}">#}
+{#        <svg data-src="{% static "dashboard/images/arrow-left.svg" %}" fill="#fff" width="20px" height="20px" />#}
+{#      </a>#}
+{#    </li>#}
+    <li>
+      <span class="breadcrumbs--ellipsed-item">
+        {{ product_stock_temp }}
+      </span>
+    </li>
+    {% if product_object_stock_temp.pk %}
+      <li>
+        <span class="breadcrumbs--ellipsed-item">
+            {{ product_object_stock_temp }}
+        </span>
+      </li>
+    <li>
+      <span class="breadcrumbs--ellipsed-item">
+        {% trans "編集" context "product_stock_temp detail breadcrumbs" %}
+      </span>
+    </li>
+    {% else %}
+    <li>
+      <span class="breadcrumbs--ellipsed-item">
+        {% trans "在庫新規追加" context "product_stock_temp detail breadcrumbs" %}
+      </span>
+    </li>
+    {% endif %}
+  </ul>
+{% endblock %}
+
+
+{% block content %}
+  <div class="row">
+    <div class="col m12 l9">
+      <div class="card">
+        <form method="post" enctype="multipart/form-data" id="form-attributes" novalidate>
+          <div class="card-content card-content-form">
+            {% csrf_token %}
+            <div class="row">
+              {{ form.imei_code|materializecss }}
+            </div>
+            <div class="row">
+              {{ form.notion|materializecss }}
+            </div>
+            <div class="row">
+              {{ form.shops|materializecss }}
+            </div>
+            <div class="row">
+              {{ form.extra_informations|materializecss }}
+            </div>
+            <div class="row">
+              {{ form.price_override|materializecss }}
+            </div>
+            <div class="row">
+              {{ form.status|materializecss }}
+            </div>
+          </div>
+          <div class="card-action right-align">
+            {% if product_object_stock_temp.pk %}
+              <a href="{%url 'product_stock:product-object-stock-temp-list' product_stock_temp_pk=product_stock_temp.pk%}" class="btn-flat waves-effect">
+                {% trans "Cancel" context "Dashboard cancel action" %}
+              </a>
+              <button type="submit" class="btn waves-effect">
+                {% trans "Save" context "Dashboard update action" %}
+              </button>
+            {% else %}
+              <a href="{%url 'product_stock:product-object-stock-temp-list' product_stock_temp_pk=product_stock_temp.pk%}" class="btn-flat waves-effect">
+                {% trans "Cancel" context "Dashboard cancel action" %}
+              </a>
+              <button type="submit" class="btn waves-effect">
+                {% trans "Create" context "Dashboard create action" %}
+              </button>
+            {% endif %}
+          </div>
+        </form>
+      </div>
+    </div>
+    <div class="col m12 l3 help-box"></div>
+  </div>
+{% endblock %}

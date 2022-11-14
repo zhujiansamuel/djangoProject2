@@ -1,0 +1,20 @@
+{% extends "base_modal.html" %}
+
+{% load i18n %}
+{% load materializecss %}
+
+{% block action_url %}
+  {%url 'product_stock:manual-inventory-manage-add-note' manual_inventory_manage_pk=manual_inventory_manage.pk %}
+{% endblock %}
+
+{% block title %}
+  {% trans "Add note" context "Modal add note title" %}
+{% endblock %}
+
+{% block content %}
+  {{ form|materializecss }}
+{% endblock %}
+
+{% block primary_action %}
+  {% trans "Save note" context "Modal add note primary action" %}
+{% endblock %}

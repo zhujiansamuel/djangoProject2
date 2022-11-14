@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+{% load i18n %}
+{% load price from taxed_prices %}
+{% load prices %}
+{% load status %}
+{% load utils %}
+{% load static %}
+
+{% block title %}{% trans "執行(IEMIを入力)" context "Dashboard order_manage list" %} - {{ block.super }}{% endblock %}
+
+{% block body_class %}body-order_manage{% endblock %}
+
+{% block menu_order_manage_class %}active{% endblock %}
+
+{% block newfilters %}{% endblock newfilters %}
+
+{% block header_extra %}{% endblock %}
+
+{% block breadcrumbs %}
+  <ul class="breadcrumbs breadcrumbs--history">
+    <li class="">
+      <a href="{% url "product_stock:order-manage-list" %}">
+        {% trans "注文出入庫" context "Dashboard orders list" %}
+      </a>
+    </li>
+    <li>
+      <span>
+        {{ order_manage }}
+      </span>
+    </li>
+  <li>
+    <span>
+    執行(IEMIを入力)
+    </span>
+  </li>
+  </ul>
+
+
+
+
+{% endblock %}
+
+{% block content %}
+
+{% endblock %}

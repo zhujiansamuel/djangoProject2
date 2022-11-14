@@ -5,15 +5,24 @@ from django.contrib.auth.decorators import login_required
 from django.shortcuts import get_object_or_404, redirect
 
 from django.utils.translation import pgettext, gettext_lazy as _
+from django.urls import reverse
 
 from .forms import (
     LoginForm,
 )
 from .models import User
 
-def login(request):
-    kwargs = {"template_name": "account/login.html", "authentication_form": LoginForm}
-    return django_views.LoginView.as_view(**kwargs)(request, **kwargs)
+# def login(request):
+#     kwargs = {"template_name": "account/login.html", "authentication_form": LoginForm}
+#     return django_views.LoginView.as_view(**kwargs)(request, **kwargs)
+
+class KingbuyLoginView(django_views.LoginView):
+    form_class = LoginForm
+    template_name = 'account/login.html'
+    next_page = 'index'
+
+    def get_success_url(self):
+        return reverse('index')
 
 
 @login_required

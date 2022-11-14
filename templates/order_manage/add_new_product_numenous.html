@@ -1,0 +1,142 @@
+{% extends "base.html" %}
+{% load i18n %}
+{% load price from taxed_prices %}
+{% load materializecss %}
+{% load prices %}
+{% load status %}
+{% load utils %}
+{% load static %}
+
+{% block title %}{{ order_manage }}{% trans "商品追加" context "Dashboard order_manage list" %} -
+  {{ block.super }}{% endblock %}
+
+{% block body_class %}body-order_manage{% endblock %}
+
+{% block menu_order_manage_class %}active{% endblock %}
+
+{% block newfilters %}{% endblock newfilters %}
+
+{% block header_extra %}{% endblock %}
+
+{% block breadcrumbs %}
+  <ul class="breadcrumbs breadcrumbs--history">
+    <li class="">
+      <a href="{% url "product_stock:order-manage-list" %}">
+        {% trans "注文出入庫" context "Dashboard orders list" %}
+      </a>
+    </li>
+    <li>
+      <span>
+        {{ order_manage }}
+      </span>
+    </li>
+    <li>
+    <span>
+    商品を追加
+    </span>
+    </li>
+  </ul>
+
+{% endblock %}
+
+{% block content %}
+  <form method="post" id="myforms">
+    {% csrf_token %}
+    <div class="row">
+      {{ form.jan_code|materializecss }}
+    </div>
+    <br>
+    <div class="row">
+      {{ form.quantity|materializecss }}
+    </div>
+    <div class="row">
+      {{ form.name|materializecss }}
+    </div>
+    <div class="row">
+      {{ form.description|materializecss }}
+    </div>
+    {% if no_imei %}
+      <div class="row">
+
+
+        <div class="input input-field col {{ classes.label }}">
+          {% if form.price_to_cal.auto_id %}
+            <label class="active" for="{{ form.price_to_cal.auto_id }}">
+              {{ form.price_to_cal.label }}<span
+              class="help-block materialize-red-text">{% trans "(必要)" context "Dashboard form labels" %}</span>
+            </label>
+          {% endif %}
+          {{ form.price_to_cal }}
+          {% for error in form.price_to_cal.errors %}
+            <p class="help-block materialize-red-text">{{ error }}</p>
+          {% endfor %}
+          {% if form.price_to_cal.help_text %}
+            <p class="help-block">
+              {{ form.price_to_cal.help_text|safe }}
+            </p>
+          {% endif %}
+        </div>
+    </div>
+  {% endif %}
+
+  </form>
+  <a href="{%url 'product_stock:order-manage-details' order_manage_pk=order_manage.pk %}"
+     class="modal-action modal-close btn-flat waves-effect">
+    {% block cancel_action %} {% trans "Cancel" context "Dashboard cancel action" %} {% endblock %}
+  </a>
+
+  <a class="btn waves-effect" contenteditable="false" onclick="document.getElementById('myforms').submit()">
+    {% if no_imei %}
+      追加
+    {% else %}
+      次に
+    {% endif %}
+  </a>
+
+  <script src="https://code.jquery.com/jquery-3.6.1.min.js"></script>
+
+  <script>
+    {% if no_imei %}
+
+    {% else %}
+      var input_max1 = document.getElementById('id_quantity')
+
+      input_max1.oninput = function () {
+        if (input_max1.value > 10) {
+          input_max1.value = 10
+          alert('最大数は10')
+        }
+      }
+    {% endif %}
+
+
+    $('#product_stock_jan_search_id').keydown(function (event) {
+      if (event.keyCode == 13) {
+        $.ajax({
+          type: 'POST',
+          url: '{% url "product_stock:ajax-product-stock-single" %}',
+          data: {
+            product_stock_jan_search: $('#product_stock_jan_search_id').val(),
+            csrfmiddlewaretoken: $('input[name=csrfmiddlewaretoken]').val(),
+            action: 'post'
+          },
+          success: function (json) {
+            var name00 = document.getElementById('id_name')
+            var description00 = document.getElementById('id_description')
+            name00.value = json.results.name;
+            {#name00.disabled = true;#}
+            description00.value = json.results.description;
+            description00.disabled = true;
+          },
+          error: function (xhr, errmsg, err) {
+            console.log(xhr.status + ": " + xhr.responseText); // provide a bit more info about the error to the console
+          }
+        });
+
+      }
+    });
+
+
+  </script>
+{% endblock %}
+

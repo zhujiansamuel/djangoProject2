@@ -1,0 +1,30 @@
+{% extends "base_modal.html" %}
+
+{% load i18n %}
+{% load materializecss %}
+
+{% block form_class %}{% endblock %}
+
+{% block action_url %}
+{%url 'product_stock:remove-draft-barter-manage' barter_manage_pk=barter_manage.pk %}
+{% endblock %}
+
+{% block title %}
+{% trans "物々交換下書き削除" context "Modal remove barter_manage title" %}
+{% endblock %}
+
+{% block content %}
+  <div class="col s12">
+    {% blocktrans trimmed with barter_manage=barter_manage context "Modal remove barter_manage text" %}
+      物々交換下書き {{ barter_manage }} を削除してもよろしいですか?
+    {% endblocktrans %}
+  </div>
+{% endblock %}
+
+{% block cancel_action %}
+{% trans "中止" context "Modal remove barter_manage cancel action" %}
+{% endblock %}
+
+{% block primary_action %}
+{% trans "削除" context "Modal remove barter_manage primary action" %}
+{% endblock %}

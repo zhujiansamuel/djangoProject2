@@ -3,7 +3,7 @@ from django_filters import FilterSet
 
 
 class SortedFilterSet(FilterSet):
-    """Base class for filter sets used in dashboard views.
+    """Base class for filter sets used in product_stock views.
 
     Adds flag `is_bound_unsorted` to indicate if filter set has data from
     filters other than `sort_by` or `page`.
@@ -17,13 +17,13 @@ class SortedFilterSet(FilterSet):
         return any([key not in {"sort_by", "page"} for key in data.keys()])
 
     def get_summary_message(self):
-        """Return message displayed in dashboard filter cards.
+        """Return message displayed in product_stock filter cards.
 
         Inherited by subclasses for record specific naming.
         """
         counter = self.qs.count()
         return npgettext(
-            "Number of matching records in the dashboard list",
+            "Number of matching records in the product_stock list",
             "Found %(counter)d matching record",
             "Found %(counter)d matching records",
             number=counter,

@@ -1,0 +1,20 @@
+{% extends "base_modal.html" %}
+
+{% load i18n %}
+{% load materializecss %}
+
+{% block action_url %}
+  {%url 'product_stock:barter-manage-add-slip-number' barter_manage_pk=barter_manage.pk %}
+{% endblock %}
+
+{% block title %}
+  {% trans "Add Slip Number." context "Modal add slip-number title" %}
+{% endblock %}
+
+{% block content %}
+  {{ form.slip_number|materializecss }}
+{% endblock %}
+
+{% block primary_action %}
+  {% trans "Save" context "Modal add Confirmation primary action" %}
+{% endblock %}

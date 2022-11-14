@@ -1,7 +1,508 @@
 {% extends "base.html" %}
-{% load static i18n %}
+{% load i18n %}
+{% load price from taxed_prices %}
+
+{% block title %}
+  {{ block.super }}
+{% endblock %}
 
 
 {% block newfilters %}{% endblock newfilters %}
 
-{% block content %}{% endblock %}
+
+
+{% block content %}
+
+  {% if user.is_authenticated %}
+    {% if user.is_staff %}
+      <div class="row">
+        <div class="col s12">
+          <h2>在庫関連</h2>
+          <hr>
+        </div>
+
+        <div class="col l4 m4 s12">
+          <div class="card Large">
+            <div class="card-reveal">
+            <span class="card-title grey-text text-darken-4">
+              入庫関連
+              <i class="fa-thin fa-xmark right"></i>
+            </span>
+              <p>Here is some more information about this product that is only revealed once clicked on.</p>
+            </div>
+            <div class="card-content">
+          <span class="card-title activator grey-text text-darken-4">
+             入庫関連
+             <i class="fa-thin fa-bars right"></i>
+           </span>
+              <ul>
+                {% if perms.product_stock.order_manage_permissions %}
+                  <li class="center-text">
+                    <a href="{% url 'product_stock:order-manage-create' order_manage_type_No=0 %}"
+                       class="waves-effect waves-light btn-large">
+                      {% trans "新規買取入庫執行表" context "product_stock products list" %}
+                    </a>
+                  </li>
+                  <hr>
+                  <li class="center-text">
+                    <a href="{% url 'product_stock:order-manage-list' %}" class="waves-effect waves-light btn-large">
+                      {% trans "買取・注文出入庫執行表一覧" context "product_stock products list" %}
+                    </a>
+                  </li>
+                {% endif %}
+
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <div class="col l4 m4 s12">
+          <div class="card Large">
+            <div class="card-reveal">
+            <span class="card-title grey-text text-darken-4">
+              商品関連
+              <i class="fa-thin fa-xmark right"></i>
+            </span>
+              <p>Here is some more information about this product that is only revealed once clicked on.</p>
+            </div>
+            <div class="card-content">
+          <span class="card-title activator grey-text text-darken-4">
+             商品関連
+             <i class="fa-thin fa-bars right"></i>
+           </span>
+              <ul>
+                {% if perms.product_stock.barter_manage_permissions %}
+                  <li class="center-text">
+                    <a href="{% url 'product_stock:barter-manage-create' %}" class="waves-effect waves-light btn-large">
+                      {% trans "新規物々交換執行表" context "product_stock products list" %}
+                    </a>
+                  </li>
+                {% endif %}
+                {% if perms.product_stock.store_to_store_manage_permissions %}
+                  <li class="center-text">
+                    <a href="{% url 'product_stock:store-to-store-manage-create' %}"
+                       class="waves-effect waves-light btn-large">
+                      {% trans "新規店舗間移動執行表" context "product_stock products list" %}
+                    </a>
+                  </li>
+                {% endif %}
+                {% if perms.product_stock.manual_inventory_manage_permissions %}
+                  <li class="center-text">
+                    <a href="{% url 'product_stock:manual-inventory-manage-create' %}"
+                       class="waves-effect waves-light btn-large">
+                      {% trans "新規商品ロック執行表" context "product_stock products list" %}
+                    </a>
+                  </li>
+                {% endif %}
+                <hr>
+
+                {% if perms.product_stock.barter_cancel_permissions %}
+                  <li class="center-text">
+                    <a href="{% url 'product_stock:barter-manage-list' %}" class="waves-effect waves-light btn-large">
+                      {% trans "物々交換執行表一覧" context "product_stock products list" %}
+                    </a>
+                  </li>
+                {% endif %}
+                {% if perms.product_stock.store_to_store_manage_permissions %}
+                  <li class="center-text">
+                    <a href="{% url 'product_stock:store-to-store-manage-list' %}"
+                       class="waves-effect waves-light btn-large">
+                      {% trans "店舗間移動執行表一覧" context "product_stock products list" %}
+                    </a>
+                  </li>
+                {% endif %}
+                {% if perms.product_stock.manual_inventory_manage_permissions %}
+                  <li class="center-text">
+                    <a href="{% url 'product_stock:manual-inventory-manage-list' %}"
+                       class="waves-effect waves-light btn-large">
+                      {% trans "商品ロック執行表一覧" context "product_stock products list" %}
+                    </a>
+                  </li>
+                {% endif %}
+              </ul>
+            </div>
+          </div>
+        </div>
+
+
+        <div class="col l4 m4 s12">
+          <div class="card">
+            <div class="card-reveal">
+            <span class="card-title grey-text text-darken-4">
+              出庫関連
+              <i class="fa-thin fa-xmark right"></i>
+            </span>
+              <p>Here is some more information about this product that is only revealed once clicked on.</p>
+            </div>
+            <div class="card-content">
+          <span class="card-title activator grey-text text-darken-4">
+             出庫関連
+             <i class="fa-thin fa-bars right"></i>
+           </span>
+              <ul>
+                {% if perms.product_stock.order_manage_permissions %}
+                  <li class="center-text">
+                    <a href="{% url 'product_stock:order-manage-create' order_manage_type_No=1 %}"
+                       class="waves-effect waves-light btn-large">
+                      {% trans "新規注文出庫執行表" context "product_stock products list" %}
+                    </a>
+                  </li>
+                  <hr>
+                  <li class="center-text">
+                    <a href="{% url 'product_stock:order-manage-list' %}" class="waves-effect waves-light btn-large">
+                      {% trans "買取・注文出入庫執行表一覧" context "product_stock products list" %}
+                    </a>
+                  </li>
+                {% endif %}
+
+              </ul>
+            </div>
+          </div>
+        </div>
+
+
+      </div>
+
+      <div class="row">
+        <div class="col l12 m4 s12">
+          <div class="card Large" style="height: 5%;!important;">
+            <div class="card-reveal">
+            <span class="card-title grey-text text-darken-4">
+              全商品関連
+              <i class="fa-thin fa-xmark right"></i>
+            </span>
+              <p>Here is some more information about this product that is only revealed once clicked on.</p>
+            </div>
+            <div class="card-content">
+              <span class="card-title activator grey-text text-darken-4">
+                 全商品関連
+                 <i class="fa-thin fa-bars right"></i>
+               </span>
+              <div class="row">
+                  <div class="col s2">
+
+                  </div>
+                {% if perms.product_stock.change_product_object_stock %}
+                  <div class="col s2">
+                    <a href="{% url 'product_stock:product-stock-temp-list' %}" class="waves-effect waves-light btn-large">
+                      {% trans "商品在庫一覧" context "product_stock products list" %}
+                    </a>
+                  </div>
+                {% endif %}
+                {% if perms.product_stock.manage_product_stock %}
+                  <div class="col s2">
+                    <a href="{% url 'product_stock:add-imei' %}" class="waves-effect waves-light btn-large">
+                      {% trans "商品へIMEI追加" context "product_stock products list" %}
+                    </a>
+                  </div>
+                {% endif %}
+                {% if perms.product_stock.change_product_object_stock %}
+                  <div class="col s2">
+                    <a href="{% url 'product_stock:product-change-history' %}" class="waves-effect waves-light btn-large">
+                      {% trans "商品情報の編集歴史" context "product_stock products list" %}
+                    </a>
+                  </div>
+                {% endif %}
+                              {% if perms.site.manage_settings %}
+                  <div class="col s2">
+                    <a href="{% url 'product_stock:correcte-inventory-quantity' %}" class="waves-effect waves-light btn-large"
+                    style="color: #9c27b0;">
+                      {% trans "在庫数量の手動修正" context "product_stock products list" %}
+                    </a>
+                  </div>
+                {% endif %}
+
+              </div>
+
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+
+
+
+
+      <div class="row">
+        <div class="col s12">
+          <h2>記述統計</h2>
+          <hr>
+        </div>
+
+        <div class="col l4 m4 s12">
+          <div class="card">
+            <div class="card-reveal">
+            <span class="card-title grey-text text-darken-4">
+              資金統計
+              <i class="fa-thin fa-xmark right"></i>
+            </span>
+              <p>Here is some more information about this product that is only revealed once clicked on.</p>
+            </div>
+            <div class="card-content">
+          <span class="card-title activator grey-text text-darken-4">
+             資金統計
+             <i class="fa-thin fa-bars right"></i>
+           </span>
+              <ul>
+                <li class="center-text">
+                  <a href="" class="waves-effect waves-light btn-large">
+                    {% trans "商品在庫一覧" context "product_stock products list" %}
+                  </a>
+                </li>
+                <li class="center-text">
+                  <a href="" class="waves-effect waves-light btn-large">
+                    {% trans "価格一括変更" context "product_stock side navigation link" %}
+                  </a>
+                </li>
+                <li class="center-text">
+                  <a href="" class="waves-effect waves-light btn-large">
+                    {% trans "商品一括追加" context "product_stock side navigation link" %}
+                  </a>
+                </li>
+                <li class="center-text">
+                  <a href="" class="waves-effect waves-light btn-large">
+                    {% trans "商品一括変更" context "product_stock side navigation link" %}
+                  </a>
+                </li>
+
+
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <div class="col l4 m4 s12">
+          <div class="card">
+            <div class="card-reveal">
+            <span class="card-title grey-text text-darken-4">
+              在庫統計
+              <i class="fa-thin fa-xmark right"></i>
+            </span>
+              <p>Here is some more information about this product that is only revealed once clicked on.</p>
+            </div>
+            <div class="card-content">
+          <span class="card-title activator grey-text text-darken-4">
+             在庫統計
+             <i class="fa-thin fa-bars right"></i>
+           </span>
+              <ul>
+                <li class="center-text">
+                  <a href="" class="waves-effect waves-light btn-large">
+                    {% trans "商品在庫一覧" context "product_stock products list" %}
+                  </a>
+                </li>
+                <li class="center-text">
+                  <a href="" class="waves-effect waves-light btn-large">
+                    {% trans "価格一括変更" context "Dashboard side navigation link" %}
+                  </a>
+                </li>
+                <li class="center-text">
+                  <a href="" class="waves-effect waves-light btn-large">
+                    {% trans "商品一括追加" context "Dashboard side navigation link" %}
+                  </a>
+                </li>
+                <li class="center-text">
+                  <a href="" class="waves-effect waves-light btn-large">
+                    {% trans "商品一括変更" context "Dashboard side navigation link" %}
+                  </a>
+                </li>
+
+
+              </ul>
+            </div>
+          </div>
+        </div>
+        <div class="col l4 m4 s12">
+          <div class="card">
+            <div class="card-reveal">
+            <span class="card-title grey-text text-darken-4">
+              Card Title
+              <i class="fa-thin fa-xmark right"></i>
+            </span>
+              <p>Here is some more information about this product that is only revealed once clicked on.</p>
+            </div>
+            <div class="card-content">
+          <span class="card-title activator grey-text text-darken-4">
+             Card Title
+             <i class="fa-thin fa-bars right"></i>
+           </span>
+              <ul>
+                <li class="center-text">
+                  <a href="" class="waves-effect waves-light btn-large">
+                    {% trans "商品在庫一覧" context "Dashboard products list" %}
+                  </a>
+                </li>
+                <li class="center-text">
+                  <a href="" class="waves-effect waves-light btn-large">
+                    {% trans "価格一括変更" context "Dashboard side navigation link" %}
+                  </a>
+                </li>
+                <li class="center-text">
+                  <a href="" class="waves-effect waves-light btn-large">
+                    {% trans "商品一括追加" context "Dashboard side navigation link" %}
+                  </a>
+                </li>
+                <li class="center-text">
+                  <a href="" class="waves-effect waves-light btn-large">
+                    {% trans "商品一括変更" context "Dashboard side navigation link" %}
+                  </a>
+                </li>
+
+
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col s12">
+          <h2>総合管理</h2>
+          <hr>
+        </div>
+
+        <div class="col l4 m4 s12">
+          <div class="card">
+            <div class="card-reveal">
+            <span class="card-title grey-text text-darken-4">
+              商品関連
+              <i class="fa-thin fa-xmark right"></i>
+            </span>
+              <p>Here is some more information about this product that is only revealed once clicked on.</p>
+            </div>
+            <div class="card-content">
+          <span class="card-title activator grey-text text-darken-4">
+             商品関連
+             <i class="fa-thin fa-bars right"></i>
+           </span>
+              <ul>
+                {% if perms.product_stock.manage_product_stock %}
+                  <li class="center-text">
+                    <a href="{% url 'product_stock:extra-information-list' %}" class="waves-effect waves-light btn-large">
+                      {% trans "追加情報の管理" context "Dashboard side navigation link" %}
+                    </a>
+                  </li>
+                  <li class="center-text">
+                    <a href="{% url 'product_stock:product-stock-status-list' %}"
+                       class="waves-effect waves-light btn-large">
+                      {% trans "商品状態の管理" context "Dashboard side navigation link" %}
+                    </a>
+                  </li>
+                {% endif %}
+                {% if perms.site.manage_settings %}
+                  <li class="center-text">
+                    <a href="{% url 'product_stock:stocktakings' %}" class="waves-effect waves-light btn-large"
+                       style="color: #9c27b0;">
+                      {% trans "棚　　　　　卸" context "Dashboard side navigation link" %}
+                    </a>
+                  </li>
+                {% endif %}
+
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <div class="col l4 m4 s12">
+          <div class="card">
+            <div class="card-reveal">
+            <span class="card-title grey-text text-darken-4">
+              取引先関連
+              <i class="fa-thin fa-xmark right"></i>
+            </span>
+              <p>Here is some more information about this product that is only revealed once clicked on.</p>
+            </div>
+            <div class="card-content">
+          <span class="card-title activator grey-text text-darken-4">
+             取引先関連
+             <i class="fa-thin fa-bars right"></i>
+           </span>
+              <ul>
+                {% if perms.product_stock.manage_suppliers %}
+                  <li class="center-text">
+                    <a href="{% url 'product_stock:suppliers-list' %}" class="waves-effect waves-light btn-large">
+                      {% trans "取引先(個人)一覧" context "Dashboard products list" %}
+                    </a>
+                  </li>
+                {% endif %}
+                {% if perms.product_stock.manage_legalperson %}
+                  <li class="center-text">
+                    <a href="{% url 'product_stock:legal-person-list' %}" class="waves-effect waves-light btn-large">
+                      {% trans "取引先(法人)一覧" context "Dashboard products list" %}
+                    </a>
+                  </li>
+                {% endif %}
+                {% if perms.product_stock.manage_E_mark %}
+                  <li class="center-text">
+                    <a href="{% url 'product_stock:E-market-list' %}" class="waves-effect waves-light btn-large">
+                      {% trans "取引先(サイト)一覧" context "Dashboard products list" %}
+                    </a>
+                  </li>
+                {% endif %}
+              </ul>
+            </div>
+          </div>
+        </div>
+        <div class="col l4 m4 s12">
+          <div class="card">
+            <div class="card-reveal">
+            <span class="card-title grey-text text-darken-4">
+              サイト関連
+              <i class="fa-thin fa-xmark right"></i>
+            </span>
+              <p>Here is some more information about this product that is only revealed once clicked on.</p>
+            </div>
+            <div class="card-content">
+          <span class="card-title activator grey-text text-darken-4">
+             サイト関連
+             <i class="fa-thin fa-bars right"></i>
+           </span>
+              <ul>
+                {% if perms.product_stock.manage_shopss %}
+                  <li class="center-text">
+                    <a href="{% url 'product_stock:shop-list' %}" class="waves-effect waves-light btn-large">
+                      {% trans "店舗の管理" context "Dashboard side navigation link" %}
+                    </a>
+                  </li>
+                {% endif %}
+                {% if perms.site.manage_settings %}
+                  <li class="center-text">
+{#                    <a href="{% url 'product_stock:site-index' %}" class="waves-effect waves-light btn-large">#}
+                      <a href="" class="waves-effect waves-light btn-large">
+                      {% trans "サイトの設定" context "Dashboard products list" %}
+                    </a>
+                  </li>
+                {% endif %}
+                {% if perms.account.manage_staff %}
+                  <li class="center-text">
+                    <a href="" class="waves-effect waves-light btn-large" style="">
+                      {% trans "スタッフ一覧" context "Dashboard products list" %}
+                    </a>
+                  </li>
+                {% endif %}
+
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+
+
+    {% endif %}
+  {% endif %}
+
+{% endblock %}
+
+{% block custom_css %}
+  <style>
+    .center-text {
+      text-align: center;
+      margin: 5px;
+    }
+
+    .card {
+      height: 500px;
+    }
+  </style>
+{% endblock %}

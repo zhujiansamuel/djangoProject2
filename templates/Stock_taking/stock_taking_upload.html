@@ -1,0 +1,95 @@
+{% extends "base.html" %}
+{% load i18n %}
+{% load materializecss %}
+{% load static %}
+
+
+{% load price from taxed_prices %}
+{% load utils %}
+
+
+{% block title %}
+  {% trans "棚卸" context "Dashboard suppliers list" %} - {{ block.super }}
+{% endblock %}
+
+{% block body_class %}body-stock-taking-list{% endblock %}
+
+{% block menu_stock_taking_class %}active{% endblock %}
+
+{% block newfilters %}{% endblock newfilters %}
+
+{% block header_extra %}
+  <div class="btn-fab-fixed" style="right: 30%;">
+    <a class="btn waves-effect" contenteditable="false" onclick="document.getElementById('myforms').submit()">
+      ファイルをダウンロード
+    </a>
+  </div>
+{% endblock %}
+
+{% block breadcrumbs %}
+  <ul class="breadcrumbs">
+    <li class="visible-s">
+      {% trans "棚卸" context "Dashboard suppliers list" %}
+    </li>
+  </ul>
+{% endblock %}
+
+
+{% block content %}
+
+  <div class="row">
+    <div class="col s12 l12" id="stock-taking-upload">
+      <form id="myforms" method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+
+        <div
+          class="input col input-field s12">
+          {% if form.file.auto_id %}
+            <p>
+              <label
+                class="s12"
+                for="{{ form.file.auto_id }}">
+                {{ form.file.label }}
+                {% if not form.file.field.required %}
+                  {#          <span class="help-block materialize-red-text">{% trans "(optional)" context "Dashboard form labels" %}</span>#}
+                {% elif form.file.field.required %}
+                  <span
+                    class="help-block materialize-red-text">{% trans "(必要)" context "Dashboard form labels" %}</span>
+                {% endif %}
+              </label>
+            </p>
+          {% endif %}
+
+
+          <div class="file-field">
+            <p>
+            <div class="btn">
+          <span>
+            {% trans "File" %}
+          </span>
+              <input class="file-chooser" id="{{ form.file.auto_id }}" name="{{ form.file.name }}" type="file">
+            </div>
+            <div class="file-path-wrapper">
+              <input class="file-path" type="text">
+            </div>
+            </p>
+            {% for error in form.file.errors %}
+              <p class="help-block materialize-red-text">
+                {{ error }}
+              </p>
+            {% endfor %}
+            {% if form.file.help_text %}
+              <p class="help-block">
+                {{ form.file.help_text|safe }}
+              </p>
+            {% endif %}
+          </div>
+        </div>
+
+
+      </form>
+    </div>
+  </div>
+
+{% endblock %}
+

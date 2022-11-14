@@ -5,6 +5,6 @@ from . import views
 app_name = 'account'
 
 urlpatterns = [
-    re_path( r"^login/$", views.login, name="login" ),
+    re_path( r"^login/$", views.KingbuyLoginView.as_view(), name="login" ),
     re_path( r"^logout/$", views.logout, name="logout" ),
     ]

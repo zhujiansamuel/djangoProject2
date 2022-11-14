@@ -1,0 +1,136 @@
+{% extends "base.html" %}
+{% load i18n %}
+{% load price from taxed_prices %}
+{% load materializecss %}
+{% load prices %}
+{% load status %}
+{% load utils %}
+{% load static %}
+
+{% block title %}
+  {% if order_manage.legal_person %}
+    {% blocktrans trimmed with order_manage=order_manage context "Modal order_manage add variant title" %}
+      {{ order_manage }}の取引先を編集
+    {% endblocktrans %}
+  {% else %}
+    {% blocktrans trimmed with order_manage=order_manage context "Modal order_manage add variant title" %}
+      {{ order_manage }}へ取引先を追加
+    {% endblocktrans %}
+  {% endif %}
+  - {{ block.super }}
+{% endblock %}
+
+{% block body_class %}body-order_manage{% endblock %}
+
+{% block menu_order_manage_class %}active{% endblock %}
+
+{% block newfilters %}{% endblock newfilters %}
+
+{% block header_extra %}{% endblock %}
+
+{% block breadcrumbs %}
+  <ul class="breadcrumbs breadcrumbs--history">
+    <li class="">
+      <a href="{% url "product_stock:order-manage-list" %}">
+        {% trans "注文出入庫" context "Dashboard orders list" %}
+      </a>
+    </li>
+    <li>
+      <span>
+        {{ order_manage }}
+      </span>
+    </li>
+    <li>
+    <span>
+    取引先(法人)を追加
+    </span>
+    </li>
+  </ul>
+{% endblock %}
+
+{% block content %}
+
+  <a class="btn waves-effect" contenteditable="false" onclick="document.getElementById('myforms').submit()">
+    保存
+  </a>
+  <div class="" style="margin: 10px;">
+    <form method="post" id="myforms" class="form-async h-adr">
+      {% csrf_token %}
+      <div class="row">
+        <div class="col s4">
+          {{ form.email|materializecss }}
+        </div>
+        <div class="col s4">
+          {{ form.company_name|materializecss }}
+        </div>
+        <div class="col s4">
+          {{ form.phone|materializecss }}
+        </div>
+      </div>
+      <div class="row">
+        <div class="col s2">
+          {{ form.fax|materializecss }}
+        </div>
+        <div class="col s5">
+          {{ form.homepage|materializecss }}
+        </div>
+        <div class="col s5">
+          {{ form.note|materializecss }}
+        </div>
+      </div>
+      <div class="row">
+        <div class="col s2">
+          {{ form.postal_code|materializecss }}
+        </div>
+        <div class="col s2">
+          {{ form.city_area|materializecss }}
+        </div>
+        <div class="col s8">
+          {{ form.city|materializecss }}
+        </div>
+      </div>
+      <div class="row">
+        <div class="col s6">
+          {{ form.street_address_1|materializecss }}
+        </div>
+        <div class="col s6">
+          {{ form.street_address_2|materializecss }}
+        </div>
+      </div>
+
+      <span class="p-country-name" style="display:none;">Japan</span>
+    </form>
+  </div>
+    <script src="https://code.jquery.com/jquery-3.6.1.min.js"></script>
+<script>
+
+$('#id_email').keydown(function(event){
+    if (event.keyCode == 13) {
+      $.ajax({
+          type:'POST',
+          url:'{% url "product_stock:ajax-legal-person-single" %}',
+          data:{
+              email:$('#id_email').val(),
+              csrfmiddlewaretoken:$('input[name=csrfmiddlewaretoken]').val(),
+              action: 'post'
+          },
+          success:function(json){
+            for (var val in json.results){
+              var id_for_value = '#id_'+val
+              $(id_for_value).val(json.results[val]);
+              $(id_for_value).prop('disabled', true);
+              $(id_for_value).siblings("input").prop('disabled', true);
+              $(val).val(json.results[val]);
+              $(val).prop('disabled', true);
+            }
+          },
+          error : function(xhr,errmsg,err) {
+          console.log(xhr.status + ": " + xhr.responseText); // provide a bit more info about the error to the console
+      }
+      });
+
+    }
+});
+
+</script>
+{% endblock %}

@@ -1,0 +1,91 @@
+{% extends "base.html" %}
+{% load i18n %}
+{% load materializecss %}
+{% load static %}
+
+{% block title %}
+  {% if shop.pk %}
+   {% trans "編集" context "Dashboard attributes list" %} - {{ shop }}
+  {% else %}
+    {% trans "店舗新規追加" context "Shop detail page title" %}
+  {% endif %}
+  - {{ block.super }}
+{% endblock %}
+
+{% block body_class %}body-shops-list{% endblock %}
+
+{% block menu_shops_class %}active{% endblock %}
+
+{% block newfilters %}{% endblock newfilters %}
+
+{% block breadcrumbs %}
+  <ul class="breadcrumbs breadcrumbs--history">
+    <li>
+      <a href="{%url 'product_stock:shop-list' %}" class="breadcrumbs--ellipsed-item">
+        {% trans "店舗" context "Dashboard shop list" %}
+      </a>
+    </li>
+{#    <li class="back-mobile">#}
+{#      <a href="{%url 'product_stock:attributes' %}">#}
+{#        <svg data-src="{% static "dashboard/images/arrow-left.svg" %}" fill="#fff" width="20px" height="20px" />#}
+{#      </a>#}
+{#    </li>#}
+    {% if shop.pk %}
+      <li>
+        <span class="breadcrumbs--ellipsed-item">
+            {{ shop }}
+        </span>
+      </li>
+    <li>
+      <span class="breadcrumbs--ellipsed-item">
+        {% trans "編集" context "shop detail breadcrumbs" %}
+      </span>
+    </li>
+    {% else %}
+    <li>
+      <span class="breadcrumbs--ellipsed-item">
+        {% trans "店舗新規追加" context "shop detail breadcrumbs" %}
+      </span>
+    </li>
+    {% endif %}
+  </ul>
+{% endblock %}
+
+
+{% block content %}
+  <div class="row">
+    <div class="col m12 l9">
+      <div class="card">
+        <form method="post" enctype="multipart/form-data" id="form-attributes" novalidate>
+          <div class="card-content card-content-form">
+            {% csrf_token %}
+            <div class="row">
+              {{ form.name|materializecss }}
+            </div>
+            <div class="row">
+              {{ form.description|materializecss }}
+            </div>
+          </div>
+          <div class="card-action right-align">
+            {% if shop.pk %}
+              <a href="{%url 'product_stock:shop-list' %}" class="btn-flat waves-effect">
+                {% trans "Cancel" context "Dashboard cancel action" %}
+              </a>
+              <button type="submit" class="btn waves-effect">
+                {% trans "Save" context "Dashboard update action" %}
+              </button>
+            {% else %}
+              <a href="{%url 'product_stock:shop-list' %}" class="btn-flat waves-effect">
+                {% trans "Cancel" context "Dashboard cancel action" %}
+              </a>
+              <button type="submit" class="btn waves-effect">
+                {% trans "Create" context "Dashboard create action" %}
+              </button>
+            {% endif %}
+          </div>
+        </form>
+      </div>
+    </div>
+    <div class="col m12 l3 help-box"></div>
+  </div>
+{% endblock %}

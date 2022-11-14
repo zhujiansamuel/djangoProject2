@@ -1,0 +1,120 @@
+{% extends "base.html" %}
+{% load i18n %}
+{% load materializecss %}
+{% load static %}
+
+
+{% load price from taxed_prices %}
+{% load utils %}
+
+
+{% block title %}
+  {% trans "取引先(個人)" context "Dashboard suppliers list" %} - {{ block.super }}
+{% endblock %}
+
+{% block body_class %}body-suppliers-list{% endblock %}
+
+{% block menu_suppliers_class %}active{% endblock %}
+
+{% block newfilters %}{% endblock newfilters %}
+
+{% block header_extra %}
+  <div class="btn-fab-fixed" style="right: 8%;">
+    <a class="waves-effect waves-light btn" href="{%url 'product_stock:suppliers-create' %}"
+       title="{% trans "取引先(個人)を新規追加" context "suppliers list add button text" %}">
+      <span>取引先(個人)を新規追加</span>
+      <i class="fa-sharp fa-solid fa-memo-circle-info"></i>
+    </a>
+  </div>
+{% endblock %}
+
+{% block breadcrumbs %}
+  <ul class="breadcrumbs">
+    <li class="visible-s">
+      {% trans "取引先(個人)" context "Dashboard suppliers list" %}
+    </li>
+  </ul>
+{% endblock %}
+
+
+{% block content %}
+  <div class="row">
+    <div class="col s12 l9" id="product-list">
+      {% if suppliers_s %}
+        <div class="card">
+            <div class="data-table-container">
+              <table class="bordered highlight responsive data-table last-right-align">
+            <thead>
+              <tr>
+                <th class="bulk-checkbox"></th>
+                {% trans "名前" context "Products list table header" as label %}
+                {% sorting_header 'name' label is_wide=True %}
+
+                {% trans "Eメール" context "Products list table header" as label %}
+                {% sorting_header 'email' label is_wide=True %}
+
+                {% trans "電話番号" context "Products list table header" as label %}
+                {% sorting_header 'phone' label is_wide=True %}
+
+                {% trans "性別" context "Products list table header" as label %}
+                {% sorting_header 'gender' label is_wide=True %}
+
+                {% trans "ノート" context "Products list table header" as label %}
+                {% sorting_header 'note' label is_wide=True %}
+
+              </tr>
+            </thead>
+
+            <tbody>
+                {% for suppliers in suppliers_s %}
+{#                  --------------------------------------------------|-#}
+                  <tr class="avatar" data-action-go="{%url 'product_stock:suppliers-details' suppliers_pk=suppliers.pk %}">
+                    <td>
+                      <label for="id_suppliers_{{ suppliers.pk }}"></label>
+                    </td>
+                    <td>
+                      {{ suppliers }}
+                    </td>
+                    <td>
+                      {{ suppliers.email }}
+                    </td>
+                    <td>
+                      {{ suppliers.phone }}
+                    </td>
+                    <td>
+                      {{ suppliers.gender }}
+                    </td>
+                    <td>
+                      {{ suppliers.note }}
+                    </td>
+
+                  </tr>
+                {% endfor %}
+            </tbody>
+            </table>
+            </div>
+        </div>
+      {% endif %}
+    </div>
+    <div class="col s12 l3" id="filters">
+  {% if not is_empty %}
+    <div class="row">
+    <div class="col s12 l12">
+    <ul class="collapsible">
+      <li>
+        <div class="collapsible-header active">
+          <i class="fa-regular fa-nfc-magnifying-glass"></i>
+          フィルター
+          <span class="new badge"  data-badge-caption="個取引先(個人)発見">{{ suppliers_s_filter.get_total }}</span></div>
+        <div class="collapsible-body">
+          {% filters suppliers_s_filter %}
+        </div>
+      </li>
+    </ul>
+    </div>
+    </div>
+  {% endif %}
+    </div>
+  </div>
+{% endblock %}
+

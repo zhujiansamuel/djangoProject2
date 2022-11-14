@@ -1,0 +1,88 @@
+{% extends "base.html" %}
+{% load i18n %}
+{% load materializecss %}
+{% load static %}
+
+{% block title %}
+  {% if suppliers.pk %}
+   {% trans "編集" context "Dashboard attributes list" %} - {{ suppliers }}
+  {% else %}
+    {% trans "取引先(個人)を新規追加" context "suppliers detail page title" %}
+  {% endif %}
+  - {{ block.super }}
+{% endblock %}
+
+{% block body_class %}body-supplierss-list{% endblock %}
+
+{% block menu_suppliers_class %}active{% endblock %}
+
+{% block newfilters %}{% endblock newfilters %}
+
+{% block breadcrumbs %}
+  <ul class="breadcrumbs breadcrumbs--history">
+    <li>
+      <a href="{%url 'product_stock:suppliers-list' %}" class="breadcrumbs--ellipsed-item">
+        {% trans "取引先(個人)" context "Dashboard suppliers list" %}
+      </a>
+    </li>
+    {% if suppliers.pk %}
+      <li>
+        <span class="breadcrumbs--ellipsed-item">
+            {{ suppliers }}
+        </span>
+      </li>
+    <li>
+      <span class="breadcrumbs--ellipsed-item">
+        {% trans "編集" context "suppliers detail breadcrumbs" %}
+      </span>
+    </li>
+    {% else %}
+    <li>
+      <span class="breadcrumbs--ellipsed-item">
+        {% trans "取引先(個人)を新規追加" context "suppliers detail breadcrumbs" %}
+      </span>
+    </li>
+    {% endif %}
+  </ul>
+{% endblock %}
+
+
+{% block content %}
+  <div class="row">
+    <div class="col m12 l9">
+      <div class="card">
+        <form method="post" enctype="multipart/form-data" id="form-attributes" class="h-adr" novalidate>
+          <div class="card-content card-content-form">
+            {% csrf_token %}
+            <div class="row">
+                <span class="p-country-name" style="display:none;">Japan</span>
+              {{ form|materializecss }}
+            </div>
+          </div>
+          <div class="card-action right-align">
+            {% if suppliers.pk %}
+              <a href="{%url 'product_stock:suppliers-list' %}" class="btn-flat waves-effect">
+                {% trans "Cancel" context "Dashboard cancel action" %}
+              </a>
+              <button type="submit" class="btn waves-effect">
+                {% trans "Save" context "Dashboard update action" %}
+              </button>
+            {% else %}
+              <a href="{%url 'product_stock:suppliers-list' %}" class="btn-flat waves-effect">
+                {% trans "Cancel" context "Dashboard cancel action" %}
+              </a>
+              <button type="submit" class="btn waves-effect">
+                {% trans "Create" context "Dashboard create action" %}
+              </button>
+            {% endif %}
+          </div>
+        </form>
+      </div>
+    </div>
+    <div class="col m12 l3 help-box"></div>
+  </div>
+  <script>
+  document.getElementById('id_birth').addEventListener('pointerdown', (e)=>{e.target.setPointerCapture(e.pointerId);})
+  </script>
+
+{% endblock %}

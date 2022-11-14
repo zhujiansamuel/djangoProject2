@@ -1,0 +1,30 @@
+{% extends "base_modal.html" %}
+
+{% load i18n %}
+{% load materializecss %}
+{% load utils %}
+
+{% block action_url %}
+{%url 'product_stock:select-product-object-stock-to-store-to-store-manage' store_to_store_manage_pk=store_to_store_manage.pk %}
+{% endblock %}
+
+{% block title %}
+{% blocktrans trimmed with store_to_store_manage=store_to_store_manage context "Modal store_to_store_manage add variant title" %}
+  {{ store_to_store_manage }}へ在庫商品を追加
+{% endblocktrans %}
+{% endblock %}
+
+{% block content %}
+      <div class="card">
+      {{ form }}
+
+      </div>
+
+
+
+{% endblock %}
+
+{% block primary_action %}
+{% trans "Add" context "Modal store_to_store_manage add variant primary action" %}
+
+{% endblock %}

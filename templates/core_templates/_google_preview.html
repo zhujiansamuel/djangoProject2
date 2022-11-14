@@ -1,0 +1,32 @@
+{% load build_absolute_uri from urls %}
+{% load materializecss %}
+{% load i18n %}
+<div class='google-preview' style="display: none;">
+  <span class="card-title">{% trans "Search engine listing preview" context "Title of the box showing preview from the search engine perspective" %}</span>
+  <span class="card-title">{% trans "Googleなどの検索エンジン向けに用意された情報。" %}</span>
+  <div class='google-preview__container'>
+    <br>
+    <div id="google-preview">
+      <div class='google-preview__title'>
+        <a id="google-preview-title" href='#'>{{ object.seo_title|default:"" }}</a>
+      </div>
+      <div class='google-preview__url'>
+        {% if object.pk %}
+          {% build_absolute_uri request=request location=object.get_absolute_url %}
+        {% else %}
+          {% build_absolute_uri request=request location="/" %}
+        {% endif %}
+      </div>
+      <div id="google-preview-description" class='google-preview__description'>{{ object.seo_description|default:"" }}</div>
+    </div>
+  </div>
+</div>
+
+<div class="row" style="display: none;">
+    <span class="card-title">{% trans "Googleなどの検索エンジン向けに用意された情報。" %}</span>
+  {{ form.seo_title|materializecss }}
+</div>
+<div class="row" style="display: none;">
+    <span class="card-title">{% trans "Googleなどの検索エンジン向けに用意された情報。" %}</span>
+  {{ form.seo_description|materializecss }}
+</div>

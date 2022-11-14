@@ -1,0 +1,153 @@
+{% extends "base.html" %}
+{% load i18n %}
+{% load materializecss %}
+{% load static %}
+
+
+{% load price from taxed_prices %}
+{% load utils %}
+
+
+{% block title %}
+  {% trans "在庫商品類" context "Dashboard product_stock_temp list" %} - {{ block.super }}
+{% endblock %}
+
+{% block body_class %}body-product-stock-temp-list{% endblock %}
+
+{% block menu_product_stock_temp_class %}active{% endblock %}
+
+{% block newfilters %}
+  {% if not is_empty %}
+    <div class="row">
+    <div class="col s12 l12">
+    <ul class="collapsible">
+      <li>
+        <div class="collapsible-header">
+          <i class="fa-regular fa-nfc-magnifying-glass"></i>
+          フィルター
+          <span class="new badge"  data-badge-caption="個商品類発見">{{ product_stock_temps_filter.get_total }}</span></div>
+        <div class="collapsible-body">
+          {% filters product_stock_temps_filter %}
+        </div>
+      </li>
+    </ul>
+    </div>
+    </div>
+  {% endif %}
+{% endblock newfilters %}
+
+{% block header_extra %}
+  <div class="btn-fab-fixed" style="right: 8%;z-index: auto;">
+    <a class="waves-effect waves-light btn" href="{%url 'product_stock:product-stock-temp-create' %}"
+       title="{% trans "在庫商品類新規追加" context "product_stock_temp list add button text" %}">
+      <span>在庫商品類新規追加</span>
+      <i class="fa-sharp fa-solid fa-memo-circle-info"></i>
+    </a>
+  </div>
+{% endblock %}
+
+{% block breadcrumbs %}
+  <ul class="breadcrumbs">
+    <li class="visible-s">
+      {% trans "在庫商品類" context "Dashboard product-stock-temp list" %}
+    </li>
+  </ul>
+{% endblock %}
+
+{% block content %}
+  <div class="row">
+    <div class="col s12 l12" id="product-list">
+      {% if product_stock_temps %}
+        <div class="card">
+            <div class="data-table-container">
+              <table class="bordered highlight responsive data-table last-right-align">
+            <thead>
+              <tr>
+                <th class="bulk-checkbox"></th>
+                {% trans "名前" context "Products list table header" as label %}
+                {% sorting_header 'name' label %}
+
+                {% trans "平均価格" context "Products list table header" as label %}
+                {% sorting_header 'price_average' label %}
+
+                {% trans "全部数量" context "Products list table header" as label %}
+                {% sorting_header 'quantity_all' label %}
+
+                {% trans "管理数量" context "Products list table header" as label %}
+                {% sorting_header 'quantity' label %}
+
+                {% trans "可用数量" context "Products list table header" as label %}
+                {% sorting_header 'quantity_available' label %}
+
+                {% trans "ロック数量" context "Products list table header" as label %}
+                {% sorting_header 'quantity_locking' label %}
+
+                {% trans "配分数量" context "Products list table header" as label %}
+                {% sorting_header 'quantity_allocated' label %}
+
+                {% trans "予定数量" context "Products list table header" as label %}
+                {% sorting_header 'quantity_predestinate' label %}
+
+                {% trans "品切れ数量" context "Products list table header" as label %}
+                {% sorting_header 'quantity_out_of_stock' label %}
+
+                {% trans "説明" context "Products list table header" as label %}
+                {% sorting_header 'description' label %}
+
+              </tr>
+            </thead>
+
+            <tbody>
+                {% for product_stock_temp in product_stock_temps %}
+{#                  --------------------------------------------------|-#}
+                  <tr class="avatar" data-action-go="{%url 'product_stock:product-object-stock-temp-list' product_stock_temp_pk=product_stock_temp.pk %}">
+                    <td>
+                      <label for="id_product_stock_temp_{{ product_stock_temp.pk }}"></label>
+                    </td>
+                    <td>
+                      {{ product_stock_temp.name }}
+                    </td>
+                    <td>
+                        {% price product_stock_temp.price_average %}
+                    </td>
+                    <td>
+                      {{ product_stock_temp.quantity_all }}
+                    </td>
+                    <td>
+                      {{ product_stock_temp.quantity }}　
+                      ({{ product_stock_temp.quantity_no_imei }})
+                    </td>
+                    <td>
+                      {{ product_stock_temp.quantity_available }}　
+                      ({{ product_stock_temp.quantity_available_no_imei }})
+                    </td>
+                    <td>
+                      {{ product_stock_temp.quantity_locking }}　
+                      ({{ product_stock_temp.quantity_locking_no_imei }})
+                    </td>
+                    <td>
+                      {{ product_stock_temp.quantity_allocated }}　
+                      ({{ product_stock_temp.quantity_allocated_no_imei }})
+                    </td>
+                    <td>
+                      {{ product_stock_temp.quantity_predestinate }}　
+                      ({{ product_stock_temp.quantity_predestinate_no_imei }})
+                    </td>
+                    <td>
+                      {{ product_stock_temp.quantity_out_of_stock }}　
+                      ({{ product_stock_temp.quantity_out_of_stock_no_imei }})
+                    </td>
+                    <td>
+                      {{ product_stock_temp.description }}
+                    </td>
+
+                  </tr>
+                {% endfor %}
+            </tbody>
+            </table>
+            </div>
+        </div>
+      {% endif %}
+    </div>
+  </div>
+{% endblock %}

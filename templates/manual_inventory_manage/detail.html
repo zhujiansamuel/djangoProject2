@@ -1,0 +1,913 @@
+{% extends "base.html" %}
+{#{% load babel %}#}
+{% load i18n %}
+{#{% load i18n_address_tags %}#}
+{% load materializecss %}
+{% load price from taxed_prices %}
+{% load static %}
+{% load status %}
+{#{% load voucher %}#}
+{% load product_stock %}
+
+{% block title %}
+  {{ manual_inventory_manage }} - {% trans "商品ロック執行表" context "Dashboard manual_inventory_manage list" %} -
+  {{ block.super }}
+{% endblock %}
+
+{% block body_class %}body-manual-inventory-manage{% endblock %}
+
+{% block menu_manual_inventory_manage_class %}active{% endblock %}
+
+{% block newfilters %}{% endblock newfilters %}
+
+{% block header_menu %}
+  {#  {% url "product_stock:order-manage-list" as url %}#}
+  {#  {% include "dashboard/includes/_back_link.html" with url=url %}#}
+{% endblock %}
+
+{% block header_extra %}
+  {% if manual_inventory_manage.is_draft %}
+    <div class="btn-fab-fixed" style="right: 8%;z-index: auto;">
+      <a href="#base-modal" data-href="{% url "product_stock:remove-draft-manual-inventory-manage" manual_inventory_manage_pk=manual_inventory_manage.pk %}"
+         class="waves-effect waves-light btn modal-trigger-custom">
+        {% trans "削除" context "manual_inventory_manage detail action" %}
+        <i class="fa-solid fa-trash-can-list"></i>
+      </a>
+    </div>
+  {% endif %}
+    {% if manual_inventory_manage.can_cancel %}
+    {% if perms.product_stock.barter_cancel_permissions %}
+      <div class="btn-fab-fixed" style="right: 8%;z-index: auto;">
+        <a href="#base-modal"
+           data-href="{% url "product_stock:remove-manual-inventory-manage" manual_inventory_manage_pk=manual_inventory_manage.pk %}"
+           class="waves-effect waves-light btn modal-trigger-custom">
+          {% trans "取消" context "manual_inventory_manage detail action" %}
+          <i class="fa-solid fa-trash-can-list"></i>
+        </a>
+      </div>
+    {% endif %}
+  {% endif %}
+{% endblock %}
+
+{% block breadcrumbs %}
+  <ul class="breadcrumbs breadcrumbs--history">
+    <li>
+      <a href="{% url "product_stock:manual-inventory-manage-list" %}">
+        {% trans "商品ロック執行表" context "Dashboard orders list" %}
+      </a>
+    </li>
+    <li>
+      <span>
+        {{ manual_inventory_manage }}
+      </span>
+    </li>
+  </ul>
+{% endblock %}
+
+
+{% block content %}
+  {#  <div class="row">#}
+  {#    <div class="col s12">#}
+  {#      {% if manual_inventory_manage.can_cancel %}#}
+  {#        <a  class="waves-effect waves-light btn">#}
+  {#          {% trans "取消" context "manual_inventory_manage detail action" %}#}
+  {#          <i class="fa-solid fa-xmark-large"></i>#}
+  {#        </a>#}
+  {#      {% endif %}#}
+  {#      {% if manual_inventory_manage.is_draft %}#}
+  {#        <a href="#base-modal" data-href="{% url "product_stock:remove-draft-manual-inventory-manage" manual_inventory_manage_pk=manual_inventory_manage.pk %}"  class="waves-effect waves-light btn modal-trigger-custom">#}
+  {#          {% trans "削除" context "manual_inventory_manage detail action" %}#}
+  {#          <i class="fa-solid fa-trash-can-list"></i>#}
+  {#        </a>#}
+  {#      {% else %}#}
+  {#        <a class="waves-effect waves-light btn">#}
+  {#          {% trans "印刷" context "manual_inventory_manage detail action" %}#}
+  {#          <i class="fa-sharp fa-solid fa-print"></i>#}
+  {#        </a>#}
+  {#      {% endif %}#}
+  {#    </div>#}
+  {#  </div>#}
+
+  <div class="row">
+    <div class="col s12">
+      <ul class="tabs" role="tablist">
+        <li role="presentation" class="tab col s4">
+          <a href="#order-manage-details" role="tab" class="active">
+            <span>
+              {% trans "商品ロック執行表詳細" context "manual_inventory_manage detail tab" %}
+            </span>
+            <i class="fa-solid fa-square-info"></i>
+          </a>
+        </li>
+        {#        <li role="presentation" class="tab col s4">#}
+        {#          <a href="#payment-history" role="tab">#}
+        {#            <span>#}
+        {#              {% trans "商品ロック執行表資金流" context "manual_inventory_manage detail tab" %}#}
+        {#            </span>#}
+        {#            <i class="fa-solid fa-money-simple-from-bracket"></i>#}
+        {#          </a>#}
+        {#        </li>#}
+        <li role="presentation" class="tab col s4">
+          <a href="#order-manage-history" role="tab">
+            <span>
+              {% trans "商品ロック執行表歴史" context "manual_inventory_manage detail tab" %}
+            </span>
+            <i class="fa-sharp fa-solid fa-rectangle-history-circle-user"></i>
+          </a>
+        </li>
+      </ul>
+    </div>
+  </div>
+
+
+  {#---------------------------------------------------------------#}
+  {#---------------------------------------------------------------#}
+  <div class="row tab-content" id="order-manage-details">
+    <div class="col s12 l12">
+      <div class="card shipment-table">
+        {#---------------------------------------------------------------#}
+        <div class="data-table-header">
+          <div class="data-table-title">
+            <div class="row" style="padding-top: 3%;">
+              <div class="col s6">
+                <h5>
+                  {% if manual_inventory_manage.is_draft %}
+                    {% blocktrans trimmed with manual_inventory_manage=manual_inventory_manage.id context "manual_inventory_manage table title" %}
+                      商品ロック執行表 下書き #{{ manual_inventory_manage }}
+                    {% endblocktrans %}
+                  {% else %}
+                    {% blocktrans trimmed with manual_inventory_manage=manual_inventory_manage.id context "manual_inventory_manage table title" %}
+                      商品ロック執行表 #{{ manual_inventory_manage }}
+                    {% endblocktrans %}
+                  {% endif %}
+                </h5>
+              </div>
+              <div class="col s6">
+                <h6>
+                  {% trans "作成" context "Order placed on date" %} {{ manual_inventory_manage.created }}
+                </h6>
+                <h6>
+                  {{ manual_inventory_manage.manual_inventory_status }}
+                  {#          {% render_order_status order.status order.get_status_display %}#}
+                </h6>
+              </div>
+            </div>
+          </div>
+        </div>
+        {#---------------------------------------------------------------#}
+
+        <div class="data-table-container">
+          <table class="bordered highlight responsive data-table">
+            <thead>
+            <tr>
+              <th class="wide">
+                {% trans "項目" context "Order table header" %}
+              </th>
+              <th class="right-align">
+                {% trans "価格" context "Order table header" %}
+              </th>
+              <th class="right-align">
+                {% trans "数量" context "Order table header" %}
+              </th>
+              <th class="right-align">
+                {% trans "金額" context "Order table header" %}
+              </th>
+              <th class="right-align">
+                {% trans "店舗" context "Order table header" %}
+              </th>
+              <th class="right-align">
+                {% trans "タイプ" context "Order table header" %}
+              </th>
+              <th class="right-align">
+                {% trans "状態" context "Order table header" %}
+              </th>
+              <th class="right-align">
+                {% trans "アクション" context "Order table header" %}
+              </th>
+            </tr>
+            </thead>
+            <tbody>
+            {#-------------------------------------------------------------------------------#}
+            {% if manual_inventory_manage.manual_inventory_manage_lines %}
+              {% for line in manual_inventory_manage %}
+                {% if line.product_object_stock %}
+                  <tr class="last-no-border">
+                    <td>
+                      {{ line.product_object_stock.product_stock.name }}
+                      <br>
+                      <span class="grey-text">
+                      {% blocktrans trimmed with jan=line.product_object_stock.product_stock.jan_code context "Order table text" %}
+                        JAN 　　　: {{ jan }}
+                      {% endblocktrans %}
+                    </span>
+                      <br>
+                      <span class="grey-text">
+                      {% blocktrans trimmed with imei=line.product_object_stock.imei_code context "Order table text" %}
+                        IMEI　　　: {{ imei }}
+                      {% endblocktrans %}
+                    </span>
+                      <br>
+                      <span class="grey-text">
+                      {% blocktrans trimmed with extra_informations=line.product_object_stock.extra_informations context "Order table text" %}
+                        追加情報　: {{ extra_informations }}
+                      {% endblocktrans %}
+                    </span>
+                      <br>
+                      <span class="grey-text">
+                      {% blocktrans trimmed with status=line.product_object_stock.status context "Order table text" %}
+                        ステータス: {{ status }}
+                      {% endblocktrans %}
+                    </span>
+                    </td>
+                    <td class="right-align">
+                      {% price line.unit_price %}
+                    </td>
+
+                    <td class="right-align">
+                      {{ line.quantity }}
+                    </td>
+                    <td class="right-align">
+                      {% price line.line_price %}
+                    </td>
+                    <td class="right-align">
+                      {{ line.product_object_stock.shops }}
+                    </td>
+                    <td class="right-align">
+                      {{ line.manual_inventory_type }}
+                    </td>
+                    <td class="right-align">
+                      {{ line.product_object_stock.manage_status }}
+                    </td>
+                    <td class="right-align">
+                      <a href="#base-modal"
+                         data-href="{%url 'product_stock:remove-manual-inventory-manage-line' manual_inventory_manage_pk=manual_inventory_manage.pk manual_inventory_manage_line_pk=line.pk %}"
+                         class="modal-trigger-custom"
+                         title="{% trans "Remove line" context "manual_inventory_manage table row action" %}">
+                        {% trans "削除" context "manual_inventory_manage table row action" %}
+                      </a>
+                    </td>
+                  </tr>
+                {% elif line.product_stock %}
+                  <tr class="last-no-border">
+                    <td>
+                      {{ line.product_stock.name }}
+                      <br>
+                      <span class="grey-text">
+                      {% blocktrans trimmed with jan=line.product_stock.jan_code context "Order table text" %}
+                        JAN 　　　: {{ jan }}
+                      {% endblocktrans %}
+                    </span>
+                    </td>
+                    <td class="right-align">
+                      {% price line.unit_price %}
+                    </td>
+
+                    <td class="right-align">
+                      {{ line.quantity }}
+                    </td>
+                    <td class="right-align">
+                      {% price line.line_price %}
+                    </td>
+
+                    <td class="right-align">
+                      ----
+                    </td>
+                    <td class="right-align">
+                      {{ line.manual_inventory_type }}
+                    </td>
+                    <td class="right-align">
+                      ----
+                    </td>
+
+                    <td class="right-align">
+                      <a href="#base-modal"
+                         data-href="{%url 'product_stock:remove-manual-inventory-manage-line' manual_inventory_manage_pk=manual_inventory_manage.pk manual_inventory_manage_line_pk=line.pk %}"
+                         class="modal-trigger-custom"
+                         title="{% trans "Remove line" context "manual_inventory_manage table row action" %}">
+                        {% trans "削除" context "manual_inventory_manage table row action" %}
+                      </a>
+                    </td>
+                  </tr>
+                {% endif %}
+              {% endfor %}
+            {% else %}
+              <tr class="">
+              </tr>
+            {% endif %}
+
+            <tr class="last-no-border">
+              <td>
+                ^
+              </td>
+              <td class="right-align">
+                ^
+              </td>
+              <td class="right-align">
+                ^
+              </td>
+              <td class="right-align">
+                ^
+              </td>
+              <td class="right-align">
+                ^
+              </td>
+              <td class="right-align">
+                ^
+              </td>
+              {#                <td class="right-align" colspan="3">#}
+              {#                  <p>#}
+              {#                    {% trans "Subtotal" context "Order subtotal" %}#}
+              {#                  </p>#}
+              {##}
+              {#-------------------------------------#}
+              {#                  {% if order.is_shipping_required or order.shipping_method %}#}
+              {#                  <p>#}
+              {#                    {% if order.is_draft %}#}
+              {#                      <a href="#base-modal" data-href="{%url 'product_stock:order-shipping-edit' order_pk=order.pk %}"#}
+              {#                         class="modal-trigger-custom" title="{% trans "Edit shipping" context "Order totals action" %}">#}
+              {#                        {% if order.shipping_method_name %}#}
+              {#                          {% blocktrans trimmed with shipping_name=order.shipping_method_name context "Order totals header" %}#}
+              {#                            Shipping ({{ shipping_name }})#}
+              {#                          {% endblocktrans %}#}
+              {#                        {% else %}#}
+              {#                          {% trans "Shipping" context "Order totals header" %}#}
+              {#                        {% endif %}#}
+              {#                      </a>#}
+              {#                    {% else %}#}
+              {#                      {% if order.shipping_method_name %}#}
+              {#                        {% blocktrans trimmed with shipping_name=order.shipping_method_name context "Order totals header" %}#}
+              {#                          Shipping ({{ shipping_name }})#}
+              {#                        {% endblocktrans %}#}
+              {#                      {% else %}#}
+              {#                        {% trans "Shipping" context "Order totals header" %}#}
+              {#                      {% endif %}#}
+              {#                    {% endif %}#}
+              {#                  </p>#}
+              {#                  {% endif %}#}
+              {##}
+              {#                  <p>#}
+              {#                    {% if order.display_gross_prices %}#}
+              {#                      {% trans "Taxes (included)" context "Order total taxes" %}#}
+              {#                    {% else %}#}
+              {#                      {% trans "Taxes" context "Order total taxes" %}#}
+              {#                    {% endif %}#}
+              {#                  </p>#}
+              {#-------------------------------------#}
+              {##}
+              {#                  {% if order.is_draft or order.discount_amount %}#}
+              {#                    <p>#}
+              {#                      {% if order.is_draft  %}#}
+              {#                        <a class="dropdown-button" href="#" data-activates="discount-menu" data-constrainwidth="false">#}
+              {#                          {% if order.discount_name %}#}
+              {#                            {% blocktrans trimmed with voucher=order.discount_name context "Order totals header" %}#}
+              {#                              Discount ({{ voucher }})#}
+              {#                            {% endblocktrans %}#}
+              {#                          {% else %}#}
+              {#                            {% trans "クーポン" context "Order totals header" %}#}
+              {#                          {% endif %}#}
+              {#                          <svg data-src="{% static "dashboard/images/arrow-drop-down.svg" %}" width="20px" height="20px" />#}
+              {#                        </a>#}
+              {#                        <ul id="discount-menu" class="dropdown-content">#}
+              {#                          <li>#}
+              {#                            <a href="#base-modal" data-href="{%url 'product_stock:order-voucher-edit' order_pk=order.pk %}"#}
+              {#                               class="modal-trigger-custom" title="{% trans "Edit voucher" context "Order totals action" %}">#}
+              {#                              {% trans "Edit voucher" context "Order detail action" %}#}
+              {#                            </a>#}
+              {#                          </li>#}
+              {#                          <li>#}
+              {#                            <a href="#base-modal" data-href="{%url 'product_stock:order-discount-edit' order_pk=order.pk %}"#}
+              {#                               class="modal-trigger-custom" title="{% trans "Edit discount" context "Order totals action" %}">#}
+              {#                              {% trans "Edit discount" context "Order detail action" %}#}
+              {#                            </a>#}
+              {#                          </li>#}
+              {#                        </ul>#}
+              {#                      {% elif order.discount_amount %}#}
+              {#                        {% if order.discount_name %}#}
+              {#                          {% blocktrans trimmed with voucher=order.discount_name context "Order totals header" %}#}
+              {#                            Discount ({{ voucher }})#}
+              {#                          {% endblocktrans %}#}
+              {#                        {% else %}#}
+              {#                          {% trans "Discount" context "Order totals header" %}#}
+              {#                        {% endif %}#}
+              {#                      {% endif %}#}
+              {#                    </p>#}
+              {#                  {% endif %}#}
+              {##}
+              {#                  <p><strong>{% trans "Grand total" context "Order totals header" %}</strong></p>#}
+              {#                </td>#}
+              {#                <td class="right-align">#}
+              {##}
+              {#                  <p>#}
+              {#                    {% price order.get_subtotal display_gross=order.display_gross_prices %}#}
+              {#                  </p>#}
+              {#-------------------------------------#}
+              {#                  {% if order.is_shipping_required or order.shipping_method %}#}
+              {#                  <p>#}
+              {#                    {% price order.shipping_price display_gross=order.display_gross_prices %}#}
+              {#                  </p>#}
+              {#                  {% endif %}#}
+              {#                  <p>{% price order.total.tax %}</p>#}
+              {#-------------------------------------#}
+              {#                  {% if order.is_draft or order.discount_amount %}#}
+              {#                    <p>{% discount_as_negative order.discount html=True %}</p>#}
+              {#                  {% endif %}#}
+              {##}
+              {#                  <p><strong>{% price order.total.gross %}</strong></p>#}
+              {#                </td>#}
+            </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="data-table-action">
+          <div class="row">
+            <div class="col s6">
+              {#-----------------------------------------------------------------------#}
+              {% if manual_inventory_manage.is_draft %}
+                <a href="#base-modal"
+                   data-href="{%url 'product_stock:select-product-object-stock-to-manual-inventory-manage' manual_inventory_manage_pk=manual_inventory_manage.pk %}"
+                   class="btn-flat waves-effect modal-trigger-custom"
+                   title="{% trans "Select ProductObjectStock to manual_inventory_manage" context "manual_inventory_manage summary card action title" %}">
+                  {% trans "ロック商品を追加(IMEI確定)" context "ProductObjectStock summary card action" %}
+                </a>
+                <a href="#base-modal"
+                   data-href="{%url 'product_stock:select-product-stock-to-manual-inventory-manage' manual_inventory_manage_pk=manual_inventory_manage.pk %}"
+                   class="btn-flat waves-effect modal-trigger-custom"
+                   title="{% trans "Select ProductObjectStock to manual_inventory_manage" context "manual_inventory_manage summary card action title" %}">
+                  {% trans "ロック商品を追加(IMEI未定)" context "ProductObjectStock summary card action" %}
+                </a>
+              {% endif %}
+            </div>
+
+            <div class="col s6">
+              {#----------------------------------------------------------------------#}
+              {% if not manual_inventory_manage.is_locked and manual_inventory_manage.is_open %}
+                <span class="right">
+                <a href="#base-modal"
+                   data-href="{%url 'product_stock:fulfill-manual-inventory-manage-LOCK' manual_inventory_manage_pk=manual_inventory_manage.pk %}"
+                   class="btn waves-effect modal-trigger-custom"
+                   title="{% trans "執行(ロック)" context "Order summary card action title" %}">
+                  {% trans "執行(ロック)" context "Order summary card action(fulfill)" %}
+                </a>
+                </span>
+              {% endif %}
+              {#------------------------------------------#}
+              {% if manual_inventory_manage.is_draft %}
+                <span class="right">
+                  <a href="#base-modal"
+                     data-href="{%url 'product_stock:create-manual-inventory-manage-from-draft' manual_inventory_manage_pk=manual_inventory_manage.pk %}"
+                     class="btn waves-effect modal-trigger-custom"
+                     title="{% trans "商品ロック執行表を作成" context "Order summary card action title" %}">
+                    {% trans "商品ロック執行表を作成" context "Order summary card action" %}
+                  </a>
+                </span>
+              {% endif %}
+
+              {#          <span class="right">#}
+              {#            {% if order.is_draft %}#}
+              {#              <a href="#base-modal" data-href="{%url 'product_stock:create-order-from-draft' order_pk=order.pk %}" class="btn waves-effect modal-trigger-custom" title="{% trans "Create order" context "Order summary card action title" %}">#}
+              {#                {% trans "Create order" context "Order summary card action" %}#}
+              {#              </a>#}
+              {#            {% endif %}#}
+              {#          </span>#}
+              {#          {% if not order.is_draft %}#}
+              {#            <a href="{%url 'product_stock:order-invoice' order_pk=order.pk %}" class="btn-flat waves-effect" target="_blank">#}
+              {#              {% trans "Invoice" context "Order detail action" %}#}
+              {#            </a>#}
+              {#---------------------#}
+              {#            <a href="{% url 'order:details' token=order.token %}" class="btn-flat waves-effect" target="_blank">#}
+              {#              {% trans "View on site" context "Order detail action" %}#}
+              {#            </a>#}
+              {#---------------------#}
+              {#          {% endif %}#}
+              {#            {% if order.can_cancel %}#}
+              {#                <a href="#base-modal" data-href="{% url "product_stock:order-cancel" order_pk=order.pk %}" class="modal-trigger-custom">#}
+              {#                  {% trans "Cancel Order" context "Order detail action" %}#}
+              {#                </a>#}
+              {#            {% endif %}#}
+              {#           {% if order.is_draft %}#}
+              {#                <a href="#base-modal" data-href="{% url "product_stock:draft-order-delete" order_pk=order.pk %}" class="modal-trigger-custom">#}
+              {#                  {% trans "Remove draft order" context "Order detail action" %}#}
+              {#                </a>#}
+              {#            {% else %}#}
+              {#                <a class="btn-print" href="#">#}
+              {#                  {% trans "Print" context "Order detail action" %}#}
+              {#                </a>#}
+              {#            {% endif %}#}
+              {##}
+
+            </div>
+
+          </div>
+        </div>
+
+
+
+
+        {% for fulfillment in manual_inventory_manage_fulfillments_LOCK %}
+          <div class="card shipment-table">
+            <div class="data-table-header">
+              <h5 class="data-table-title">
+                {% blocktrans trimmed with fulfillment=fulfillment.composed_id context "Fulfillment table title" %}
+                  執行確認(ロック) #{{ fulfillment }}
+                {% endblocktrans %}
+              </h5>
+              {{ fulfillment.status }}
+              {#                  {% render_order_status fulfillment.status fulfillment.get_status_display %}#}
+            </div>
+            <div class="data-table-container">
+              <table class="bordered highlight responsive data-table">
+                <thead>
+                <tr>
+                  <th class="wide">
+                    {% trans "Item" context "Order table header" %}
+                  </th>
+                  <th class="right-align">
+                    {% trans "Quantity" context "Order table header" %}
+                  </th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for line in fulfillment %}
+                  {% if line.manual_inventory_manage_line.product_object_stock %}
+                  <tr class="last-no-border">
+                    <td>
+                      {{ line.manual_inventory_manage_line.product_object_stock.product_stock.name }}
+                      <br>
+                      <span class="grey-text">
+                      {% blocktrans trimmed with jan=line.manual_inventory_manage_line.product_object_stock.product_stock.jan_code context "Order table text" %}
+                        JAN 　　　: {{ jan }}
+                      {% endblocktrans %}
+                    </span>
+                      <br>
+                      <span class="grey-text">
+                      {% blocktrans trimmed with imei=line.manual_inventory_manage_line.product_object_stock.imei_code context "Order table text" %}
+                        IMEI　　　: {{ imei }}
+                      {% endblocktrans %}
+                    </span>
+                      <br>
+                      <span class="grey-text">
+                      {% blocktrans trimmed with extra_informations=line.manual_inventory_manage_line.product_object_stock.extra_informations context "Order table text" %}
+                        追加情報　: {{ extra_informations }}
+                      {% endblocktrans %}
+                    </span>
+                      <br>
+                      <span class="grey-text">
+                      {% blocktrans trimmed with status=line.manual_inventory_manage_line.product_object_stock.status context "Order table text" %}
+                        ステータス: {{ status }}
+                      {% endblocktrans %}
+                    </span>
+                    </td>
+
+                    <td class="right-align">
+                      {{ line.quantity }}
+                    </td>
+                  </tr>
+                  {% elif line.manual_inventory_manage_line.product_stock %}
+                  <tr class="last-no-border">
+                    <td>
+                      {{ line.manual_inventory_manage_line.product_stock.name }}
+                      <br>
+                      <span class="grey-text">
+                      {% blocktrans trimmed with jan=line.manual_inventory_manage_line.product_stock.jan_code context "Order table text" %}
+                        JAN 　　　: {{ jan }}
+                      {% endblocktrans %}
+                    </span>
+
+                    <td class="right-align">
+                      {{ line.manual_inventory_manage_line.quantity }}
+                    </td>
+
+                  </tr>
+                  {% endif %}
+                {% endfor %}
+                {#      -----------------------#}
+                {#                      {% if fulfillment.tracking_number %}#}
+                {#                        <tr class="last-no-border">#}
+                {#                          <td colspan="2">#}
+                {#                            {% blocktrans trimmed with tracking=fulfillment.tracking_number context "Fulfillment table text" %}#}
+                {#                              Tracking number: {{ tracking }}#}
+                {#                            {% endblocktrans %}#}
+                {#                          </td>#}
+                {#                        </tr>#}
+                {#                      {% endif %}#}
+                {#      -----------------------#}
+                </tbody>
+              </table>
+            </div>
+            {#                {% if fulfillment.can_edit %}#}
+            {#                  <div class="data-table-action">#}
+            {#                    <a href="#base-modal" data-href="{%url 'product_stock:fulfillment-cancel' order_pk=order.pk fulfillment_pk=fulfillment.pk %}"#}
+            {#                       class="btn-flat waves-effect modal-trigger-custom" title="{% trans "Cancel fulfillment" context "Fulfillment summary card action title" %}">#}
+            {#                      {% trans "Remove" context "Fulfillment summary card action" %}#}
+            {#                    </a>#}
+            {#      -------------------------#}
+            {#                    <a href="#base-modal" data-href="{%url 'product_stock:fulfillment-change-tracking' order_pk=order.pk fulfillment_pk=fulfillment.pk %}"#}
+            {#                       class="btn-flat waves-effect modal-trigger-custom" title="{% trans "Edit tracking number" context "Fulfillment summary card action title" %}">#}
+            {#                      {% if fulfillment.tracking_number %}#}
+            {#                        {% trans "Edit tracking" context "Fulfillment summary card action" %}#}
+            {#                      {% else %}#}
+            {#                        {% trans "Add tracking" context "Fulfillment summary card action" %}#}
+            {#                      {% endif %}#}
+            {#                    </a>#}
+            {#                    <a href="{%url 'product_stock:fulfillment-packing-slips' order_pk=order.pk fulfillment_pk=fulfillment.pk %}"#}
+            {#                       data-href="" class="btn-flat waves-effect" target="_blank">#}
+            {#                      {% trans "Packing Slips" context "Order detail action" %}#}
+            {#                    </a>#}
+            {#      -------------------------#}
+            {#                  </div>#}
+            {#                {% endif %}#}
+            {% if manual_inventory_manage.is_open %}
+              <div class="data-table-action">
+                <a href="#base-modal"
+                   data-href="{%url 'product_stock:fulfill-manual-inventory-manage-UNLOCK' manual_inventory_manage_pk=manual_inventory_manage.pk %}"
+                   class="btn waves-effect modal-trigger-custom"
+                   title="{% trans "Confirmation of receipt" context "Order summary card action title" %}">
+                  {% trans "執行(ロック解除)" context "Order summary card action(fulfill)" %}
+                </a>
+              </div>
+            {% endif %}
+
+          </div>
+        {% endfor %}
+
+
+        {#----------------------------------------------------------------------------------------------------------#}
+
+
+        {% for fulfillment in manual_inventory_manage_fulfillments_UNLOCK %}
+          <div class="card shipment-table">
+            <div class="data-table-header">
+              <h5 class="data-table-title">
+                {% blocktrans trimmed with fulfillment=fulfillment.composed_id context "Fulfillment table title" %}
+                  執行確認(ロック解除) #{{ fulfillment }}
+                {% endblocktrans %}
+              </h5>
+              {{ fulfillment.status }}
+              {#                  {% render_order_status fulfillment.status fulfillment.get_status_display %}#}
+            </div>
+            <div class="data-table-container">
+              <table class="bordered highlight responsive data-table">
+                <thead>
+                <tr>
+                  <th class="wide">
+                    {% trans "Item" context "Order table header" %}
+                  </th>
+                  <th class="right-align">
+                    {% trans "Quantity" context "Order table header" %}
+                  </th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for line in fulfillment %}
+                  {% if line.manual_inventory_manage_line.product_object_stock %}
+                  <tr class="last-no-border">
+                    <td>
+                      {{ line.manual_inventory_manage_line.product_object_stock.product_stock.name }}
+                      <br>
+                      <span class="grey-text">
+                      {% blocktrans trimmed with jan=line.manual_inventory_manage_line.product_object_stock.product_stock.jan_code context "Order table text" %}
+                        JAN 　　　: {{ jan }}
+                      {% endblocktrans %}
+                    </span>
+                      <br>
+                      <span class="grey-text">
+                      {% blocktrans trimmed with imei=line.manual_inventory_manage_line.product_object_stock.imei_code context "Order table text" %}
+                        IMEI　　　: {{ imei }}
+                      {% endblocktrans %}
+                    </span>
+                      <br>
+                      <span class="grey-text">
+                      {% blocktrans trimmed with extra_informations=line.manual_inventory_manage_line.product_object_stock.extra_informations context "Order table text" %}
+                        追加情報　: {{ extra_informations }}
+                      {% endblocktrans %}
+                    </span>
+                      <br>
+                      <span class="grey-text">
+                      {% blocktrans trimmed with status=line.manual_inventory_manage_line.product_object_stock.status context "Order table text" %}
+                        ステータス: {{ status }}
+                      {% endblocktrans %}
+                    </span>
+                    </td>
+
+                    <td class="right-align">
+                      {{ line.quantity }}
+                    </td>
+                  </tr>
+                  {% elif line.manual_inventory_manage_line.product_stock %}
+                  <tr class="last-no-border">
+                    <td>
+                      {{ line.manual_inventory_manage_line.product_stock.name }}
+                      <br>
+                      <span class="grey-text">
+                      {% blocktrans trimmed with jan=line.manual_inventory_manage_line.product_stock.jan_code context "Order table text" %}
+                        JAN 　　　: {{ jan }}
+                      {% endblocktrans %}
+                    </span>
+
+                    <td class="right-align">
+                      {{ line.manual_inventory_manage_line.quantity }}
+                    </td>
+
+                  </tr>
+                  {% endif %}
+                {% endfor %}
+                {#      -----------------------#}
+                {#                      {% if fulfillment.tracking_number %}#}
+                {#                        <tr class="last-no-border">#}
+                {#                          <td colspan="2">#}
+                {#                            {% blocktrans trimmed with tracking=fulfillment.tracking_number context "Fulfillment table text" %}#}
+                {#                              Tracking number: {{ tracking }}#}
+                {#                            {% endblocktrans %}#}
+                {#                          </td>#}
+                {#                        </tr>#}
+                {#                      {% endif %}#}
+                {#      -----------------------#}
+                </tbody>
+              </table>
+            </div>
+            {#                {% if fulfillment.can_edit %}#}
+            {#                  <div class="data-table-action">#}
+            {#                    <a href="#base-modal" data-href="{%url 'product_stock:fulfillment-cancel' order_pk=order.pk fulfillment_pk=fulfillment.pk %}"#}
+            {#                       class="btn-flat waves-effect modal-trigger-custom" title="{% trans "Cancel fulfillment" context "Fulfillment summary card action title" %}">#}
+            {#                      {% trans "Remove" context "Fulfillment summary card action" %}#}
+            {#                    </a>#}
+            {#      -------------------------#}
+            {#                    <a href="#base-modal" data-href="{%url 'product_stock:fulfillment-change-tracking' order_pk=order.pk fulfillment_pk=fulfillment.pk %}"#}
+            {#                       class="btn-flat waves-effect modal-trigger-custom" title="{% trans "Edit tracking number" context "Fulfillment summary card action title" %}">#}
+            {#                      {% if fulfillment.tracking_number %}#}
+            {#                        {% trans "Edit tracking" context "Fulfillment summary card action" %}#}
+            {#                      {% else %}#}
+            {#                        {% trans "Add tracking" context "Fulfillment summary card action" %}#}
+            {#                      {% endif %}#}
+            {#                    </a>#}
+            {#                    <a href="{%url 'product_stock:fulfillment-packing-slips' order_pk=order.pk fulfillment_pk=fulfillment.pk %}"#}
+            {#                       data-href="" class="btn-flat waves-effect" target="_blank">#}
+            {#                      {% trans "Packing Slips" context "Order detail action" %}#}
+            {#                    </a>#}
+            {#      -------------------------#}
+            {#                  </div>#}
+            {#                {% endif %}#}
+          </div>
+        {% endfor %}
+      </div>
+
+
+
+
+
+        <div class="card order-notes{% if not notes %} print-hide{% endif %}" id="order-notes">
+          <div class="card-content">
+          <span class="card-title black-text">
+            {% trans "商品ロックメモ" context "Order notes card title" %}
+          </span>
+            {% if notes %}
+              <ul class="list">
+                {% for note in notes %}
+                  <li class="list-item list-item--spaced">
+                    <small class="list-item-author">{{ note.responsible_person }} - {{ note.date }}</small>
+                    <p>{{ note.parameters.message }}</p>
+                  </li>
+                {% endfor %}
+              </ul>
+            {% else %}
+              <p>
+                {% trans "There are no notes associated with this order." context "Empty order notes card message" %}
+              </p>
+            {% endif %}
+          </div>
+          <div class="card-action">
+            <a
+              data-href="{% url "product_stock:manual-inventory-manage-add-note" manual_inventory_manage_pk=manual_inventory_manage.pk %}"
+              class="modal-trigger-custom btn-flat waves-effect" href="#base-modal">
+              {% trans "メモを追加" context "Order notes card action" %}
+            </a>
+          </div>
+        </div>
+        {#-----------传票号-----------#}
+        <div class="card order-slip" id="order-slip">
+          <div class="card-content">
+          <span class="card-title black-text">
+            {% trans "伝票番号" context "slip_number card title" %}
+          </span>
+            {% if manual_inventory_manage.slip_number %}
+              <p>{{ manual_inventory_manage.slip_number }}</p>
+            {% else %}
+              <p>
+                {% trans "No slip number has been added yet." context "No slip number has been added yet card message" %}
+              </p>
+            {% endif %}
+          </div>
+
+          {% if not manual_inventory_manage.slip_number %}
+
+            <div class="card-action">
+              ADD
+              {#                        <a data-href="{% url "product_stock:order-add-slip" order_pk=order.pk %}" class="modal-trigger-custom btn-flat waves-effect" href="#base-modal">#}
+              {#                          {% trans "Add" context "Order slip number card action" %}#}
+              {#                        </a>#}
+            </div>
+          {% else %}
+            <div class="card-action">
+              EDITE
+              {#                        <a data-href="{% url "product_stock:order-add-slip" order_pk=order.pk %}" class="modal-trigger-custom btn-flat waves-effect" href="#base-modal">#}
+              {#                          {% trans "Edite" context "Order slip number card action" %}#}
+              {#                        </a>#}
+            </div>
+          {% endif %}
+        </div>
+
+
+        {#        <div class="card order-confirmation" id="order-confirmation">#}
+        {#          <div class="card-content">#}
+        {#          <span class="card-title black-text">#}
+        {#            {% trans "確認書類" context "confirmation card title" %}#}
+        {#          </span>#}
+        {#            {% if store_to_store_manage.confirm_file_id %}#}
+        {#              <p>{{ store_to_store_manage.confirm_file_id }}</p>#}
+        {#            {% else %}#}
+        {#              <p>#}
+        {#                {% trans "No confirmation has been added yet." context "No confirmation has been added yet card message" %}#}
+        {#              </p>#}
+        {#            {% endif %}#}
+        {#          </div>#}
+        {#          {% if not store_to_store_manage.confirm_file_id %}#}
+        {#            <div class="card-action">#}
+        {#              Add#}
+        {#          <a data-href="{% url "product_stock:order-add-confirmation" order_pk=order.pk %}" class="modal-trigger-custom btn-flat waves-effect" href="#base-modal">#}
+        {#            {% trans "Add" context "Order confirmation card action" %}#}
+        {#          </a>#}
+        {#            </div>#}
+        {#          {% else %}#}
+        {#            <div class="card-action">#}
+        {#              Edite#}
+        {#          <a data-href="{% url "product_stock:order-add-confirmation" order_pk=order.pk %}" class="modal-trigger-custom btn-flat waves-effect" href="#base-modal">#}
+        {#            {% trans "Edite" context "Order confirmation card action" %}#}
+        {#          </a>#}
+        {#            </div>#}
+        {#          {% endif %}#}
+        {#        </div>#}
+        {#      <div class="card order-notes{% if not order.customer_note %} print-hide{% endif %}" id="customer-note">#}
+        {#        <div class="card-content">#}
+        {#          <span class="card-title black-text">#}
+        {#            {% trans "Customer note" context "Customer order note card title" %}#}
+        {#          </span>#}
+        {#          {% if order.customer_note %}#}
+        {#            <p>{{ order.customer_note }}</p>#}
+        {#          {% else %}#}
+        {#            <p>#}
+        {#              {% trans "There is no note from the customer associated with this order." context "No customer order note card message" %}#}
+        {#            </p>#}
+        {#          {% endif %}#}
+        {#        </div>#}
+        {#      </div>#}
+        {##}
+        {#      <div class="card order-notes{% if not notes %} print-hide{% endif %}" id="order-notes">#}
+        {#        <div class="card-content">#}
+        {#          <span class="card-title black-text">#}
+        {#            {% trans "Order notes" context "Order notes card title" %}#}
+        {#          </span>#}
+        {#          {% if notes %}#}
+        {#            <ul class="list">#}
+        {#              {% for note in notes %}#}
+        {#              <li class="list-item list-item--spaced">#}
+        {#                <small class="list-item-author">{{ note.user }} - {{ note.date }}</small>#}
+        {#                <p>{{ note.parameters.message }}</p>#}
+        {#              </li>#}
+        {#              {% endfor %}#}
+        {#            </ul>#}
+        {#          {% else %}#}
+        {#            <p>#}
+        {#              {% trans "There are no notes associated with this order." context "Empty order notes card message" %}#}
+        {#            </p>#}
+        {#          {% endif %}#}
+        {#        </div>#}
+        {#        <div class="card-action">#}
+        {#          <a data-href="{% url "product_stock:order-add-note" order_pk=order.pk %}" class="modal-trigger-custom btn-flat waves-effect" href="#base-modal">#}
+        {#            {% trans "Add note" context "Order notes card action" %}#}
+        {#          </a>#}
+        {#        </div>#}
+      </div>
+    </div>
+  </div>
+  {#---------------------------------------------------------------#}
+  <div class="tab-content" id="payment-history">
+
+  </div>
+  {#---------------------------------------------------------------#}
+  <div class="tab-content" id="order-manage-history">
+    <p class="print-show print-tabs">{% trans "商品ロック歴史" context "manual_inventory_manage detail tab" %}</p>
+    <div class="timeline-outer">
+      <ul class="timeline">
+        {% for event in events %}
+          <li class="event" data-date="{{ event.date }}">
+            <div class="content">
+              {% display_manual_inventory_manage_event event %}{% if event.user %} by {{ event.user }}{% endif %}
+            </div>
+          </li>
+        {% endfor %}
+      </ul>
+    </div>
+  </div>
+  {#---------------------------------------------------------------#}
+{% endblock %}

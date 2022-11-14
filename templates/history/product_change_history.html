@@ -1,0 +1,228 @@
+{% extends "base.html" %}
+{% load i18n %}
+{% load materializecss %}
+{% load static %}
+
+
+{% load price from taxed_prices %}
+{% load utils %}
+
+
+{% block title %}
+  {% trans "商品編集歴史" context "Dashboard product_stock_temp list" %} -{{ product_stock_temp }}- {{ block.super }}
+{% endblock %}
+
+{% block body_class %}body-product-stock-temp-list{% endblock %}
+
+{% block menu_product_stock_temp_class %}active{% endblock %}
+
+{% block newfilters %}{% endblock newfilters %}
+
+{% block header_extra %}{% endblock %}
+
+
+{% block breadcrumbs %}
+  <ul class="breadcrumbs breadcrumbs--history">
+    <li class="visible-s">
+      <a href="{% url "product_stock:product-change-history" %}" class="breadcrumb">
+        {% trans "商品編集歴史" context "Product form breadcrumbs" %}
+      </a>
+    </li>
+  </ul>
+{% endblock %}
+
+
+{% block content %}
+
+
+  {% if product_stock_change_history %}
+    {% if perms.product_stock.change_product_stock %}
+      <div class="row tab-content" id="order-manage-details">
+        <div class="col s12 l12">
+          <div class="card shipment-table">
+            <div class="data-table-header">
+              <div class="data-table-title">
+                <div class="row" style="padding-top: 3%;">
+                  <div class="col s6">
+                    <h5>
+                      商品類情報の編集歴史
+                    </h5>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="data-table-container">
+
+              <table class="bordered highlight responsive data-table">
+                <thead>
+                <tr>
+                  <td>
+                    {% trans "作成" context "manual_inventory_manage table header" %}
+                  </td>
+                  <td>
+                    {% trans "商品類" context "manual_inventory_manage table header" %}
+                  </td>
+                  <td>
+                    {% trans "フィールド" context "manual_inventory_manage table header" %}
+                  </td>
+                  <td>
+                    {% trans "編集前" context "manual_inventory_manage table header" %}
+                  </td>
+                  <td>
+                    {% trans "→" context "manual_inventory_manage table header" %}
+                  </td>
+                  <td>
+                    {% trans "編集後" context "manual_inventory_manage table header" %}
+                  </td>
+                  <td>
+                    {% trans "編集者" context "manual_inventory_manage table header" %}
+                  </td>
+                </tr>
+                </thead>
+
+                <tbody>
+                {% for change in product_stock_change_history %}
+                  <tr>
+                    <td>
+                      #{{ change.change_date }}
+                    </td>
+                   <td>
+                    JAN:{{ change.product_stock.jan_code }}
+                  </td>
+                    <td>
+                      {{ change.change_field }}
+                    </td>
+                    <td>
+                      {{ change.old_value }}
+                    </td>
+                    <td>
+                      {% trans "→" context "manual_inventory_manage table header" %}
+                    </td>
+                    <td>
+                      {{ change.changed_value }}
+                    </td>
+                    <td class="right-align">
+                      {{ change.responsible_person }}
+                    </td>
+                  </tr>
+                {% endfor %}
+                </tbody>
+
+              </table>
+
+            </div>
+
+            <div class="data-table-action">
+              <div class="row">
+                {#---------------------------------------------------------------#}
+                <div class="col s6"></div>
+                {#---------------------------------------------------------------#}
+                <div class="col s6"></div>
+                {#---------------------------------------------------------------#}
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    {% endif %}
+  {% endif %}
+
+
+
+
+  {% if product_object_stock_change_history %}
+    {% if perms.product_stock.change_product_object_stock %}
+      <div class="row tab-content" id="order-manage-details">
+        <div class="col s12 l12">
+          <div class="card shipment-table">
+            <div class="data-table-header">
+              <div class="data-table-title">
+                <div class="row" style="padding-top: 3%;">
+                  <div class="col s6">
+                    <h5>
+                      商品情報の編集歴史
+                    </h5>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="data-table-container">
+
+              <table class="bordered highlight responsive data-table">
+                <thead>
+                <tr>
+                  <td>
+                    {% trans "作成" context "manual_inventory_manage table header" %}
+                  </td>
+                  <td>
+                    {% trans "商品" context "manual_inventory_manage table header" %}
+                  </td>
+                  <td>
+                    {% trans "フィールド" context "manual_inventory_manage table header" %}
+                  </td>
+                  <td>
+                    {% trans "編集前" context "manual_inventory_manage table header" %}
+                  </td>
+                  <td>
+                    {% trans "→" context "manual_inventory_manage table header" %}
+                  </td>
+                  <td>
+                    {% trans "編集後" context "manual_inventory_manage table header" %}
+                  </td>
+                  <td>
+                    {% trans "編集者" context "manual_inventory_manage table header" %}
+                  </td>
+                </tr>
+                </thead>
+
+                <tbody>
+                {% for change in product_object_stock_change_history %}
+                  <tr>
+                    <td>
+                      #{{ change.change_date }}
+                    </td>
+                    <td>
+                      <span>JAN :{{ change.product_object_stock.product_stock.jan_code }}</span>
+                      <br>
+                      <span>IMEI:{{ change.product_object_stock.imei_code }}</span>
+                    </td>
+                    <td>
+                      {{ change.change_field }}
+                    </td>
+                    <td>
+                      {{ change.old_value }}
+                    </td>
+                    <td>
+                      {% trans "→" context "manual_inventory_manage table header" %}
+                    </td>
+                    <td>
+                      {{ change.changed_value }}
+                    </td>
+                    <td class="right-align">
+                      {{ change.responsible_person }}
+                    </td>
+                  </tr>
+                {% endfor %}
+                </tbody>
+
+              </table>
+
+            </div>
+
+            <div class="data-table-action">
+              <div class="row">
+                {#---------------------------------------------------------------#}
+                <div class="col s6"></div>
+                {#---------------------------------------------------------------#}
+                <div class="col s6"></div>
+                {#---------------------------------------------------------------#}
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    {% endif %}
+  {% endif %}
+
+
+{% endblock %}
