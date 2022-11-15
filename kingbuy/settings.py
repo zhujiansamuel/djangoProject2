@@ -84,6 +84,7 @@ INSTALLED_APPS = [
     "django_countries",
     "django_filters",
     'crispy_forms',
+    "webpack_loader",
 ]
 
 MIDDLEWARE = [
@@ -219,11 +220,22 @@ STATICFILES_FINDERS = [
     'sass_processor.finders.CssFinder',
     ]
 
+STATICFILES_DIRS = (
+    # webpack がここにバンドルしたファイルを吐き出すように設定済み
+    BASE_DIR / 'dist',
+)
 
 SASS_PROCESSOR_INCLUDE_DIRS = [
     os.path.join(PROJECT_ROOT, 'static/sass/materialize.scss'),
 ]
 
+WEBPACK_LOADER = {
+    'DEFAULT': {
+        'CACHE': False,
+        'BUNDLE_DIR_NAME': '',
+        'STATS_FILE': os.path.join(BASE_DIR, "webpack-stats.json"),
+    }
+}
 
 SASS_PRECISION = 8
 SASS_OUTPUT_STYLE = 'compact'

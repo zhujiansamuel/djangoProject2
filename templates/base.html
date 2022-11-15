@@ -4,12 +4,12 @@
 {% load serialize_messages from utils %}
 {% load svg %}
 {% load sass_tags %}
-{% load static %}
-
+{#{% load static %}#}
+{% load render_bundle from webpack_loader %}
+{% load webpack_static from webpack_loader %}
 
 <html lang="{{ LANGUAGE_CODE }}" class="no-js">
 <head>
-
     <title>
         {% block title %}
             {% blocktrans trimmed context "product_stock default page title" with site_name=site.name %}
@@ -17,8 +17,6 @@
             {% endblocktrans %}
         {% endblock %}
     </title>
-
-
     {% block meta %}
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
@@ -29,25 +27,18 @@
     {#    {% include 'favicon.html' %}#}
 
     {#    {% render_bundle 'base' 'css' %}#}
-    {#    {% render_bundle 'dashboard' 'css' %}#}
-    {#    <link rel="stylesheet" type="text/css" href="{% static "versatileimagefield/css/versatileimagefield.css" %}">#}
 
-    {#    <link href="{% sass_src "sass/materialize.scss" %}" rel="stylesheet">#}
-    {##}
     <link href="https://cdn.datatables.net/v/dt/dt-1.10.16/datatables.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.7.0/fullcalendar.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+
     <link href="{% static 'css/jqvmap.css' %}" rel="stylesheet">
     <link href="{% static 'css/flag-icon-css/css/flag-icon.min.css' %}" rel="stylesheet">
-    <!-- Fullcalendar-->
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.7.0/fullcalendar.min.css" rel="stylesheet">
-    <!-- Materialize-->
     <link href="{% static 'css/admin-materialize.min.css' %}" rel="stylesheet">
-    <!-- Material Icons-->
-    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+
     {% block custom_css %}{% endblock %}
 
 </head>
-
-
 <body class="{% block body_class %}body-home{% endblock %}">
 <header>
     <div class="navbar-fixed">
@@ -65,7 +56,6 @@
                     <li class="user-name">
                         現在のスタッフ： {{ request.user }}
                     </li>
-
                     <li class="">
                         <a href="" class="waves-effect waves-light btn-large"
                            style="font-size: large">
@@ -73,13 +63,10 @@
                         </a>
                     </li>
                 </ul>
-
             </div>
         </nav>
     </div>
 </header>
-
-
 <div class="subheader top-nav">
     <div class="nav-wrapper container">
         {% block breadcrumbs %}
@@ -94,8 +81,6 @@
         {% block header_extra %}{% endblock %}
     </div>
 </div>
-
-
 <main class="main">
     <div id="base-modal" class="modal"></div>
     <div id="base-modal-fixed" class="modal modal-fixed-footer"></div>
@@ -110,56 +95,36 @@
     </div>
 </main>
 
-
 <div id="messages-container" data-messages="{% serialize_messages %}"></div>
 
-
-<!-- Core Scripts - Include with every page -->
-
-
 {#    <script type="text/javascript" src="{% url 'javascript-catalog' %}"></script>#}
-{#    {% render_bundle 'dashboard' 'js' %}#}
-{#    <script src="{% static "versatileimagefield/js/versatileimagefield.js" %}"></script>#}
+<script src="https://code.jquery.com/jquery-3.6.1.js" integrity="sha256-3zlB5s2uwoUzrXK3BT7AX3FyvojsraNFxCc2vC/7pNI=" crossorigin="anonymous"></script>
 <script src="https://kit.fontawesome.com/1f9b8807e2.js" crossorigin="anonymous"></script>
 <script src="https://yubinbango.github.io/yubinbango/yubinbango.js" charset="UTF-8"></script>
 
 
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
-<script src="{% static 'sitejs/materialize.min.js' %}"></script>
+
+
 <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.19.2/moment.min.js"></script>
-<!-- External libraries -->
-
-<!-- jqvmap -->
-<script type="text/javascript" src="{% static 'sitejs/jqvmap/jquery.vmap.min.js' %}"></script>
-<script type="text/javascript" src="{% static 'sitejs/jqvmap/jquery.vmap.world.js' %}" charset="utf-8"></script>
-<script type="text/javascript" src="{% static 'sitejs/jqvmap/jquery.vmap.sampledata.js' %}"></script>
-
-<!-- ChartJS -->
-<script type="text/javascript" src="{% static 'sitejs/Chart.js' %}"></script>
-<script type="text/javascript" src="{% static 'sitejs/Chart.Financial.js' %}"></script>
-
-
 <script src="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.7.0/fullcalendar.min.js"></script>
-<script type="text/javascript" src="https://cdn.datatables.net/v/dt/dt-1.10.16/datatables.min.js"></script>
-<script src="{% static 'sitejs/imagesloaded.pkgd.min.js' %}"></script>
-<script src="{% static 'sitejs/masonry.pkgd.min.js' %}"></script>
+<script src="https://cdn.datatables.net/v/dt/dt-1.10.16/datatables.min.js" type="text/javascript"></script>
+
+    {% render_bundle 'kingbuy' 'js' %}
+{% render_bundle 'vendor' 'js' %}
+
+{#<script src="{% static 'sitejs/materialize.min.js' %}"></script#}
+{#<script src="{% static 'sitejs/jqvmap/jquery.vmap.min.js' %}" type="text/javascript"></script>#}
+{#<script src="{% static 'sitejs/jqvmap/jquery.vmap.world.js' %}" charset="utf-8" type="text/javascript"></script>#}
+{#<script src="{% static 'sitejs/jqvmap/jquery.vmap.sampledata.js' %}" type="text/javascript"></script>#}
+{#<script src="{% static 'sitejs/Chart.js' %}" type="text/javascript"></script>#}
+{#<script src="{% static 'sitejs/Chart.Financial.js' %}" type="text/javascript"></script>#}
+{#<script src="{% static 'sitejs/imagesloaded.pkgd.min.js' %}"></script>#}
+{#<script src="{% static 'sitejs/masonry.pkgd.min.js' %}"></script>#}
+{#<script src="{% static 'sitejs/admin.js' %}"></script>#}
+{#<script src="{% static 'sitejs/init.js' %}"></script>#}
 
 
-<!-- Initialization script -->
-<script src="{% static 'sitejs/admin.js' %}"></script>
-<script src="{% static 'sitejs/init.js' %}"></script>
-
-
-<script>
-    {#var iii = document.getElementsByClassName('datepicker');#}
-    {#for (let i = 0; i < iii.length; i++) {#}
-    {#    iii[i].addEventListener('pointerdown', (e) => {#}
-    {#        e.target.setPointerCapture(e.pointerId);#}
-    {#    })#}
-    {
-    #}#}
-
-</script>
 {% block custom_js %}{% endblock %}
+
 </body>
 </html>
