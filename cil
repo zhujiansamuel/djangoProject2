@@ -3,6 +3,7 @@ yarn init
 
 yarn add -D webpack webpack-bundle-tracker webpack-cli webpack-dev-server webpack-merge copy-webpack-plugin css-loader file-loader mini-css-extract-plugin rimraf sass sass-loader style-loader
 
+yarn install
 yarn build
 
 C:\"Program Files"\PostgreSQL\14\bin\createuser.exe --username=postgres --superuser --pwprompt kingbuy
